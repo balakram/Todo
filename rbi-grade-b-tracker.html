@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RBI Grade B — Progress Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080a0f;
+  --s1: #10131a;
+  --s2: #181c27;
+  --s3: #1f2435;
+  --border: #252b3b;
+  --accent: #e8b84b;
+  --accent2: #4b8be8;
+  --accent3: #4be87a;
+  --danger: #e84b4b;
+  --purple: #9b4be8;
+  --text: #dde3f0;
+  --muted: #6b738f;
+  --r: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+}
+body::before {
+  content: '';
+  position: fixed; top: 0; left: 0; right: 0; height: 300px;
+  background: linear-gradient(180deg, rgba(232,184,75,0.04) 0%, transparent 100%);
+  pointer-events: none; z-index: 0;
+}
+
+/* NAV */
+nav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(8,10,15,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 16px;
+}
+.nav-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center; gap: 0;
+  overflow-x: auto; scrollbar-width: none;
+}
+.nav-inner::-webkit-scrollbar { display: none; }
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem; font-weight: 900;
+  color: var(--accent); white-space: nowrap;
+  padding: 14px 20px 14px 0;
+  margin-right: 8px;
+  border-right: 1px solid var(--border);
+}
+.nav-tab {
+  padding: 14px 16px;
+  font-size: 0.82rem; font-weight: 600;
+  color: var(--muted); cursor: pointer;
+  white-space: nowrap; border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+.nav-tab:hover { color: var(--text); }
+.nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* LAYOUT */
+.page { display: none; padding: 28px 16px 80px; max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+.page.active { display: block; }
+
+/* HEADINGS */
+.page-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.9rem; font-weight: 900;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+.page-title span { color: var(--accent); }
+.page-sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 28px; }
+
+/* CARDS */
+.card {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 20px 22px;
+  margin-bottom: 18px;
+}
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem; font-weight: 700;
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* STAT GRID */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px; margin-bottom: 22px;
+}
+.stat-card {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 16px 18px;
+  position: relative; overflow: hidden;
+}
+.stat-card::after {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+}
+.sc-gold::after { background: var(--accent); }
+.sc-blue::after { background: var(--accent2); }
+.sc-green::after { background: var(--accent3); }
+.sc-red::after { background: var(--danger); }
+.sc-purple::after { background: var(--purple); }
+.stat-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 5px; }
+.stat-val { font-family: 'Playfair Display', serif; font-size: 1.9rem; font-weight: 700; }
+.sc-gold .stat-val { color: var(--accent); }
+.sc-blue .stat-val { color: var(--accent2); }
+.sc-green .stat-val { color: var(--accent3); }
+.sc-red .stat-val { color: var(--danger); }
+.sc-purple .stat-val { color: var(--purple); }
+
+/* PROGRESS BAR */
+.pbar-wrap { margin-bottom: 22px; }
+.pbar-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem; font-weight: 600; }
+.pbar-pct { color: var(--accent3); font-family: 'Playfair Display', serif; font-size: 1.1rem; }
+.pbar-track { height: 8px; background: var(--s3); border-radius: 999px; overflow: hidden; }
+.pbar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--accent3)); transition: width 0.5s ease; min-width: 3px; }
+
+/* WEEK TABLE */
+.week-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.week-table th {
+  text-align: center; padding: 8px 6px;
+  font-size: 0.7rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.6px;
+  color: var(--muted); border-bottom: 1px solid var(--border);
+  background: var(--s2);
+}
+.week-table th:first-child { text-align: left; padding-left: 12px; }
+.week-table td {
+  padding: 9px 6px; text-align: center;
+  border-bottom: 1px solid rgba(37,43,59,0.5);
+  vertical-align: middle;
+}
+.week-table td:first-child { text-align: left; padding-left: 12px; font-weight: 500; font-size: 0.8rem; }
+.week-table tr:hover td { background: rgba(232,184,75,0.03); }
+.week-table tr.current-week td { background: rgba(232,184,75,0.04); }
+
+.chk {
+  width: 22px; height: 22px;
+  border-radius: 6px;
+  border: 2px solid var(--border);
+  background: var(--s2);
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  font-size: 12px;
+}
+.chk:hover { border-color: var(--accent); }
+.chk.on { background: var(--accent); border-color: var(--accent); color: #080a0f; font-weight: 900; }
+.chk.on::after { content: '✓'; }
+
+.week-label { font-size: 0.72rem; color: var(--muted); display: block; }
+
+/* DAY TABLE */
+.day-section { margin-bottom: 30px; }
+.day-section-title {
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--accent);
+  padding: 6px 0 10px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 10px;
+}
+.day-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.day-table th {
+  padding: 8px 8px; font-size: 0.7rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted);
+  border-bottom: 1px solid var(--border); background: var(--s2);
+  text-align: center;
+}
+.day-table th:nth-child(1) { text-align: left; padding-left: 12px; width: 60px; }
+.day-table th:nth-child(2) { text-align: left; width: 100px; }
+.day-table td {
+  padding: 8px 8px; border-bottom: 1px solid rgba(37,43,59,0.4);
+  text-align: center; vertical-align: middle;
+}
+.day-table td:nth-child(1) { text-align: left; padding-left: 12px; font-weight: 600; font-size: 0.75rem; color: var(--muted); }
+.day-table td:nth-child(2) { text-align: left; font-size: 0.78rem; }
+.day-table tr:hover td { background: rgba(75,142,232,0.03); }
+.day-table tr.today-row td { background: rgba(232,184,75,0.05); }
+
+.date-display { font-size: 0.78rem; color: var(--text); }
+
+/* MOCK TABLE */
+.mock-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.mock-table th {
+  padding: 9px 10px; font-size: 0.7rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted);
+  border-bottom: 1px solid var(--border); background: var(--s2);
+  text-align: center;
+}
+.mock-table th:first-child { text-align: left; padding-left: 12px; width: 80px; }
+.mock-table td {
+  padding: 8px 10px; border-bottom: 1px solid rgba(37,43,59,0.4);
+  text-align: center; vertical-align: middle;
+}
+.mock-table td:first-child { text-align: left; padding-left: 12px; font-weight: 600; font-size: 0.8rem; }
+.mock-table tr:hover td { background: rgba(75,142,232,0.03); }
+
+.score-input, .notes-input {
+  background: var(--s3); border: 1px solid var(--border);
+  color: var(--text); border-radius: 7px;
+  padding: 5px 8px; font-size: 0.8rem;
+  font-family: 'DM Sans', sans-serif;
+  outline: none; width: 100%;
+  transition: border-color 0.2s;
+}
+.score-input { width: 64px; text-align: center; }
+.notes-input { width: 160px; }
+.score-input:focus, .notes-input:focus { border-color: var(--accent2); }
+
+.badge {
+  display: inline-block; padding: 2px 9px; border-radius: 999px;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.3px;
+}
+.badge-pass { background: rgba(75,232,122,0.15); color: var(--accent3); }
+.badge-fail { background: rgba(232,75,75,0.15); color: var(--danger); }
+.badge-pending { background: rgba(107,115,143,0.2); color: var(--muted); }
+
+/* ANALYTICS */
+.chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px; }
+.mini-chart { background: var(--s1); border: 1px solid var(--border); border-radius: var(--r); padding: 18px 20px; }
+.mini-chart-title { font-size: 0.8rem; font-weight: 600; color: var(--muted); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.6px; }
+.subject-bars { display: flex; flex-direction: column; gap: 9px; }
+.subj-row { display: flex; align-items: center; gap: 10px; }
+.subj-name { font-size: 0.78rem; font-weight: 500; width: 90px; flex-shrink: 0; }
+.subj-track { flex: 1; height: 6px; background: var(--s3); border-radius: 999px; overflow: hidden; }
+.subj-fill { height: 100%; border-radius: 999px; transition: width 0.5s ease; }
+.subj-pct { font-size: 0.75rem; color: var(--muted); width: 36px; text-align: right; flex-shrink: 0; }
+
+/* STREAK */
+.streak-display {
+  display: flex; align-items: center; gap: 16px;
+  background: var(--s2); border-radius: 10px; padding: 14px 18px;
+  border: 1px solid var(--border); margin-bottom: 18px;
+}
+.streak-fire { font-size: 2rem; }
+.streak-num { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 900; color: var(--accent); }
+.streak-label { font-size: 0.78rem; color: var(--muted); }
+
+/* HEATMAP */
+.heatmap { display: flex; flex-wrap: wrap; gap: 3px; }
+.hmap-cell {
+  width: 16px; height: 16px; border-radius: 3px;
+  background: var(--s3); cursor: pointer;
+  transition: transform 0.1s;
+  position: relative;
+}
+.hmap-cell:hover { transform: scale(1.3); z-index: 2; }
+.hmap-cell.h1 { background: rgba(232,184,75,0.2); }
+.hmap-cell.h2 { background: rgba(232,184,75,0.45); }
+.hmap-cell.h3 { background: rgba(232,184,75,0.7); }
+.hmap-cell.h4 { background: var(--accent); }
+
+/* MOTIVATIONAL QUOTE */
+.quote-bar {
+  background: linear-gradient(135deg, rgba(232,184,75,0.08), rgba(75,142,232,0.06));
+  border: 1px solid rgba(232,184,75,0.2);
+  border-radius: var(--r); padding: 16px 20px;
+  margin-bottom: 20px; font-style: italic;
+  color: var(--muted); font-size: 0.88rem;
+  text-align: center;
+}
+.quote-bar strong { color: var(--accent); font-style: normal; }
+
+/* BUTTON */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 18px; border-radius: 999px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.83rem;
+  font-weight: 600; cursor: pointer; border: none; transition: all 0.2s;
+}
+.btn-gold { background: var(--accent); color: #080a0f; }
+.btn-gold:hover { background: #f0c85a; }
+.btn-ghost { background: var(--s2); color: var(--text); border: 1px solid var(--border); }
+.btn-ghost:hover { background: var(--s3); }
+
+.top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; flex-wrap: wrap; gap: 10px; }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 20px; right: 20px; z-index: 999;
+  background: var(--s2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 11px 16px;
+  font-size: 0.83rem; font-weight: 500;
+  opacity: 0; transform: translateY(10px);
+  transition: all 0.3s; pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.ok { border-color: rgba(75,232,122,0.4); color: var(--accent3); }
+
+/* SCROLLABLE TABLE WRAP */
+.table-wrap { overflow-x: auto; border-radius: var(--r); border: 1px solid var(--border); }
+
+/* CALENDAR */
+.cal-month {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: var(--r); margin-bottom: 20px; overflow: hidden;
+}
+.cal-month-header {
+  padding: 16px 20px; display: flex; align-items: center;
+  justify-content: space-between; border-bottom: 1px solid var(--border);
+}
+.cal-month-title {
+  font-family: 'Playfair Display', serif; font-size: 1.05rem;
+  font-weight: 700;
+}
+.cal-month-dates { font-size: 0.78rem; color: var(--muted); }
+.cal-month-pct {
+  font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700;
+}
+.cal-week-row {
+  display: grid;
+  grid-template-columns: 38px 130px 1fr auto;
+  gap: 0;
+  border-bottom: 1px solid rgba(37,43,59,0.5);
+  align-items: stretch;
+  transition: background 0.15s;
+}
+.cal-week-row:last-child { border-bottom: none; }
+.cal-week-row:hover { background: rgba(255,255,255,0.02); }
+.cal-week-row.cw-current { background: rgba(232,184,75,0.05); border-left: 3px solid var(--accent); }
+.cal-week-row.cw-done { opacity: 0.65; }
+.cal-wk-num {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 700; color: var(--muted);
+  border-right: 1px solid var(--border); padding: 14px 6px;
+  background: var(--s2);
+}
+.cal-wk-dates {
+  padding: 14px 14px; font-size: 0.78rem; color: var(--muted);
+  border-right: 1px solid var(--border); display: flex;
+  align-items: center;
+}
+.cal-wk-focus {
+  padding: 14px 16px; font-size: 0.85rem; font-weight: 500;
+  display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+}
+.focus-tag {
+  display: inline-block; padding: 2px 10px; border-radius: 999px;
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+.cal-wk-action {
+  padding: 14px 16px; display: flex; align-items: center;
+  justify-content: flex-end; gap: 8px; border-left: 1px solid var(--border);
+  min-width: 130px;
+}
+.cal-check-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: 999px;
+  font-size: 0.75rem; font-weight: 600; cursor: pointer;
+  border: 1px solid var(--border); background: var(--s2);
+  color: var(--muted); transition: all 0.15s; white-space: nowrap;
+}
+.cal-check-btn:hover { border-color: var(--accent3); color: var(--accent3); }
+.cal-check-btn.studied { background: rgba(75,232,122,0.12); border-color: var(--accent3); color: var(--accent3); }
+.cal-notes-input {
+  background: var(--s3); border: 1px solid var(--border);
+  color: var(--text); border-radius: 7px;
+  padding: 4px 8px; font-size: 0.75rem;
+  font-family: 'DM Sans', sans-serif;
+  outline: none; width: 140px;
+  transition: border-color 0.2s;
+}
+.cal-notes-input:focus { border-color: var(--accent2); }
+.cal-month-bar { height: 4px; width: 100%; }
+
+.today-pill {
+  display: inline-block; padding: 1px 7px; border-radius: 999px;
+  font-size: 0.65rem; font-weight: 700; background: var(--accent);
+  color: #080a0f; margin-left: 4px; vertical-align: middle;
+}
+
+/* SYLLABUS CHECKLIST */
+.syl-phase {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: var(--r); margin-bottom: 20px; overflow: hidden;
+}
+.syl-phase-header {
+  padding: 15px 20px; display: flex; align-items: center;
+  justify-content: space-between; cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+.syl-phase-header:hover { background: rgba(255,255,255,0.02); }
+.syl-phase-title {
+  font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700;
+  display: flex; align-items: center; gap: 10px;
+}
+.syl-phase-meta { display: flex; align-items: center; gap: 12px; }
+.syl-phase-pct { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; }
+.syl-phase-body { display: block; }
+.syl-phase-body.collapsed { display: none; }
+
+.syl-section { border-bottom: 1px solid rgba(37,43,59,0.5); }
+.syl-section:last-child { border-bottom: none; }
+.syl-section-title {
+  padding: 10px 20px; font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.8px;
+  background: var(--s2); color: var(--muted);
+  border-bottom: 1px solid rgba(37,43,59,0.4);
+}
+
+.syl-item {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center; gap: 12px;
+  padding: 11px 20px;
+  border-bottom: 1px solid rgba(37,43,59,0.3);
+  transition: background 0.12s;
+}
+.syl-item:last-child { border-bottom: none; }
+.syl-item:hover { background: rgba(255,255,255,0.02); }
+.syl-item.syl-done { opacity: 0.6; }
+
+.syl-item-left { display: flex; flex-direction: column; gap: 3px; }
+.syl-topic { font-size: 0.88rem; font-weight: 500; }
+.syl-item.syl-done .syl-topic { text-decoration: line-through; color: var(--muted); }
+.syl-meta-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.syl-pyq {
+  font-size: 0.68rem; font-weight: 700; padding: 1px 7px;
+  border-radius: 999px; letter-spacing: 0.3px;
+}
+.pyq-high  { background: rgba(232,75,75,0.15); color: #e84b4b; }
+.pyq-med   { background: rgba(232,184,75,0.15); color: #e8b84b; }
+.pyq-low   { background: rgba(75,142,232,0.15); color: #4b8be8; }
+.syl-tip   { font-size: 0.72rem; color: var(--muted); font-style: italic; }
+
+.conf-select {
+  background: var(--s3); border: 1px solid var(--border);
+  color: var(--text); border-radius: 7px;
+  padding: 4px 8px; font-size: 0.75rem;
+  font-family: 'DM Sans', sans-serif; outline: none; cursor: pointer;
+  transition: border-color 0.2s; min-width: 110px;
+}
+.conf-select:focus { border-color: var(--accent2); }
+.conf-select.conf-strong { border-color: rgba(75,232,122,0.5); color: var(--accent3); }
+.conf-select.conf-medium { border-color: rgba(232,184,75,0.5); color: var(--accent); }
+.conf-select.conf-weak   { border-color: rgba(232,75,75,0.5); color: var(--danger); }
+
+.syl-chk {
+  width: 22px; height: 22px; border-radius: 6px;
+  border: 2px solid var(--border); background: var(--s2);
+  cursor: pointer; display: inline-flex; align-items: center;
+  justify-content: center; transition: all 0.15s; flex-shrink: 0;
+}
+.syl-chk:hover { border-color: var(--accent3); }
+.syl-chk.on { background: var(--accent3); border-color: var(--accent3); color: #080a0f; font-size: 13px; font-weight: 900; }
+.syl-chk.on::after { content: '✓'; }
+
+.syl-stats {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr));
+  gap: 10px; margin-bottom: 20px;
+}
+
+.syl-filter-row {
+  display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; align-items: center;
+}
+.syl-search {
+  background: var(--s1); border: 1px solid var(--border);
+  color: var(--text); border-radius: 10px;
+  padding: 8px 14px; font-family: 'DM Sans', sans-serif;
+  font-size: 0.83rem; outline: none; flex: 1; min-width: 180px;
+  transition: border-color 0.2s;
+}
+.syl-search:focus { border-color: var(--accent); }
+
+@media (max-width: 600px) {
+  .syl-item { grid-template-columns: 1fr auto; }
+  .conf-select { display: none; }
+}
+  .cal-week-row { grid-template-columns: 28px 1fr; grid-template-rows: auto auto; }
+  .cal-wk-dates { display: none; }
+  .cal-wk-focus { grid-column: 2; padding: 10px 12px; }
+  .cal-wk-action { grid-column: 1 / -1; border-left: none; border-top: 1px solid var(--border); min-width: unset; justify-content: flex-start; padding: 10px 12px; }
+  .cal-notes-input { width: 100%; }
+}
+@media (max-width: 600px) {
+  .page-title { font-size: 1.4rem; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .score-input { width: 52px; }
+  .notes-input { width: 110px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">RBI Grade B</div>
+    <div class="nav-tab active" onclick="showPage('dashboard')">📊 Dashboard</div>
+    <div class="nav-tab" onclick="showPage('weekly')">📅 Weekly Tracker</div>
+    <div class="nav-tab" onclick="showPage('daily')">📆 Daily Log</div>
+    <div class="nav-tab" onclick="showPage('prelim')">📝 Prelim Mocks</div>
+    <div class="nav-tab" onclick="showPage('mains')">🏆 Mains Mocks</div>
+    <div class="nav-tab" onclick="showPage('analytics')">📈 Analytics</div>
+    <div class="nav-tab" onclick="showPage('calendar')">🗓 Study Calendar</div>
+    <div class="nav-tab" onclick="showPage('syllabus')">✅ Syllabus Checklist</div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════ DASHBOARD ═══════════════════════════ -->
+<div class="page active" id="page-dashboard">
+  <div class="page-title">Your <span>RBI Grade B</span> Journey</div>
+  <div class="page-sub">Mar 29 – Aug 15, 2026 · 20 Weeks · 140 Days</div>
+
+  <div class="quote-bar" id="quoteBar">"<strong>Consistency > Intensity.</strong> Complete the system, not random tasks."</div>
+
+  <div class="stat-grid">
+    <div class="stat-card sc-gold"><div class="stat-label">Weeks Done</div><div class="stat-val" id="d-weeksDone">0/20</div></div>
+    <div class="stat-card sc-blue"><div class="stat-label">Days Logged</div><div class="stat-val" id="d-daysLogged">0</div></div>
+    <div class="stat-card sc-green"><div class="stat-label">Daily Streak</div><div class="stat-val" id="d-streak">0🔥</div></div>
+    <div class="stat-card sc-purple"><div class="stat-label">Prelim Mocks</div><div class="stat-val" id="d-prelim">0/35</div></div>
+    <div class="stat-card sc-red"><div class="stat-label">Mains Mocks</div><div class="stat-val" id="d-mains">0/35</div></div>
+  </div>
+
+  <div class="pbar-wrap card">
+    <div class="pbar-header"><span>Overall Weekly Progress</span><span class="pbar-pct" id="d-wpct">0%</span></div>
+    <div class="pbar-track"><div class="pbar-fill" id="d-wbar" style="width:0%"></div></div>
+    <div style="margin-top:12px;">
+      <div class="pbar-header"><span>Daily Task Completion</span><span class="pbar-pct" id="d-dpct">0%</span></div>
+      <div class="pbar-track"><div class="pbar-fill" id="d-dbar" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📅 Activity Heatmap (Daily Completion)</div>
+    <div class="heatmap" id="heatmap"></div>
+    <div style="display:flex;gap:8px;margin-top:10px;align-items:center;font-size:0.72rem;color:var(--muted)">
+      <span>Less</span>
+      <div style="width:12px;height:12px;border-radius:2px;background:var(--s3)"></div>
+      <div class="hmap-cell h1" style="width:12px;height:12px;border-radius:2px;display:inline-block"></div>
+      <div class="hmap-cell h2" style="width:12px;height:12px;border-radius:2px;display:inline-block"></div>
+      <div class="hmap-cell h3" style="width:12px;height:12px;border-radius:2px;display:inline-block"></div>
+      <div class="hmap-cell h4" style="width:12px;height:12px;border-radius:2px;display:inline-block"></div>
+      <span>More</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚡ Subject-wise Consistency (Daily Log)</div>
+    <div class="subject-bars" id="subjBars"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ WEEKLY TRACKER ═══════════════════════════ -->
+<div class="page" id="page-weekly">
+  <div class="top-bar">
+    <div>
+      <div class="page-title">Weekly <span>Target Tracker</span></div>
+      <div class="page-sub">Tick only if the weekly target is FULLY completed</div>
+    </div>
+    <button class="btn btn-ghost" onclick="exportData()">⬇ Export</button>
+  </div>
+  <div class="table-wrap">
+    <table class="week-table" id="weekTable">
+      <thead>
+        <tr>
+          <th style="min-width:130px">Week</th>
+          <th>Quant<br><span style="font-weight:400;font-style:italic;color:#4b7">(150+ Q)</span></th>
+          <th>Reasoning<br><span style="font-weight:400;font-style:italic;color:#4b7">(120+ Q)</span></th>
+          <th>ESI<br><span style="font-weight:400;font-style:italic;color:#4b7">(2 Topics)</span></th>
+          <th>Finance<br><span style="font-weight:400;font-style:italic;color:#4b7">(2 Topics)</span></th>
+          <th>Mgmt<br><span style="font-weight:400;font-style:italic;color:#4b7">(1 Topic)</span></th>
+          <th>English<br><span style="font-weight:400;font-style:italic;color:#4b7">(5RC+Essay)</span></th>
+          <th>CA<br><span style="font-weight:400;font-style:italic;color:#4b7">(Weekly)</span></th>
+          <th>Mock<br><span style="font-weight:400;font-style:italic;color:#4b7">(If Appl.)</span></th>
+          <th>Done</th>
+        </tr>
+      </thead>
+      <tbody id="weekTbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ DAILY LOG ═══════════════════════════ -->
+<div class="page" id="page-daily">
+  <div class="top-bar">
+    <div>
+      <div class="page-title">Daily <span>Study Log</span></div>
+      <div class="page-sub">84 days · Mar 29 – Aug 15, 2026</div>
+    </div>
+  </div>
+  <div id="dayLogWrap"></div>
+</div>
+
+<!-- ═══════════════════════════ PRELIM MOCKS ═══════════════════════════ -->
+<div class="page" id="page-prelim">
+  <div class="page-title">Prelim <span>Mock Performance</span></div>
+  <div class="page-sub">35 Mocks · Track scores, section-wise performance & weak areas</div>
+
+  <div class="stat-grid" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr))">
+    <div class="stat-card sc-gold"><div class="stat-label">Attempted</div><div class="stat-val" id="pm-attempted">0</div></div>
+    <div class="stat-card sc-green"><div class="stat-label">Avg Score</div><div class="stat-val" id="pm-avg">—</div></div>
+    <div class="stat-card sc-blue"><div class="stat-label">Best Score</div><div class="stat-val" id="pm-best">—</div></div>
+    <div class="stat-card sc-purple"><div class="stat-label">Sections Cleared</div><div class="stat-val" id="pm-cleared">0</div></div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="mock-table" id="prelimTable">
+      <thead>
+        <tr>
+          <th>Mock</th>
+          <th>Score</th>
+          <th>GA</th>
+          <th>Quant</th>
+          <th>Reasoning</th>
+          <th>English</th>
+          <th>Section Cleared</th>
+          <th>Key Weak Areas</th>
+        </tr>
+      </thead>
+      <tbody id="prelimTbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ MAINS MOCKS ═══════════════════════════ -->
+<div class="page" id="page-mains">
+  <div class="page-title">Mains <span>Mock Performance</span></div>
+  <div class="page-sub">35 Mocks · ESI, FM & English section tracking</div>
+
+  <div class="stat-grid" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr))">
+    <div class="stat-card sc-gold"><div class="stat-label">Attempted</div><div class="stat-val" id="mm-attempted">0</div></div>
+    <div class="stat-card sc-green"><div class="stat-label">Avg Score</div><div class="stat-val" id="mm-avg">—</div></div>
+    <div class="stat-card sc-blue"><div class="stat-label">Best Score</div><div class="stat-val" id="mm-best">—</div></div>
+    <div class="stat-card sc-purple"><div class="stat-label">Sections Cleared</div><div class="stat-val" id="mm-cleared">0</div></div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="mock-table" id="mainsTable">
+      <thead>
+        <tr>
+          <th>Mock</th>
+          <th>Score</th>
+          <th>ESI</th>
+          <th>FM</th>
+          <th>English</th>
+          <th>Section Cleared</th>
+          <th>Key Weak Areas</th>
+        </tr>
+      </thead>
+      <tbody id="mainsTbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ ANALYTICS ═══════════════════════════ -->
+<div class="page" id="page-analytics">
+  <div class="page-title">Progress <span>Analytics</span></div>
+  <div class="page-sub">Visual breakdown of your preparation journey</div>
+
+  <div class="chart-grid">
+    <div class="mini-chart">
+      <div class="mini-chart-title">Weekly Subject Completion %</div>
+      <div class="subject-bars" id="wk-subj-bars"></div>
+    </div>
+    <div class="mini-chart">
+      <div class="mini-chart-title">Mock Score Trend (Prelim)</div>
+      <canvas id="mockChart" height="180"></canvas>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Preparation Score Card</div>
+    <div id="scoreCard"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ STUDY CALENDAR ═══════════════════════════ -->
+<div class="page" id="page-calendar">
+  <div class="top-bar">
+    <div>
+      <div class="page-title">Study <span>Calendar</span></div>
+      <div class="page-sub">Foundation + Practice Plan · Mar 29 – Aug 15, 2026</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <span style="font-size:0.78rem;color:var(--muted)">Phase:</span>
+      <span class="badge" style="background:rgba(232,184,75,0.15);color:var(--accent);font-size:0.75rem" id="cal-phase-badge">—</span>
+    </div>
+  </div>
+
+  <!-- Phase legend -->
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px">
+    <div style="display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--muted)"><div style="width:10px;height:10px;border-radius:2px;background:#e8b84b"></div>Foundation Month 1</div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--muted)"><div style="width:10px;height:10px;border-radius:2px;background:#4b8be8"></div>Foundation Month 2</div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--muted)"><div style="width:10px;height:10px;border-radius:2px;background:#9b4be8"></div>Foundation Month 3</div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--muted)"><div style="width:10px;height:10px;border-radius:2px;background:#4be87a"></div>Foundation Month 4</div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--muted)"><div style="width:10px;height:10px;border-radius:2px;background:#e84b4b"></div>Practice + Mock</div>
+  </div>
+
+  <div id="calendarGrid"></div>
+</div>
+
+<!-- ═══════════════════════════ SYLLABUS CHECKLIST ═══════════════════════════ -->
+<div class="page" id="page-syllabus">
+  <div class="top-bar">
+    <div>
+      <div class="page-title">Syllabus <span>Checklist</span></div>
+      <div class="page-sub">PYQ-mapped · Tick only when you can explain + write + link to current affairs</div>
+    </div>
+  </div>
+
+  <div class="syl-stats" id="sylStats"></div>
+
+  <div class="syl-filter-row">
+    <input class="syl-search" type="text" id="sylSearch" placeholder="🔍 Search topics..." oninput="renderSyllabus()">
+    <div class="tabs" id="sylFilterTabs">
+      <div class="tab active" onclick="setSylFilter('all',this)">All</div>
+      <div class="tab" onclick="setSylFilter('pending',this)">Pending</div>
+      <div class="tab" onclick="setSylFilter('weak',this)">Weak</div>
+      <div class="tab" onclick="setSylFilter('done',this)">Done</div>
+    </div>
+  </div>
+
+  <div id="syllabusList"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── DATA ───
+const WEEKS = [
+  {num:1, range:'Mar 29 – Apr 4'},{num:2,range:'Apr 5 – Apr 11'},
+  {num:3,range:'Apr 12 – Apr 18'},{num:4,range:'Apr 19 – Apr 25'},
+  {num:5,range:'Apr 26 – May 2'},{num:6,range:'May 3 – May 9'},
+  {num:7,range:'May 10 – May 16'},{num:8,range:'May 17 – May 23'},
+  {num:9,range:'May 24 – May 30'},{num:10,range:'May 31 – Jun 6'},
+  {num:11,range:'Jun 7 – Jun 13'},{num:12,range:'Jun 14 – Jun 20'},
+  {num:13,range:'Jun 21 – Jun 27'},{num:14,range:'Jun 28 – Jul 4'},
+  {num:15,range:'Jul 5 – Jul 11'},{num:16,range:'Jul 12 – Jul 18'},
+  {num:17,range:'Jul 19 – Jul 25'},{num:18,range:'Jul 26 – Aug 1'},
+  {num:19,range:'Aug 2 – Aug 8'},{num:20,range:'Aug 9 – Aug 15'}
+];
+const WSUBJ = ['quant','reasoning','esi','finance','mgmt','english','ca','mock'];
+const WLABELS = ['Quant','Reasoning','ESI','Finance','Mgmt','English','CA','Mock'];
+
+// 84 days starting Mar 29 2026
+function getDayDate(i) {
+  const start = new Date('2026-03-29');
+  const d = new Date(start);
+  d.setDate(d.getDate() + i);
+  return d.toLocaleDateString('en-IN', {day:'2-digit',month:'short'});
+}
+function getDayISO(i) {
+  const start = new Date('2026-03-29');
+  const d = new Date(start);
+  d.setDate(d.getDate() + i);
+  return d.toISOString().split('T')[0];
+}
+
+const DSUBJ = ['quant','reasoning','esiFin','english','ca'];
+const DLABELS = ['Quant','Reasoning','ESI/Fin/Mgmt','English','CA'];
+
+let state = JSON.parse(localStorage.getItem('rbi_tracker_v2') || 'null') || {
+  weekly: {}, daily: {}, prelim: {}, mains: {},
+  calWeeks: {},
+  syl: {} // {topicId: {done:bool, conf:'strong'|'medium'|'weak'|''}}
+};
+
+function save() { localStorage.setItem('rbi_tracker_v2', JSON.stringify(state)); }
+
+// ─── NAVIGATION ───
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  const tabs = document.querySelectorAll('.nav-tab');
+  const map = {dashboard:0,weekly:1,daily:2,prelim:3,mains:4,analytics:5,calendar:6,syllabus:7};
+  tabs[map[id]].classList.add('active');
+  if (id === 'dashboard') updateDashboard();
+  if (id === 'analytics') updateAnalytics();
+  if (id === 'calendar') buildCalendar();
+  if (id === 'syllabus') renderSyllabus();
+}
+
+// ─── WEEKLY ───
+function buildWeekTable() {
+  const tbody = document.getElementById('weekTbody');
+  const today = new Date();
+  tbody.innerHTML = WEEKS.map(w => {
+    const wd = state.weekly[w.num] || {};
+    const allDone = WSUBJ.every(s => wd[s]);
+    // approximate current week
+    const startDate = new Date('2026-03-29');
+    startDate.setDate(startDate.getDate() + (w.num-1)*7);
+    const endDate = new Date(startDate); endDate.setDate(endDate.getDate()+6);
+    const isCurrent = today >= startDate && today <= endDate;
+    return `<tr class="${isCurrent ? 'current-week' : ''}">
+      <td><b>Week ${w.num}</b><span class="week-label">${w.range}</span></td>
+      ${WSUBJ.map(s => `<td><div class="chk ${wd[s] ? 'on' : ''}" onclick="toggleWeek(${w.num},'${s}',this)"></div></td>`).join('')}
+      <td><span class="badge ${allDone ? 'badge-pass' : 'badge-pending'}">${allDone ? '✓ Done' : '—'}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function toggleWeek(num, subj, el) {
+  if (!state.weekly[num]) state.weekly[num] = {};
+  state.weekly[num][subj] = !state.weekly[num][subj];
+  el.classList.toggle('on');
+  // update done badge
+  const wd = state.weekly[num];
+  const allDone = WSUBJ.every(s => wd[s]);
+  const row = el.closest('tr');
+  row.querySelector('.badge').className = 'badge ' + (allDone ? 'badge-pass' : 'badge-pending');
+  row.querySelector('.badge').textContent = allDone ? '✓ Done' : '—';
+  save(); showToast('Saved ✓');
+}
+
+// ─── DAILY ───
+function buildDayLog() {
+  const wrap = document.getElementById('dayLogWrap');
+  let html = '';
+  for (let w = 0; w < 12; w++) {
+    const start = w * 7, end = Math.min(start + 7, 84);
+    html += `<div class="day-section">
+      <div class="day-section-title">Week ${w+1} — ${WEEKS[w]?.range || ''}</div>
+      <div class="table-wrap"><table class="day-table">
+        <thead><tr>
+          <th>Day</th><th>Date</th>
+          ${DLABELS.map(l => `<th>${l}</th>`).join('')}
+          <th>Completed</th>
+        </tr></thead><tbody>
+        ${Array.from({length: end-start}, (_,i) => {
+          const idx = start + i;
+          const dd = state.daily[idx] || {};
+          const todayISO = new Date().toISOString().split('T')[0];
+          const isToday = getDayISO(idx) === todayISO;
+          return `<tr class="${isToday ? 'today-row' : ''}">
+            <td>Day ${idx+1}</td>
+            <td><span class="date-display">${getDayDate(idx)}</span></td>
+            ${DSUBJ.map(s => `<td><div class="chk ${dd[s]?'on':''}" onclick="toggleDay(${idx},'${s}',this)"></div></td>`).join('')}
+            <td><div class="chk ${dd.completed?'on':''}" onclick="toggleDay(${idx},'completed',this)" style="background:${dd.completed?'var(--accent3)':''}; border-color:${dd.completed?'var(--accent3)':''}"></div></td>
+          </tr>`;
+        }).join('')}
+        </tbody>
+      </table></div>
+    </div>`;
+  }
+  // Days 85+ if any
+  wrap.innerHTML = html;
+}
+
+function toggleDay(idx, subj, el) {
+  if (!state.daily[idx]) state.daily[idx] = {};
+  state.daily[idx][subj] = !state.daily[idx][subj];
+  el.classList.toggle('on');
+  if (subj === 'completed') {
+    el.style.background = state.daily[idx][subj] ? 'var(--accent3)' : '';
+    el.style.borderColor = state.daily[idx][subj] ? 'var(--accent3)' : '';
+  }
+  save(); showToast('Saved ✓');
+}
+
+// ─── PRELIM MOCKS ───
+function buildPrelimTable() {
+  const tbody = document.getElementById('prelimTbody');
+  tbody.innerHTML = Array.from({length:35}, (_,i) => {
+    const n = i+1, m = state.prelim[n] || {};
+    return `<tr>
+      <td>Mock ${n}</td>
+      <td><input class="score-input" type="number" placeholder="—" value="${m.score||''}" onchange="savePrelim(${n},'score',this.value)" min="0" max="200"></td>
+      <td><input class="score-input" type="number" placeholder="—" value="${m.ga||''}" onchange="savePrelim(${n},'ga',this.value)"></td>
+      <td><input class="score-input" type="number" placeholder="—" value="${m.quant||''}" onchange="savePrelim(${n},'quant',this.value)"></td>
+      <td><input class="score-input" type="number" placeholder="—" value="${m.reasoning||''}" onchange="savePrelim(${n},'reasoning',this.value)"></td>
+      <td><input class="score-input" type="number" placeholder="—" value="${m.english||''}" onchange="savePrelim(${n},'english',this.value)"></td>
+      <td>
+        <select style="background:var(--s3);border:1px solid var(--border);color:var(--text);border-radius:7px;padding:5px 8px;font-size:0.78rem;outline:none;cursor:pointer" onchange="savePrelim(${n},'cleared',this.value)">
+          <option value="">—</option>
+          <option value="yes" ${m.cleared==='yes'?'selected':''}>✓ Yes</option>
+          <option value="no" ${m.cleared==='no'?'selected':''}>✗ No</option>
+        </select>
+      </td>
+      <td><input class="notes-input" type="text" placeholder="Weak areas..." value="${m.notes||''}" onchange="savePrelim(${n},'notes',this.value)"></td>
+    </tr>`;
+  }).join('');
+  updatePrelimStats();
+}
+
+function savePrelim(n, key, val) {
+  if (!state.prelim[n]) state.prelim[n] = {};
+  state.prelim[n][key] = val;
+  save(); updatePrelimStats(); showToast('Saved ✓');
+}
+
+function updatePrelimStats() {
+  const attempted = Object.values(state.prelim).filter(m => m.score).length;
+  const scores = Object.values(state.prelim).map(m => parseFloat(m.score)).filter(s => !isNaN(s));
+  const cleared = Object.values(state.prelim).filter(m => m.cleared === 'yes').length;
+  document.getElementById('pm-attempted').textContent = attempted;
+  document.getElementById('pm-avg').textContent = scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1) : '—';
+  document.getElementById('pm-best').textContent = scores.length ? Math.max(...scores) : '—';
+  document.getElementById('pm-cleared').textContent = cleared;
+}
+
+// ─── MAINS MOCKS ───
+function buildMainsTable() {
+  const tbody = document.getElementById('mainsTbody');
+  tbody.innerHTML = Array.from({length:35}, (_,i) => {
+    const n = i+1, m = state.mains[n] || {};
+    return `<tr>
+      <td>Mock ${n}</td>
+      <td><input class="score-input" type="number" placeholder="—" value="${m.score||''}" onchange="saveMains(${n},'score',this.value)"></td>
+      <td><input class="score-input" type="number" placeholder="—" value="${m.esi||''}" onchange="saveMains(${n},'esi',this.value)"></td>
+      <td><input class="score-input" type="number" placeholder="—" value="${m.fm||''}" onchange="saveMains(${n},'fm',this.value)"></td>
+      <td><input class="score-input" type="number" placeholder="—" value="${m.english||''}" onchange="saveMains(${n},'english',this.value)"></td>
+      <td>
+        <select style="background:var(--s3);border:1px solid var(--border);color:var(--text);border-radius:7px;padding:5px 8px;font-size:0.78rem;outline:none;cursor:pointer" onchange="saveMains(${n},'cleared',this.value)">
+          <option value="">—</option>
+          <option value="yes" ${m.cleared==='yes'?'selected':''}>✓ Yes</option>
+          <option value="no" ${m.cleared==='no'?'selected':''}>✗ No</option>
+        </select>
+      </td>
+      <td><input class="notes-input" type="text" placeholder="Weak areas..." value="${m.notes||''}" onchange="saveMains(${n},'notes',this.value)"></td>
+    </tr>`;
+  }).join('');
+  updateMainsStats();
+}
+
+function saveMains(n, key, val) {
+  if (!state.mains[n]) state.mains[n] = {};
+  state.mains[n][key] = val;
+  save(); updateMainsStats(); showToast('Saved ✓');
+}
+
+function updateMainsStats() {
+  const attempted = Object.values(state.mains).filter(m => m.score).length;
+  const scores = Object.values(state.mains).map(m => parseFloat(m.score)).filter(s => !isNaN(s));
+  const cleared = Object.values(state.mains).filter(m => m.cleared === 'yes').length;
+  document.getElementById('mm-attempted').textContent = attempted;
+  document.getElementById('mm-avg').textContent = scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1) : '—';
+  document.getElementById('mm-best').textContent = scores.length ? Math.max(...scores) : '—';
+  document.getElementById('mm-cleared').textContent = cleared;
+}
+
+// ─── DASHBOARD ───
+function updateDashboard() {
+  // Weeks
+  const weeksDone = Object.values(state.weekly).filter(w => WSUBJ.every(s => w[s])).length;
+  const totalWeekChecks = Object.values(state.weekly).reduce((a,w) => a + WSUBJ.filter(s=>w[s]).length, 0);
+  const maxWeekChecks = 20 * WSUBJ.length;
+  document.getElementById('d-weeksDone').textContent = weeksDone + '/20';
+  document.getElementById('d-wpct').textContent = Math.round(totalWeekChecks/maxWeekChecks*100) + '%';
+  document.getElementById('d-wbar').style.width = (totalWeekChecks/maxWeekChecks*100) + '%';
+
+  // Days
+  const daysLogged = Object.values(state.daily).filter(d => d.completed).length;
+  const totalDayChecks = Object.values(state.daily).reduce((a,d) => a + DSUBJ.filter(s=>d[s]).length, 0);
+  const maxDayChecks = 84 * DSUBJ.length;
+  document.getElementById('d-daysLogged').textContent = daysLogged;
+  document.getElementById('d-dpct').textContent = Math.round(totalDayChecks/maxDayChecks*100) + '%';
+  document.getElementById('d-dbar').style.width = (totalDayChecks/maxDayChecks*100) + '%';
+
+  // Streak
+  let streak = 0;
+  const today = new Date(); today.setHours(0,0,0,0);
+  for (let i = 83; i >= 0; i--) {
+    const iso = getDayISO(i);
+    const d = new Date(iso); d.setHours(0,0,0,0);
+    if (d > today) continue;
+    if (state.daily[i]?.completed) streak++;
+    else if (d <= today) break;
+  }
+  document.getElementById('d-streak').textContent = streak + '🔥';
+
+  // Mocks
+  const prelimDone = Object.values(state.prelim).filter(m=>m.score).length;
+  const mainsDone = Object.values(state.mains).filter(m=>m.score).length;
+  document.getElementById('d-prelim').textContent = prelimDone + '/35';
+  document.getElementById('d-mains').textContent = mainsDone + '/35';
+
+  // Heatmap
+  const hm = document.getElementById('heatmap');
+  hm.innerHTML = Array.from({length:84}, (_,i) => {
+    const d = state.daily[i] || {};
+    const cnt = DSUBJ.filter(s=>d[s]).length;
+    const cls = cnt === 0 ? '' : cnt <= 1 ? 'h1' : cnt <= 2 ? 'h2' : cnt <= 4 ? 'h3' : 'h4';
+    return `<div class="hmap-cell ${cls}" title="Day ${i+1}: ${getDayDate(i)} · ${cnt}/${DSUBJ.length} tasks"></div>`;
+  }).join('');
+
+  // Subject bars
+  const sb = document.getElementById('subjBars');
+  const colors = ['#e8b84b','#4b8be8','#9b4be8','#4be87a','#e84b4b'];
+  sb.innerHTML = DSUBJ.map((s,i) => {
+    const done = Object.values(state.daily).filter(d=>d[s]).length;
+    const pct = Math.round(done/84*100);
+    return `<div class="subj-row">
+      <span class="subj-name">${DLABELS[i]}</span>
+      <div class="subj-track"><div class="subj-fill" style="width:${pct}%;background:${colors[i]}"></div></div>
+      <span class="subj-pct">${pct}%</span>
+    </div>`;
+  }).join('');
+}
+
+// ─── ANALYTICS ───
+function updateAnalytics() {
+  // Weekly subject completion %
+  const wb = document.getElementById('wk-subj-bars');
+  const colors = ['#e8b84b','#4b8be8','#9b4be8','#4be87a','#e84b4b','#4be8e8','#e84be8'];
+  wb.innerHTML = WSUBJ.map((s,i) => {
+    const done = Object.values(state.weekly).filter(w=>w[s]).length;
+    const pct = Math.round(done/20*100);
+    return `<div class="subj-row">
+      <span class="subj-name" style="font-size:0.75rem">${WLABELS[i]}</span>
+      <div class="subj-track"><div class="subj-fill" style="width:${pct}%;background:${colors[i%colors.length]}"></div></div>
+      <span class="subj-pct">${pct}%</span>
+    </div>`;
+  }).join('');
+
+  // Mock chart (simple canvas bars)
+  const canvas = document.getElementById('mockChart');
+  const ctx = canvas.getContext('2d');
+  const scores = Array.from({length:35}, (_,i) => parseFloat(state.prelim[i+1]?.score)||0).filter(s=>s>0);
+  canvas.width = canvas.offsetWidth || 280;
+  const W = canvas.width, H = 180;
+  ctx.clearRect(0,0,W,H);
+  if (scores.length > 0) {
+    const max = Math.max(...scores, 1);
+    const barW = Math.max(4, (W - 20) / scores.length - 3);
+    scores.forEach((s,i) => {
+      const h = (s/max) * (H-30);
+      const x = 10 + i * (barW+3);
+      ctx.fillStyle = '#e8b84b55';
+      ctx.fillRect(x, H-h-20, barW, h);
+      ctx.fillStyle = '#e8b84b';
+      ctx.fillRect(x, H-h-20, barW, 3);
+    });
+    // avg line
+    const avg = scores.reduce((a,b)=>a+b,0)/scores.length;
+    const avgY = H - (avg/max)*(H-30) - 20;
+    ctx.strokeStyle = '#4be87a88';
+    ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(10, avgY); ctx.lineTo(W-10, avgY); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#4be87a'; ctx.font = '10px DM Sans';
+    ctx.fillText('avg ' + avg.toFixed(1), W-60, avgY-4);
+  } else {
+    ctx.fillStyle = '#6b738f'; ctx.font = '13px DM Sans';
+    ctx.fillText('No mock data yet', W/2-60, H/2);
+  }
+
+  // Score card
+  const weeksDone = Object.values(state.weekly).filter(w => WSUBJ.every(s => w[s])).length;
+  const daysLogged = Object.values(state.daily).filter(d => d.completed).length;
+  const prelimDone = Object.values(state.prelim).filter(m=>m.score).length;
+  const mainsDone = Object.values(state.mains).filter(m=>m.score).length;
+  const rows = [
+    ['Weekly Targets Fully Completed', weeksDone, 20, '#e8b84b'],
+    ['Days Fully Completed', daysLogged, 84, '#4b8be8'],
+    ['Prelim Mocks Done', prelimDone, 35, '#9b4be8'],
+    ['Mains Mocks Done', mainsDone, 35, '#4be87a'],
+  ];
+  document.getElementById('scoreCard').innerHTML = `<div class="subject-bars">${rows.map(([l,v,t,c]) => {
+    const pct = Math.round(v/t*100);
+    return `<div class="subj-row" style="margin-bottom:6px">
+      <span class="subj-name" style="width:220px;font-size:0.82rem">${l}</span>
+      <div class="subj-track"><div class="subj-fill" style="width:${pct}%;background:${c}"></div></div>
+      <span class="subj-pct" style="width:60px">${v}/${t}</span>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+// ─── STUDY CALENDAR ───
+const CAL_MONTHS = [
+  {
+    title: 'Foundation Month 1', dates: 'March 29 – April 25', color: '#e8b84b',
+    id: 'fm1',
+    weeks: [
+      {id:'fm1w1', dates:'Mar 29 – Apr 4',  focus:'Percentages, Syllogism, Growth, GDP', tags:['Quant','Reasoning','ESI']},
+      {id:'fm1w2', dates:'Apr 5 – Apr 11',  focus:'SI/CI, Blood Relations, Inflation, RBI Intro', tags:['Quant','Reasoning','ESI','Finance']},
+      {id:'fm1w3', dates:'Apr 12 – Apr 18', focus:'T&W, TSD, Employment, Monetary Tools', tags:['Quant','ESI','Finance']},
+      {id:'fm1w4', dates:'Apr 19 – Apr 25', focus:'Full Revision + Writing Start', tags:['Revision','English']},
+    ]
+  },
+  {
+    title: 'Foundation Month 2', dates: 'April 26 – May 23', color: '#4b8be8',
+    id: 'fm2',
+    weeks: [
+      {id:'fm2w1', dates:'Apr 26 – May 2',  focus:'Inflation Depth + RBI Basics', tags:['ESI','Finance']},
+      {id:'fm2w2', dates:'May 3 – May 9',   focus:'Time & Work + Monetary Policy', tags:['Quant','Finance']},
+      {id:'fm2w3', dates:'May 10 – May 16', focus:'Fiscal Policy + Motivation Theories', tags:['Finance','Mgmt']},
+      {id:'fm2w4', dates:'May 17 – May 23', focus:'Full Revision + Essay Practice', tags:['Revision','English']},
+    ]
+  },
+  {
+    title: 'Foundation Month 3', dates: 'May 24 – June 20', color: '#9b4be8',
+    id: 'fm3',
+    weeks: [
+      {id:'fm3w1', dates:'May 24 – May 30', focus:'Number System, DI, Fiscal Depth', tags:['Quant','Finance']},
+      {id:'fm3w2', dates:'May 31 – Jun 6',  focus:'Financial Markets, NPAs', tags:['Finance']},
+      {id:'fm3w3', dates:'Jun 7 – Jun 13',  focus:'Social Issues + Leadership', tags:['ESI','Mgmt']},
+      {id:'fm3w4', dates:'Jun 14 – Jun 20', focus:'Full Syllabus Revision + Static-CA Linking', tags:['Revision','CA']},
+    ]
+  },
+  {
+    title: 'Foundation Month 4', dates: 'June 21 – July 18', color: '#4be87a',
+    id: 'fm4',
+    weeks: [
+      {id:'fm4w1', dates:'Jun 21 – Jun 27', focus:'ESI Core Revision', tags:['ESI']},
+      {id:'fm4w2', dates:'Jun 28 – Jul 4',  focus:'Finance Core Revision', tags:['Finance']},
+      {id:'fm4w3', dates:'Jul 5 – Jul 11',  focus:'Management + Social Issues', tags:['Mgmt','ESI']},
+      {id:'fm4w4', dates:'Jul 12 – Jul 18', focus:'Phase-1 Readiness + Writing Practice', tags:['Revision','English']},
+    ]
+  },
+  {
+    title: 'Practice + Mock Month', dates: 'July 19 – August 15', color: '#e84b4b',
+    id: 'pm',
+    weeks: [
+      {id:'pmw1', dates:'Jul 19 – Jul 25', focus:'Full Revision + Mock 1', tags:['Revision','Mock']},
+      {id:'pmw2', dates:'Jul 26 – Aug 1',  focus:'Mock 2 + Writing Consistency', tags:['Mock','English']},
+      {id:'pmw3', dates:'Aug 2 – Aug 8',   focus:'Mock 3 + Weak Area Fixing', tags:['Mock','Revision']},
+      {id:'pmw4', dates:'Aug 9 – Aug 15',  focus:'Final Mock + Confidence Building', tags:['Mock']},
+    ]
+  }
+];
+
+const TAG_COLORS = {
+  Quant:    {bg:'rgba(232,184,75,0.15)',  color:'#e8b84b'},
+  Reasoning:{bg:'rgba(75,142,232,0.15)',  color:'#4b8be8'},
+  ESI:      {bg:'rgba(155,75,232,0.15)',  color:'#9b4be8'},
+  Finance:  {bg:'rgba(75,232,122,0.15)',  color:'#4be87a'},
+  Mgmt:     {bg:'rgba(232,75,75,0.15)',   color:'#e84b4b'},
+  English:  {bg:'rgba(75,232,232,0.15)',  color:'#4be8e8'},
+  CA:       {bg:'rgba(232,75,232,0.15)',  color:'#e84be8'},
+  Revision: {bg:'rgba(232,184,75,0.1)',   color:'#e8b84b'},
+  Mock:     {bg:'rgba(232,75,75,0.15)',   color:'#e84b4b'},
+};
+
+function getWeekISO(dateStr) {
+  // parse "Mar 29", "Apr 5" etc → approximate ISO
+  const monthMap = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+  const p = dateStr.trim().split(' ');
+  if (p.length < 2) return null;
+  return new Date(2026, monthMap[p[0]], parseInt(p[1]));
+}
+
+function isCurrentCalWeek(week) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const start = getWeekISO(week.dates.split('–')[0]);
+  const endParts = week.dates.split('–');
+  // end date: if "Apr 4", use same month; if "May 2" use that month
+  const endRaw = endParts[1].trim();
+  let endDate;
+  if (endRaw.includes(' ')) {
+    endDate = getWeekISO(endRaw);
+  } else {
+    // just day number, use start month
+    const m = week.dates.split('–')[0].trim().split(' ')[0];
+    endDate = getWeekISO(m + ' ' + endRaw);
+  }
+  if (!start || !endDate) return false;
+  endDate.setHours(23,59,59);
+  return today >= start && today <= endDate;
+}
+
+function buildCalendar() {
+  if (!state.calWeeks) state.calWeeks = {};
+  const grid = document.getElementById('calendarGrid');
+
+  // Current phase badge
+  let currentPhase = '—';
+  CAL_MONTHS.forEach(m => {
+    m.weeks.forEach(w => { if (isCurrentCalWeek(w)) currentPhase = m.title; });
+  });
+  document.getElementById('cal-phase-badge').textContent = currentPhase;
+
+  grid.innerHTML = CAL_MONTHS.map(month => {
+    const total = month.weeks.length;
+    const done = month.weeks.filter(w => state.calWeeks[w.id]?.studied).length;
+    const pct = Math.round(done/total*100);
+    const c = month.color;
+
+    return `<div class="cal-month">
+      <div class="cal-month-bar" style="background:${c}22"></div>
+      <div class="cal-month-header">
+        <div>
+          <div class="cal-month-title" style="color:${c}">${month.title}</div>
+          <div class="cal-month-dates">${month.dates}</div>
+        </div>
+        <div class="cal-month-pct" style="color:${c}">${done}/${total} weeks <span style="font-size:0.8rem;color:var(--muted)">(${pct}%)</span></div>
+      </div>
+      ${month.weeks.map((w, wi) => {
+        const cw = state.calWeeks[w.id] || {};
+        const isCur = isCurrentCalWeek(w);
+        const tags = w.tags.map(t => {
+          const tc = TAG_COLORS[t] || {bg:'rgba(107,115,143,0.2)',color:'var(--muted)'};
+          return `<span class="focus-tag" style="background:${tc.bg};color:${tc.color}">${t}</span>`;
+        }).join('');
+        return `<div class="cal-week-row ${isCur?'cw-current':''} ${cw.studied?'cw-done':''}">
+          <div class="cal-wk-num" style="color:${c}">W${wi+1}</div>
+          <div class="cal-wk-dates">${w.dates}${isCur?'<span class="today-pill">NOW</span>':''}</div>
+          <div class="cal-wk-focus">
+            <span style="font-size:0.85rem;margin-right:6px">${w.focus}</span>
+            ${tags}
+          </div>
+          <div class="cal-wk-action">
+            <input class="cal-notes-input" type="text" placeholder="Notes…" value="${cw.notes||''}"
+              onchange="saveCalWeek('${w.id}','notes',this.value)" title="Add notes for this week">
+            <button class="cal-check-btn ${cw.studied?'studied':''}"
+              onclick="toggleCalWeek('${w.id}',this)">
+              ${cw.studied ? '✓ Studied' : '○ Mark Done'}
+            </button>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }).join('');
+}
+
+function toggleCalWeek(id, btn) {
+  if (!state.calWeeks) state.calWeeks = {};
+  if (!state.calWeeks[id]) state.calWeeks[id] = {};
+  state.calWeeks[id].studied = !state.calWeeks[id].studied;
+  btn.classList.toggle('studied');
+  btn.textContent = state.calWeeks[id].studied ? '✓ Studied' : '○ Mark Done';
+  btn.closest('.cal-week-row').classList.toggle('cw-done', state.calWeeks[id].studied);
+  // update month header pct
+  save(); buildCalendar(); showToast('Saved ✓');
+}
+
+function saveCalWeek(id, key, val) {
+  if (!state.calWeeks) state.calWeeks = {};
+  if (!state.calWeeks[id]) state.calWeeks[id] = {};
+  state.calWeeks[id][key] = val;
+  save(); showToast('Saved ✓');
+}
+
+// ─── SYLLABUS CHECKLIST ───
+const SYLLABUS = [
+  {
+    phase: 'Phase 1 — Objective', color: '#e8b84b', id: 'p1',
+    sections: [
+      {
+        title: '📰 General Awareness (80 marks — GAME CHANGER · 60–70% of Phase 1)',
+        topics: [
+          {id:'ga1', t:'Banking & Finance Current Affairs (last 6–8 months)', pyq:'high', tip:'35–40% of GA marks. Master this = clear GA cut-off.'},
+          {id:'ga2', t:'RBI Notifications, Circulars & MPC Decisions', pyq:'high', tip:'10–15 marks. RBI loves its own decisions.'},
+          {id:'ga3', t:'Monetary Policy Committee (MPC) — rates, stance, minutes', pyq:'high', tip:'Directly linked to your Finance paper too.'},
+          {id:'ga4', t:'Inflation data (CPI, WPI), GDP & Growth figures', pyq:'high', tip:'Appears in both GA and ESI. Double prep benefit.'},
+          {id:'ga5', t:'Union Budget & Economic Survey highlights', pyq:'high', tip:'Cover key numbers + flagship schemes.'},
+          {id:'ga6', t:'Government Schemes (economic & social)', pyq:'med', tip:'20–25% of GA. Focus on economic schemes only.'},
+          {id:'ga7', t:'Reports & Indices (HDI, GII, WEF, World Bank, IMF)', pyq:'med', tip:'10% of GA. Learn top 5–7 indices deeply.'},
+          {id:'ga8', t:'International Orgs (IMF, World Bank, WTO, BIS)', pyq:'med', tip:'5% · Focus on India-specific interactions.'},
+          {id:'ga9', t:'National & International Organizations', pyq:'low', tip:'Appointments + summits only when high-profile.'},
+          {id:'ga10', t:'Static GK — very limited', pyq:'low', tip:'< 5% · Ignore deep static. Only famous facts.'},
+        ]
+      },
+      {
+        title: '🔢 Quantitative Aptitude (30 marks — Accuracy > Speed)',
+        topics: [
+          {id:'q1', t:'Data Interpretation (Table, Bar, Pie, Caselet)', pyq:'high', tip:'10–12 questions. DI is compulsory. Practice daily.'},
+          {id:'q2', t:'Percentages', pyq:'high', tip:'3–4 Qs. Foundation of all other Quant topics.'},
+          {id:'q3', t:'Ratio & Proportion + Averages', pyq:'med', tip:'3–4 Qs. Fast if formula is clear.'},
+          {id:'q4', t:'Simple & Compound Interest', pyq:'med', tip:'2–3 Qs. Formula clarity is enough.'},
+          {id:'q5', t:'Time & Work + Time, Speed & Distance', pyq:'med', tip:'2–3 Qs. Standard bank-exam level.'},
+          {id:'q6', t:'Number System', pyq:'low', tip:'2–3 Qs. Cover divisibility, LCM/HCF basics.'},
+          {id:'q7', t:'Profit & Loss', pyq:'low', tip:'1–2 Qs. Basic formulas only.'},
+        ]
+      },
+      {
+        title: '🧠 Reasoning Ability (60 marks — Puzzles = Make or Break)',
+        topics: [
+          {id:'r1', t:'Puzzles & Seating Arrangement (Linear + Circular)', pyq:'high', tip:'25–30 Qs! Weak here = Phase-1 is risky. Daily practice.'},
+          {id:'r2', t:'Syllogism', pyq:'high', tip:'6–8 Qs. Very scoring once pattern is clear.'},
+          {id:'r3', t:'Inequality', pyq:'high', tip:'5–6 Qs. Rule-based. Master once, score always.'},
+          {id:'r4', t:'Coding–Decoding', pyq:'med', tip:'4–5 Qs. Pattern recognition.'},
+          {id:'r5', t:'Input–Output / Logical Reasoning', pyq:'med', tip:'5–6 Qs. Needs regular practice.'},
+          {id:'r6', t:'Series', pyq:'med', tip:'3–4 Qs. Number + letter series.'},
+          {id:'r7', t:'Blood Relations', pyq:'low', tip:'2–3 Qs. Tree diagram approach.'},
+          {id:'r8', t:'Direction Sense', pyq:'low', tip:'2–3 Qs. Quick once practiced.'},
+        ]
+      },
+      {
+        title: '📝 English Language (30 marks — Cut-off is strict)',
+        topics: [
+          {id:'e1', t:'Reading Comprehension', pyq:'high', tip:'10–12 Qs. Daily RC habit = Phase-1 + Phase-2 both covered.'},
+          {id:'e2', t:'Cloze Test', pyq:'high', tip:'5 Qs. Contextual vocab.'},
+          {id:'e3', t:'Error Spotting', pyq:'med', tip:'4–5 Qs. Grammar rules.'},
+          {id:'e4', t:'Para-jumbles', pyq:'med', tip:'4–5 Qs. Logical sequencing.'},
+          {id:'e5', t:'Fill in the Blanks / Vocabulary (context)', pyq:'low', tip:'3–4 Qs. Reading habit helps most.'},
+        ]
+      }
+    ]
+  },
+  {
+    phase: 'Phase 2 — ESI: Economic & Social Issues (100 marks)', color: '#9b4be8', id: 'p2esi',
+    sections: [
+      {
+        title: '📈 Part A: Economics (Static + Current) — Descriptive dominates',
+        topics: [
+          {id:'esi1', t:'Growth & Development — GDP, GNP, NNP, HDI, MPI', pyq:'high', tip:'20–25% of ESI. Essay + MCQ both. Always appears.'},
+          {id:'esi2', t:'Poverty & Inequality — Tendulkar, Rangarajan, Gini, MPI', pyq:'high', tip:'10–12%. India-specific data + govt schemes essential.'},
+          {id:'esi3', t:'Inflation — types, causes, CPI vs WPI, inflation targeting', pyq:'high', tip:'EVERGREEN. Cost-push vs demand-pull. Link to MPC.'},
+          {id:'esi4', t:'Monetary Policy — Repo, CRR, SLR, LAF, transmission mechanism', pyq:'high', tip:'TOP PRIORITY. Link to Phase 2 Finance paper too.'},
+          {id:'esi5', t:'Fiscal Policy — deficits, FRBM Act, fiscal stimulus, budget', pyq:'high', tip:'10–12%. Fiscal vs monetary policy comparison is a PYQ staple.'},
+          {id:'esi6', t:'Employment & Demographics — unemployment types, demographic dividend', pyq:'med', tip:'8–10%. Structural unemployment + skill mismatch trending.'},
+          {id:'esi7', t:'Indian Economy — LPG reforms, economic planning, structure', pyq:'med', tip:'Conceptual background. Links everything else.'},
+          {id:'esi8', t:'External Sector — BoP, exchange rates, IMF, World Bank, WTO', pyq:'med', tip:'Cover basics + India context. Not deep theory.'},
+        ]
+      },
+      {
+        title: '🏥 Part B: Social Issues (RISING weight — 15–20%)',
+        topics: [
+          {id:'esi9',  t:'Education — quality vs access, NEP, policies, challenges', pyq:'high', tip:'Essay almost every year. SDG 4 angle + India data.'},
+          {id:'esi10', t:'Health — public health, schemes, NHM, health expenditure', pyq:'high', tip:'Post-COVID focus. Health + growth linkage essays.'},
+          {id:'esi11', t:'Gender Issues — inequality, schemes, demographic impacts', pyq:'high', tip:'Gender + development angle in descriptive.'},
+          {id:'esi12', t:'Poverty Alleviation Programs (MGNREGA, PM-KISAN, etc.)', pyq:'med', tip:'Know 5–6 major schemes deeply with data.'},
+          {id:'esi13', t:'Social Justice & Inclusion — SC/ST, OBC, minorities', pyq:'low', tip:'Background reading. Appears in essay contexts.'},
+        ]
+      }
+    ]
+  },
+  {
+    phase: 'Phase 2 — FM: Finance & Management (100 marks)', color: '#4b8be8', id: 'p2fm',
+    sections: [
+      {
+        title: '🏦 Finance Part A — RBI & Banking (50–60 marks · Most Important)',
+        topics: [
+          {id:'fm1', t:'RBI — functions, role, history, structure, as regulator', pyq:'high', tip:'25–30% of FM. Can explain RBI role without notes? ✓'},
+          {id:'fm2', t:'Monetary Policy Instruments — Repo, Reverse Repo, CRR, SLR, LAF, OMO', pyq:'high', tip:'Links directly to ESI. Double scoring topic.'},
+          {id:'fm3', t:'Banking System — commercial banks, NBFCs, cooperative, RRBs', pyq:'high', tip:'20–25%. Structure + regulation logic.'},
+          {id:'fm4', t:'NPAs & Asset Quality — causes, AQR, bad bank, resolution', pyq:'high', tip:'10–12%. NPA lifecycle + IBC + NARCL.'},
+          {id:'fm5', t:'Basel Norms — Basel I, II, III, CAR, Tier 1/2 capital', pyq:'med', tip:'8–10%. Explain Basel in simple words. Standard PYQ.'},
+          {id:'fm6', t:'Financial Markets — money market vs capital market, instruments', pyq:'med', tip:'10–12%. T-bills, CPs, bonds, SEBI role.'},
+          {id:'fm7', t:'Digital Banking & FinTech — UPI, CBDC, payment systems, cyber risk', pyq:'med', tip:'NEW TREND. 8–10%. Expected to grow. CBDC focus.'},
+          {id:'fm8', t:'Financial Inclusion & Priority Sector Lending', pyq:'med', tip:'Links to Social Issues. Jan Dhan, MUDRA, SHGs.'},
+          {id:'fm9', t:'Banking Reforms — IBC, PCA framework, consolidation', pyq:'low', tip:'Background knowledge. Context for NPA answers.'},
+        ]
+      },
+      {
+        title: '🏢 Management Part B — STATIC + SCORING (40–50 marks · Predictable)',
+        topics: [
+          {id:'mg1', t:'Motivation Theories — Maslow, Herzberg, McGregor X&Y, Vroom', pyq:'high', tip:'15–20%. SAME questions, year after year. Easy marks.'},
+          {id:'mg2', t:'Leadership Styles — autocratic, democratic, laissez-faire, situational', pyq:'high', tip:'10–12%. Apply to workplace context in answers.'},
+          {id:'mg3', t:'Communication — process, barriers, types, channels', pyq:'high', tip:'10%. Barriers + effective communication = standard PYQ.'},
+          {id:'mg4', t:'Ethics & Governance — corporate governance, ethical dilemmas', pyq:'med', tip:'10–12%. Examples-based answers score well.'},
+          {id:'mg5', t:'Organizational Behavior & HR Concepts', pyq:'med', tip:'10–12%. OB theories + group dynamics basics.'},
+          {id:'mg6', t:'Management Functions — planning, organizing, staffing, directing', pyq:'med', tip:'Foundation. Appears in multiple-choice + short answers.'},
+          {id:'mg7', t:'Corporate Social Responsibility (CSR)', pyq:'low', tip:'5–8%. India CSR law + examples. Quick to prepare.'},
+        ]
+      }
+    ]
+  },
+  {
+    phase: 'Phase 2 — English: Writing Skills (100 marks · Descriptive)', color: '#4be87a', id: 'p2eng',
+    sections: [
+      {
+        title: '✍️ Descriptive English — Clarity > Vocabulary',
+        topics: [
+          {id:'en1', t:'Essay Writing (200–250 words) — 40–45% weightage', pyq:'high', tip:'Good intro + body + conclusion. Simple English wins. 25 min target.'},
+          {id:'en2', t:'Precis Writing — reduce by 1/3 logically', pyq:'high', tip:'30% weightage. Appears EVERY year. Practice weekly.'},
+          {id:'en3', t:'Reading Comprehension (Descriptive) — answer in own words', pyq:'high', tip:'25–30% weightage. No copy-paste. Paraphrase + analyse.'},
+          {id:'en4', t:'Essay Themes: Inflation, Banking Reforms, Digital Economy', pyq:'high', tip:'Repeat topics from ESI/Finance = linked preparation.'},
+          {id:'en5', t:'Essay Themes: Education, Health, Gender, Employment', pyq:'high', tip:'Social Issues themes. Prepare 2–3 structure templates.'},
+          {id:'en6', t:'Grammar Foundation — SVA, tenses, articles, prepositions', pyq:'med', tip:'No direct test but errors hurt score. Review once.'},
+        ]
+      }
+    ]
+  },
+  {
+    phase: 'Interview (75 marks)', color: '#e84b4b', id: 'interview',
+    sections: [
+      {
+        title: '🎤 Personal Interview — No fixed syllabus, but patterns exist',
+        topics: [
+          {id:'int1', t:'RBI Functions, Role & Recent Decisions', pyq:'high', tip:'Most asked area. Know last 3 MPC decisions.'},
+          {id:'int2', t:'Indian Economy — current issues, growth outlook', pyq:'high', tip:'Be ready to give opinions with data.'},
+          {id:'int3', t:'Banking sector — reforms, NPAs, digital banking', pyq:'high', tip:'Situational + opinion questions frequent here.'},
+          {id:'int4', t:'Your academic background & work experience', pyq:'med', tip:'Link your background to RBI/banking/economy.'},
+          {id:'int5', t:'Current economic issues (inflation, employment, fiscal)', pyq:'med', tip:'Last 3–6 months news. Your take matters.'},
+          {id:'int6', t:'Why RBI Grade B? Why public service?', pyq:'low', tip:'Prepare a 2-minute honest answer.'},
+        ]
+      }
+    ]
+  }
+];
+
+let sylFilter = 'all';
+
+function setSylFilter(f, el) {
+  sylFilter = f;
+  document.querySelectorAll('#sylFilterTabs .tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderSyllabus();
+}
+
+function renderSyllabus() {
+  if (!state.syl) state.syl = {};
+  const q = (document.getElementById('sylSearch')?.value || '').toLowerCase();
+
+  // Stats
+  let total=0, done=0, weak=0, strong=0;
+  SYLLABUS.forEach(ph => ph.sections.forEach(sec => sec.topics.forEach(tp => {
+    total++;
+    const s = state.syl[tp.id] || {};
+    if (s.done) done++;
+    if (s.conf === 'weak') weak++;
+    if (s.conf === 'strong') strong++;
+  })));
+  document.getElementById('sylStats').innerHTML = `
+    <div class="stat-card sc-blue"><div class="stat-label">Total Topics</div><div class="stat-val">${total}</div></div>
+    <div class="stat-card sc-green"><div class="stat-label">Done</div><div class="stat-val">${done}</div></div>
+    <div class="stat-card sc-gold"><div class="stat-label">Strong</div><div class="stat-val">${strong}</div></div>
+    <div class="stat-card sc-red"><div class="stat-label">Weak / Risky</div><div class="stat-val">${weak}</div></div>
+    <div class="stat-card sc-purple"><div class="stat-label">Completion</div><div class="stat-val">${total?Math.round(done/total*100):0}%</div></div>
+  `;
+
+  const container = document.getElementById('syllabusList');
+  let html = '';
+
+  SYLLABUS.forEach(phase => {
+    let phaseTopics = 0, phaseDone = 0;
+    let sectionsHtml = '';
+
+    phase.sections.forEach(sec => {
+      const filtered = sec.topics.filter(tp => {
+        const s = state.syl[tp.id] || {};
+        if (q && !tp.t.toLowerCase().includes(q) && !tp.tip.toLowerCase().includes(q)) return false;
+        if (sylFilter === 'done' && !s.done) return false;
+        if (sylFilter === 'pending' && s.done) return false;
+        if (sylFilter === 'weak' && s.conf !== 'weak') return false;
+        return true;
+      });
+      if (!filtered.length) return;
+
+      phaseTopics += sec.topics.length;
+      phaseDone += sec.topics.filter(tp => (state.syl[tp.id]||{}).done).length;
+
+      sectionsHtml += `<div class="syl-section">
+        <div class="syl-section-title">${sec.title}</div>
+        ${filtered.map(tp => {
+          const s = state.syl[tp.id] || {};
+          const pyqCls = {high:'pyq-high', med:'pyq-med', low:'pyq-low'}[tp.pyq] || 'pyq-low';
+          const pyqLabel = {high:'🔴 High PYQ', med:'🟡 Medium PYQ', low:'🔵 Low PYQ'}[tp.pyq] || '';
+          const confCls = s.conf === 'strong' ? 'conf-strong' : s.conf === 'weak' ? 'conf-weak' : s.conf === 'medium' ? 'conf-medium' : '';
+          return `<div class="syl-item ${s.done ? 'syl-done' : ''}">
+            <div class="syl-item-left">
+              <div class="syl-topic">${tp.t}</div>
+              <div class="syl-meta-row">
+                <span class="syl-pyq ${pyqCls}">${pyqLabel}</span>
+                <span class="syl-tip">${tp.tip}</span>
+              </div>
+            </div>
+            <select class="conf-select ${confCls}" onchange="saveSyl('${tp.id}','conf',this.value,this)">
+              <option value="">— Confidence</option>
+              <option value="strong" ${s.conf==='strong'?'selected':''}>💪 Strong</option>
+              <option value="medium" ${s.conf==='medium'?'selected':''}>📖 Studying</option>
+              <option value="weak"   ${s.conf==='weak'?'selected':''}>⚠️ Weak / Risky</option>
+            </select>
+            <div class="syl-chk ${s.done ? 'on' : ''}" onclick="toggleSyl('${tp.id}',this)"></div>
+          </div>`;
+        }).join('')}
+      </div>`;
+    });
+
+    if (!sectionsHtml) return;
+
+    const pct = phaseTopics ? Math.round(phaseDone/phaseTopics*100) : 0;
+    html += `<div class="syl-phase">
+      <div class="syl-phase-header" onclick="togglePhase('${phase.id}')">
+        <div class="syl-phase-title" style="color:${phase.color}">${phase.phase}</div>
+        <div class="syl-phase-meta">
+          <div class="pbar-track" style="width:120px"><div class="pbar-fill" style="width:${pct}%;background:${phase.color}"></div></div>
+          <div class="syl-phase-pct" style="color:${phase.color}">${phaseDone}/${phaseTopics}</div>
+        </div>
+      </div>
+      <div class="syl-phase-body" id="sylphase-${phase.id}">${sectionsHtml}</div>
+    </div>`;
+  });
+
+  container.innerHTML = html || `<div class="empty-state" style="text-align:center;padding:60px;color:var(--muted)"><div style="font-size:2rem;margin-bottom:12px">✦</div><p>No topics match your filter.</p></div>`;
+}
+
+function togglePhase(id) {
+  const body = document.getElementById('sylphase-' + id);
+  if (body) body.classList.toggle('collapsed');
+}
+
+function toggleSyl(id, el) {
+  if (!state.syl) state.syl = {};
+  if (!state.syl[id]) state.syl[id] = {};
+  state.syl[id].done = !state.syl[id].done;
+  el.classList.toggle('on');
+  el.closest('.syl-item').classList.toggle('syl-done', state.syl[id].done);
+  save(); renderSyllabus(); showToast('Saved ✓');
+}
+
+function saveSyl(id, key, val, el) {
+  if (!state.syl) state.syl = {};
+  if (!state.syl[id]) state.syl[id] = {};
+  state.syl[id][key] = val;
+  el.className = 'conf-select' + (val==='strong'?' conf-strong':val==='weak'?' conf-weak':val==='medium'?' conf-medium':'');
+  save(); renderSyllabus(); showToast('Saved ✓');
+}
+
+// ─── EXPORT ───
+function exportData() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'rbi-grade-b-tracker.json';
+  a.click();
+  showToast('Exported! ✓');
+}
+
+// ─── TOAST ───
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show ok';
+  setTimeout(() => t.className = 'toast', 2000);
+}
+
+// ─── INIT ───
+buildWeekTable();
+buildDayLog();
+buildPrelimTable();
+buildMainsTable();
+updateDashboard();
+buildCalendar();
+</script>
+</body>
+</html>
