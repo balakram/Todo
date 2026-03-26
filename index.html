@@ -708,9 +708,320 @@ nav {
   .score-input { width: 52px; }
   .notes-input { width: 110px; }
 }
+
+/* ── AUTH SCREEN ── */
+#authScreen {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+}
+#authScreen::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 30% 20%, rgba(232,184,75,0.07) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 80%, rgba(75,142,232,0.05) 0%, transparent 60%);
+  pointer-events: none;
+}
+.auth-box {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 20px; padding: 40px 36px;
+  width: 100%; max-width: 380px; position: relative;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+}
+.auth-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem; font-weight: 900; color: var(--accent);
+  text-align: center; margin-bottom: 4px;
+}
+.auth-tagline { text-align: center; color: var(--muted); font-size: 0.82rem; margin-bottom: 28px; }
+.auth-field { margin-bottom: 14px; }
+.auth-field label {
+  display: block; font-size: 0.72rem; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 6px;
+}
+.auth-input {
+  width: 100%; background: var(--s2); border: 1px solid var(--border);
+  color: var(--text); border-radius: 10px; padding: 11px 14px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.92rem; outline: none;
+  transition: border-color 0.2s;
+}
+.auth-input:focus { border-color: var(--accent); }
+.auth-btn {
+  width: 100%; padding: 12px; border-radius: 999px;
+  background: var(--accent); color: #080a0f;
+  font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 700;
+  border: none; cursor: pointer; transition: all 0.2s; margin-top: 6px;
+}
+.auth-btn:hover { background: #f0c85a; transform: translateY(-1px); }
+.auth-error {
+  background: rgba(232,75,75,0.12); border: 1px solid rgba(232,75,75,0.3);
+  color: #e84b4b; border-radius: 8px; padding: 9px 12px;
+  font-size: 0.8rem; margin-bottom: 12px; display: none; text-align: center;
+}
+.auth-tab-row {
+  display: flex; margin-bottom: 22px;
+  background: var(--s2); border-radius: 10px; padding: 3px;
+}
+.auth-tab {
+  flex: 1; text-align: center; padding: 8px;
+  border-radius: 8px; font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; color: var(--muted); transition: all 0.2s; user-select: none;
+}
+.auth-tab.active { background: var(--s1); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+.auth-hint { text-align: center; font-size: 0.7rem; color: var(--muted); margin-top: 14px; }
+.auth-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+.user-badge {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 12px; border-radius: 8px;
+  background: rgba(232,184,75,0.08); border: 1px solid rgba(232,184,75,0.2);
+  font-size: 0.78rem; color: var(--accent); cursor: pointer;
+  transition: all 0.15s; white-space: nowrap;
+}
+.user-badge:hover { background: rgba(232,184,75,0.15); }
+
+/* ── PERFORMANCE ANALYTICS ── */
+.perf-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 16px; margin-bottom: 20px; }
+.perf-card { background: var(--s1); border: 1px solid var(--border); border-radius: var(--r); padding: 18px 20px; }
+.perf-card-title { font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
+.trend-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+.trend-label { font-size: 0.75rem; font-weight: 500; width: 76px; flex-shrink: 0; }
+.trend-bar-track { flex: 1; height: 6px; background: var(--s3); border-radius: 999px; overflow: hidden; }
+.trend-bar-fill { height: 100%; border-radius: 999px; transition: width 0.4s; }
+.trend-val { font-size: 0.72rem; color: var(--muted); width: 36px; text-align: right; flex-shrink: 0; }
+.score-sparkline { display: flex; align-items: flex-end; gap: 2px; height: 56px; margin-top: 6px; }
+.spark-bar { flex: 1; border-radius: 3px 3px 0 0; min-width: 3px; cursor: pointer; transition: opacity 0.15s; position: relative; }
+.spark-bar:hover { opacity: 0.7; }
+.spark-label { font-size: 0.62rem; color: var(--muted); text-align: center; margin-top: 2px; }
+.weak-tag { display: inline-block; padding: 3px 9px; border-radius: 6px; font-size: 0.7rem; font-weight: 600; margin: 2px; background: rgba(232,75,75,0.12); color: var(--danger); border: 1px solid rgba(232,75,75,0.2); }
+.insight-row { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px solid rgba(37,43,59,0.35); font-size: 0.8rem; }
+.insight-row:last-child { border-bottom: none; }
+.insight-icon { font-size: 1rem; flex-shrink: 0; }
+.insight-text { color: var(--muted); line-height: 1.5; }
+.insight-text strong { color: var(--text); }
+.perf-tab-row { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+.perf-tab { padding: 5px 14px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--s2); color: var(--muted); transition: all 0.15s; }
+.perf-tab.active { background: var(--accent); color: #080a0f; border-color: var(--accent); }
+
+/* ── EXPORT PANEL ── */
+.export-panel {
+  position: fixed; right: 0; top: 0; bottom: 0; width: 300px;
+  background: var(--s1); border-left: 1px solid var(--border);
+  z-index: 400; transform: translateX(100%); transition: transform 0.3s ease;
+  display: flex; flex-direction: column; box-shadow: -8px 0 32px rgba(0,0,0,0.4);
+}
+.export-panel.open { transform: translateX(0); }
+.export-panel-header { padding: 18px 18px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.export-panel-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; }
+.export-panel-close { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1.2rem; padding: 4px; line-height: 1; transition: color 0.15s; }
+.export-panel-close:hover { color: var(--text); }
+.export-panel-body { padding: 18px; flex: 1; overflow-y: auto; }
+.export-section { margin-bottom: 22px; }
+.export-section-title { font-size: 0.7rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 10px; }
+.exp-btn { display: flex; align-items: center; gap: 10px; padding: 11px 13px; border-radius: 10px; cursor: pointer; border: 1px solid var(--border); background: var(--s2); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 500; transition: all 0.15s; text-align: left; width: 100%; margin-bottom: 6px; }
+.exp-btn:hover { background: var(--s3); border-color: var(--accent); }
+.exp-btn-icon { font-size: 1rem; flex-shrink: 0; }
+.exp-btn-sub { font-size: 0.68rem; color: var(--muted); display: block; margin-top: 1px; }
+.exp-btn.danger:hover { background: rgba(232,75,75,0.08); border-color: var(--danger); color: var(--danger); }
+.export-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 399; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+.export-overlay.open { opacity: 1; pointer-events: all; }
+.nav-export-btn { margin-left: auto; padding: 7px 12px; border-radius: 8px; background: rgba(232,184,75,0.1); border: 1px solid rgba(232,184,75,0.25); color: var(--accent); font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; }
+.nav-export-btn:hover { background: rgba(232,184,75,0.2); }
+
+/* ── TODAY'S TASKS ── */
+.today-section { background: var(--s1); border: 1px solid var(--border); border-radius: var(--r); padding: 20px 22px; margin-bottom: 18px; }
+.today-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+.today-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.today-date-badge { font-size: 0.72rem; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: rgba(232,184,75,0.12); color: var(--accent); border: 1px solid rgba(232,184,75,0.25); }
+.task-checklist { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; }
+.task-check-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-radius: 10px;
+  background: var(--s2); border: 1px solid var(--border);
+  cursor: pointer; transition: all 0.15s; user-select: none;
+}
+.task-check-item:hover { border-color: var(--accent3); background: var(--s3); }
+.task-check-item.done { opacity: 0.55; }
+.task-check-item.done .tci-title { text-decoration: line-through; color: var(--muted); }
+.tci-box {
+  width: 20px; height: 20px; border-radius: 5px; flex-shrink: 0;
+  border: 2px solid var(--border); background: var(--s1);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s; font-size: 11px; font-weight: 900;
+}
+.task-check-item.done .tci-box { background: var(--accent3); border-color: var(--accent3); color: #080a0f; }
+.task-check-item.done .tci-box::after { content: '✓'; }
+.tci-text { flex: 1; min-width: 0; }
+.tci-title { font-size: 0.82rem; font-weight: 600; }
+.tci-sub { font-size: 0.68rem; color: var(--muted); margin-top: 1px; }
+.today-progress-bar { margin-top: 14px; }
+.today-prog-label { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--muted); margin-bottom: 5px; }
+
+/* ── SMART ALERTS ── */
+.alerts-wrap { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+.alert-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 16px; border-radius: 12px; border: 1px solid transparent;
+  animation: alertIn 0.3s ease;
+}
+@keyframes alertIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+.alert-item.alert-warning { background: rgba(232,184,75,0.08); border-color: rgba(232,184,75,0.25); }
+.alert-item.alert-danger  { background: rgba(232,75,75,0.08);  border-color: rgba(232,75,75,0.25); }
+.alert-item.alert-success { background: rgba(75,232,122,0.08); border-color: rgba(75,232,122,0.25); }
+.alert-item.alert-info    { background: rgba(75,142,232,0.08); border-color: rgba(75,142,232,0.25); }
+.alert-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+.alert-body { flex: 1; }
+.alert-title { font-size: 0.85rem; font-weight: 700; margin-bottom: 2px; }
+.alert-item.alert-warning .alert-title { color: var(--accent); }
+.alert-item.alert-danger  .alert-title { color: var(--danger); }
+.alert-item.alert-success .alert-title { color: var(--accent3); }
+.alert-item.alert-info    .alert-title { color: var(--accent2); }
+.alert-desc { font-size: 0.77rem; color: var(--muted); line-height: 1.4; }
+.alert-action { font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; cursor: pointer; border: none; transition: all 0.15s; white-space: nowrap; align-self: center; flex-shrink: 0; }
+.alert-item.alert-warning .alert-action { background: rgba(232,184,75,0.2); color: var(--accent); }
+.alert-item.alert-danger  .alert-action { background: rgba(232,75,75,0.2);  color: var(--danger); }
+.alert-item.alert-info    .alert-action { background: rgba(75,142,232,0.2); color: var(--accent2); }
+
+/* ── READINESS METER ── */
+.readiness-wrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 14px; margin-bottom: 18px; }
+.readiness-card { background: var(--s1); border: 1px solid var(--border); border-radius: var(--r); padding: 18px 20px; }
+.readiness-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.readiness-label { font-size: 0.78rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; }
+.readiness-pct { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; line-height: 1; }
+.readiness-bar-track { height: 10px; background: var(--s3); border-radius: 999px; overflow: hidden; margin-bottom: 10px; }
+.readiness-bar-fill { height: 100%; border-radius: 999px; transition: width 0.6s cubic-bezier(.4,0,.2,1); }
+.readiness-breakdown { display: flex; flex-direction: column; gap: 5px; }
+.rb-row { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; }
+.rb-label { width: 80px; flex-shrink: 0; color: var(--muted); }
+.rb-track { flex: 1; height: 4px; background: var(--s3); border-radius: 999px; overflow: hidden; }
+.rb-fill { height: 100%; border-radius: 999px; }
+.rb-val { width: 30px; text-align: right; color: var(--muted); font-size: 0.7rem; }
+
+/* ── SVG TREND CHART ── */
+.trend-chart-wrap { position: relative; margin-bottom: 8px; }
+.trend-chart-wrap svg { display: block; width: 100%; overflow: visible; }
+.chart-tooltip {
+  position: absolute; background: var(--s1); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px 10px; font-size: 0.72rem; pointer-events: none;
+  opacity: 0; transition: opacity 0.15s; z-index: 10; white-space: nowrap;
+}
+.chart-tooltip.visible { opacity: 1; }
+
+/* ── SUGGESTION STRIP ── */
+.suggestion-strip { display: flex; flex-direction: column; gap: 8px; }
+.sug-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--s2); border-radius: 10px; border-left: 3px solid; }
+.sug-icon { font-size: 1rem; flex-shrink: 0; }
+.sug-text { font-size: 0.82rem; flex: 1; }
+.sug-text strong { color: var(--text); }
+.sug-badge { font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; flex-shrink: 0; }
 </style>
 </head>
 <body>
+
+<!-- ═══════════════════════════ AUTH SCREEN ═══════════════════════════ -->
+<div id="authScreen">
+  <div class="auth-box">
+    <div class="auth-logo">RBI Grade B</div>
+    <div class="auth-tagline">Personal Progress Tracker · Secured</div>
+    <div class="auth-tab-row">
+      <div class="auth-tab active" id="authTabLogin" onclick="switchAuthTab('login')">Sign In</div>
+      <div class="auth-tab" id="authTabSetup" onclick="switchAuthTab('setup')">First-Time Setup</div>
+    </div>
+    <div class="auth-error" id="authError"></div>
+
+    <!-- LOGIN FORM -->
+    <div id="authLoginForm">
+      <div class="auth-field">
+        <label>Username</label>
+        <input class="auth-input" type="text" id="loginUser" placeholder="Enter your username" autocomplete="username">
+      </div>
+      <div class="auth-field">
+        <label>Password</label>
+        <input class="auth-input" type="password" id="loginPass" placeholder="Enter your password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <button class="auth-btn" onclick="doLogin()">🔓 Sign In</button>
+      <div class="auth-hint">Only you can access this tracker.<br>Data is saved locally on this device.</div>
+    </div>
+
+    <!-- SETUP FORM -->
+    <div id="authSetupForm" style="display:none">
+      <div class="auth-field">
+        <label>Your Name</label>
+        <input class="auth-input" type="text" id="setupName" placeholder="e.g. Deepak" autocomplete="name">
+      </div>
+      <div class="auth-field">
+        <label>Create Username</label>
+        <input class="auth-input" type="text" id="setupUser" placeholder="Choose a username" autocomplete="username">
+      </div>
+      <div class="auth-field">
+        <label>Create Password</label>
+        <input class="auth-input" type="password" id="setupPass" placeholder="Min 4 characters" autocomplete="new-password">
+      </div>
+      <div class="auth-field">
+        <label>Confirm Password</label>
+        <input class="auth-input" type="password" id="setupPass2" placeholder="Repeat password" autocomplete="new-password" onkeydown="if(event.key==='Enter')doSetup()">
+      </div>
+      <button class="auth-btn" onclick="doSetup()">✅ Create Account</button>
+      <div class="auth-hint">Setup is only needed once.<br>Your credentials are stored locally.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ EXPORT PANEL ═══════════════════════════ -->
+<div class="export-overlay" id="exportOverlay" onclick="closeExportPanel()"></div>
+<div class="export-panel" id="exportPanel">
+  <div class="export-panel-header">
+    <div class="export-panel-title">⬇ Data Manager</div>
+    <button class="export-panel-close" onclick="closeExportPanel()">✕</button>
+  </div>
+  <div class="export-panel-body">
+    <div class="export-section">
+      <div class="export-section-title">Export</div>
+      <button class="exp-btn" onclick="exportAll()">
+        <span class="exp-btn-icon">📦</span>
+        <div><span>Export All Data</span><span class="exp-btn-sub">Full backup as JSON file</span></div>
+      </button>
+      <button class="exp-btn" onclick="exportSection('mocks')">
+        <span class="exp-btn-icon">📝</span>
+        <div><span>Export Mock Data Only</span><span class="exp-btn-sub">Prelim + Mains + Sectional</span></div>
+      </button>
+      <button class="exp-btn" onclick="exportSection('syllabus')">
+        <span class="exp-btn-icon">✅</span>
+        <div><span>Export Syllabus Progress</span><span class="exp-btn-sub">Checklist + revision counts</span></div>
+      </button>
+      <button class="exp-btn" onclick="exportSection('weekly')">
+        <span class="exp-btn-icon">📅</span>
+        <div><span>Export Weekly + Daily Log</span><span class="exp-btn-sub">Study completion data</span></div>
+      </button>
+    </div>
+    <div class="export-section">
+      <div class="export-section-title">Import</div>
+      <button class="exp-btn" onclick="document.getElementById('importAllFile').click()">
+        <span class="exp-btn-icon">⬆</span>
+        <div><span>Import All Data</span><span class="exp-btn-sub">Restores full backup (merges)</span></div>
+      </button>
+      <input type="file" id="importAllFile" accept=".json" style="display:none" onchange="importAll(event)">
+      <button class="exp-btn" onclick="document.getElementById('importMocksFile').click()">
+        <span class="exp-btn-icon">📝</span>
+        <div><span>Import Mock Data</span><span class="exp-btn-sub">Add mock scores from backup</span></div>
+      </button>
+      <input type="file" id="importMocksFile" accept=".json" style="display:none" onchange="importSection(event,'mocks')">
+    </div>
+    <div class="export-section">
+      <div class="export-section-title">Danger Zone</div>
+      <button class="exp-btn danger" onclick="resetAllData()">
+        <span class="exp-btn-icon">🗑</span>
+        <div><span>Reset All Progress</span><span class="exp-btn-sub">Clears all data (cannot undo)</span></div>
+      </button>
+      <button class="exp-btn danger" onclick="resetAuth()">
+        <span class="exp-btn-icon">🔐</span>
+        <div><span>Reset Login Credentials</span><span class="exp-btn-sub">Will require re-setup</span></div>
+      </button>
+    </div>
+    <div style="font-size:0.7rem;color:var(--muted);text-align:center;margin-top:8px">
+      All data stored in your browser's localStorage.<br>Export regularly to avoid data loss.
+    </div>
+  </div>
+</div>
 
 <nav>
   <div class="nav-inner">
@@ -723,6 +1034,8 @@ nav {
     <div class="nav-tab" onclick="showPage('analytics')">📈 Analytics</div>
     <div class="nav-tab" onclick="showPage('calendar')">🗓 Study Calendar</div>
     <div class="nav-tab" onclick="showPage('syllabus')">✅ Syllabus Checklist</div>
+    <button class="nav-export-btn" onclick="openExportPanel()">⬇ Data</button>
+    <div class="user-badge" id="userBadge" onclick="doLogout()" title="Click to sign out" style="margin-left:8px">👤 <span id="userBadgeName">—</span></div>
   </div>
 </nav>
 
@@ -732,6 +1045,34 @@ nav {
   <div class="page-sub">Mar 29 – Aug 15, 2026 · 20 Weeks · 140 Days</div>
 
   <div class="quote-bar" id="quoteBar">"<strong>Consistency > Intensity.</strong> Complete the system, not random tasks."</div>
+
+  <!-- SMART ALERTS -->
+  <div class="alerts-wrap" id="smartAlerts"></div>
+
+  <!-- READINESS METER -->
+  <div class="readiness-wrap" id="readinessMeter"></div>
+
+  <!-- TODAY'S TASKS -->
+  <div class="today-section">
+    <div class="today-header">
+      <div class="today-title">✅ Today's Tasks <span class="today-date-badge" id="todayDateBadge">—</span></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span id="todayTaskCount" style="font-size:0.78rem;color:var(--muted)">0/6 done</span>
+        <button onclick="resetTodayTasks()" style="background:none;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:4px 10px;font-size:0.72rem;cursor:pointer;transition:all 0.15s" title="Reset today's tasks">↺ Reset</button>
+      </div>
+    </div>
+    <div class="task-checklist" id="todayTaskList"></div>
+    <div class="today-progress-bar">
+      <div class="today-prog-label"><span>Today's Progress</span><span id="todayProgPct">0%</span></div>
+      <div class="pbar-track"><div class="pbar-fill" id="todayProgBar" style="width:0%;background:linear-gradient(90deg,var(--accent2),var(--accent3))"></div></div>
+    </div>
+  </div>
+
+  <!-- SMART SUGGESTIONS -->
+  <div class="card">
+    <div class="card-title">🧠 Smart Suggestions <span style="font-size:0.72rem;color:var(--muted);font-weight:400;margin-left:6px">Based on your performance data</span></div>
+    <div class="suggestion-strip" id="smartSuggestions"></div>
+  </div>
 
   <div class="stat-grid">
     <div class="stat-card sc-gold"><div class="stat-label">Weeks Done</div><div class="stat-val" id="d-weeksDone">0/20</div></div>
@@ -973,23 +1314,119 @@ nav {
 
 <!-- ═══════════════════════════ ANALYTICS ═══════════════════════════ -->
 <div class="page" id="page-analytics">
-  <div class="page-title">Progress <span>Analytics</span></div>
-  <div class="page-sub">Visual breakdown of your preparation journey</div>
+  <div class="page-title">Performance <span>Analytics</span></div>
+  <div class="page-sub">Deep insights for your RBI Grade B preparation</div>
 
-  <div class="chart-grid">
-    <div class="mini-chart">
-      <div class="mini-chart-title">Weekly Subject Completion %</div>
-      <div class="subject-bars" id="wk-subj-bars"></div>
+  <div class="perf-tab-row">
+    <div class="perf-tab active" onclick="setAnalyticsTab('overview',this)">📊 Overview</div>
+    <div class="perf-tab" onclick="setAnalyticsTab('prelim',this)">📝 Prelim Analysis</div>
+    <div class="perf-tab" onclick="setAnalyticsTab('mains',this)">🏆 Mains Analysis</div>
+    <div class="perf-tab" onclick="setAnalyticsTab('sectional',this)">📐 Sectional Analysis</div>
+    <div class="perf-tab" onclick="setAnalyticsTab('study',this)">📆 Study Patterns</div>
+  </div>
+
+  <!-- OVERVIEW TAB -->
+  <div id="atab-overview">
+    <div class="perf-grid">
+      <div class="perf-card">
+        <div class="perf-card-title">Weekly Subject Completion %</div>
+        <div class="subject-bars" id="wk-subj-bars"></div>
+      </div>
+      <div class="perf-card">
+        <div class="perf-card-title">📊 Preparation Score Card</div>
+        <div id="scoreCard"></div>
+      </div>
     </div>
-    <div class="mini-chart">
-      <div class="mini-chart-title">Mock Score Trend (Prelim)</div>
-      <canvas id="mockChart" height="180"></canvas>
+    <div class="perf-grid">
+      <div class="perf-card">
+        <div class="perf-card-title">🔍 AI-Style Insights</div>
+        <div id="analyticsInsights"></div>
+      </div>
+      <div class="perf-card">
+        <div class="perf-card-title">🎯 Cut-off Readiness</div>
+        <div id="cutoffReadiness"></div>
+      </div>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-title">📊 Preparation Score Card</div>
-    <div id="scoreCard"></div>
+  <!-- PRELIM TAB -->
+  <div id="atab-prelim" style="display:none">
+    <div class="perf-grid">
+      <div class="perf-card" style="grid-column:1/-1">
+        <div class="perf-card-title">📈 Prelim Full Mock Score Trend <span id="prelim-trend-badge" style="font-size:0.72rem;padding:2px 8px;border-radius:999px"></span></div>
+        <div class="trend-chart-wrap" id="prelimTrendChart" style="height:120px"></div>
+        <div id="chartTooltip" class="chart-tooltip"></div>
+      </div>
+    </div>
+    <div class="perf-grid">
+      <div class="perf-card">
+        <div class="perf-card-title">Section-wise Averages (Prelim)</div>
+        <div id="prelimSectionAvgs"></div>
+      </div>
+      <div class="perf-card">
+        <div class="perf-card-title">🎯 Accuracy Tracking (Score/Max %)</div>
+        <div id="prelimAccuracy"></div>
+      </div>
+    </div>
+    <div class="perf-grid">
+      <div class="perf-card">
+        <div class="perf-card-title">⏱ Time vs Score Analysis</div>
+        <div id="prelimTimeScore"></div>
+      </div>
+      <div class="perf-card">
+        <div class="perf-card-title">📋 Recurring Weak Areas</div>
+        <div id="prelimWeakAreas"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAINS TAB -->
+  <div id="atab-mains" style="display:none">
+    <div class="perf-grid">
+      <div class="perf-card" style="grid-column:1/-1">
+        <div class="perf-card-title">📈 Mains Full Mock Score Trend <span id="mains-trend-badge" style="font-size:0.72rem;padding:2px 8px;border-radius:999px"></span></div>
+        <div class="trend-chart-wrap" id="mainsTrendChart" style="height:120px"></div>
+      </div>
+    </div>
+    <div class="perf-grid">
+      <div class="perf-card">
+        <div class="perf-card-title">Section-wise Averages (ESI / FM / English)</div>
+        <div id="mainsSectionAvgs"></div>
+      </div>
+      <div class="perf-card">
+        <div class="perf-card-title">📋 Recurring Weak Areas (Mains)</div>
+        <div id="mainsWeakAreas"></div>
+      </div>
+    </div>
+    <!-- Mains Sectional Mock Grid -->
+    <div class="card" style="margin-top:4px">
+      <div class="card-title">📐 Mains Sectional Mocks (ESI / FM / English)</div>
+      <div class="sectional-grid" id="mainsSectionalGrid"></div>
+      <button class="add-mock-btn" onclick="openSectModal(null,'mains')">＋ Add Mains Sectional Mock</button>
+    </div>
+  </div>
+
+  <!-- SECTIONAL ANALYSIS TAB -->
+  <div id="atab-sectional" style="display:none">
+    <div class="perf-grid" id="sectionalAnalyticsGrid"></div>
+  </div>
+
+  <!-- STUDY PATTERNS TAB -->
+  <div id="atab-study" style="display:none">
+    <div class="perf-grid">
+      <div class="perf-card">
+        <div class="perf-card-title">Daily Subject Coverage (84 days)</div>
+        <div class="subject-bars" id="studySubjBars"></div>
+      </div>
+      <div class="perf-card">
+        <div class="perf-card-title">Study Streak & Consistency</div>
+        <div id="studyConsistency"></div>
+      </div>
+    </div>
+    <div class="perf-card" style="margin-bottom:18px">
+      <div class="perf-card-title">📆 Weekly Heatmap</div>
+      <div class="heatmap" id="analyticsHeatmap"></div>
+    </div>
   </div>
 </div>
 
@@ -1045,24 +1482,26 @@ nav {
 <!-- SECTIONAL MOCK MODAL -->
 <div class="sect-modal" id="sectModal">
   <div class="sect-modal-box">
-    <div class="sect-modal-title">📐 Add Sectional Mock</div>
+    <div class="sect-modal-title" id="sectModalTitle">📐 Add Sectional Mock</div>
+    <div class="sect-form-field">
+      <label>Mode</label>
+      <div class="auth-tab-row" style="margin-bottom:10px">
+        <div class="auth-tab active" id="sectModePrelimt" onclick="setSectMode('prelim')">Prelim</div>
+        <div class="auth-tab" id="sectModeMainst" onclick="setSectMode('mains')">Mains</div>
+      </div>
+    </div>
     <div class="sect-form-field">
       <label>Subject</label>
-      <div class="sect-subj-picker" id="sectSubjPicker">
-        <div class="sect-subj-btn" style="--c:#e8b84b" data-subj="GA" onclick="selectSectSubj(this)">GA</div>
-        <div class="sect-subj-btn" style="--c:#4b8be8" data-subj="Quant" onclick="selectSectSubj(this)">Quant</div>
-        <div class="sect-subj-btn" style="--c:#9b4be8" data-subj="Reasoning" onclick="selectSectSubj(this)">Reasoning</div>
-        <div class="sect-subj-btn" style="--c:#4be87a" data-subj="English" onclick="selectSectSubj(this)">English</div>
-      </div>
+      <div class="sect-subj-picker" id="sectSubjPicker"></div>
     </div>
     <div class="sect-scores-grid">
       <div class="sect-form-field">
         <label>Score</label>
-        <input class="sect-form-input" type="number" id="sectScore" placeholder="e.g. 22" min="0" max="100">
+        <input class="sect-form-input" type="number" id="sectScore" placeholder="e.g. 22" min="0" max="200">
       </div>
       <div class="sect-form-field">
         <label>Max Score</label>
-        <input class="sect-form-input" type="number" id="sectMax" placeholder="e.g. 30" min="0" max="100" value="30">
+        <input class="sect-form-input" type="number" id="sectMax" placeholder="e.g. 30" min="0" max="200" value="30">
       </div>
       <div class="sect-form-field">
         <label>Time Taken (min)</label>
@@ -1070,7 +1509,7 @@ nav {
       </div>
       <div class="sect-form-field">
         <label>Accuracy %</label>
-        <input class="sect-form-input" type="number" id="sectAcc" placeholder="auto or enter" min="0" max="100">
+        <input class="sect-form-input" type="number" id="sectAcc" placeholder="auto" min="0" max="100">
       </div>
     </div>
     <div class="sect-form-field">
@@ -1146,9 +1585,11 @@ const DLABELS = ['Quant','Reasoning','ESI/Fin/Mgmt','English','CA'];
 let state = JSON.parse(localStorage.getItem('rbi_tracker_v2') || 'null') || {
   weekly: {}, daily: {}, prelim: {}, mains: {},
   calWeeks: {},
-  syl: {},       // {topicId: {done,conf,revisions}}
-  extraPrelim: 0, // count of extra mocks beyond 35
-  sectional: {}   // {mockId: {subject,score,date,notes}}
+  syl: {},
+  extraPrelim: 0,
+  sectional: {},
+  mainsSectional: {},
+  todayTasks: {}
 };
 
 function save() { localStorage.setItem('rbi_tracker_v2', JSON.stringify(state)); }
@@ -1311,27 +1752,41 @@ function addExtraPrelimMock() {
 }
 
 // ─── SECTIONAL MOCKS ───
-const SECT_SUBJECTS = ['GA','Quant','Reasoning','English'];
-const SECT_COLORS = {GA:'#e8b84b',Quant:'#4b8be8',Reasoning:'#9b4be8',English:'#4be87a'};
+// ─── SECTIONAL MOCKS (Dynamic mode: prelim / mains) ───
+const SECT_COLORS = {GA:'#e8b84b',Quant:'#4b8be8',Reasoning:'#9b4be8',English:'#4be87a',ESI:'#9b4be8',FM:'#4be87a'};
+const PRELIM_SUBJS_DEF = [{s:'GA',max:80,c:'#e8b84b'},{s:'Quant',max:30,c:'#4b8be8'},{s:'Reasoning',max:60,c:'#9b4be8'},{s:'English',max:30,c:'#4be87a'}];
+const MAINS_SUBJS_DEF  = [{s:'ESI',max:100,c:'#9b4be8'},{s:'FM',max:100,c:'#4be87a'},{s:'English',max:100,c:'#4be8e8'}];
 
 let sectModalLinkedMock = null;
+let sectModalMode = 'prelim';
 
-function openSectModal(linkedMock) {
+function setSectMode(mode) {
+  sectModalMode = mode;
+  document.getElementById('sectModePrelimt').classList.toggle('active', mode==='prelim');
+  document.getElementById('sectModeMainst').classList.toggle('active', mode==='mains');
+  renderSectSubjPicker();
+}
+
+function renderSectSubjPicker(preselect) {
+  const defs = sectModalMode === 'mains' ? MAINS_SUBJS_DEF : PRELIM_SUBJS_DEF;
+  document.getElementById('sectSubjPicker').innerHTML = defs.map(({s,c}) =>
+    `<div class="sect-subj-btn ${preselect===s?'selected':''}" data-subj="${s}" onclick="selectSectSubj(this)"
+      style="${preselect===s?`background:${c}22;border-color:${c};color:${c}`:''}">${s}</div>`
+  ).join('');
+  if (defs.length) document.getElementById('sectMax').value = defs[0].max;
+}
+
+function openSectModal(linkedMock, mode, preselect) {
   sectModalLinkedMock = linkedMock || null;
+  sectModalMode = mode || 'prelim';
   document.getElementById('sectScore').value = '';
-  document.getElementById('sectMax').value = linkedMock ? '' : '30';
   document.getElementById('sectTime').value = '';
   document.getElementById('sectAcc').value = '';
   document.getElementById('sectNotes').value = '';
   document.getElementById('sectLinkedMock').value = linkedMock || '';
-  // reset subject selection
-  document.querySelectorAll('.sect-subj-btn').forEach(b => {
-    b.classList.remove('selected');
-    b.style.background = 'var(--s2)';
-    b.style.borderColor = 'var(--border)';
-    b.style.color = 'var(--muted)';
-  });
-  // set default max based on subject
+  document.getElementById('sectModePrelimt').classList.toggle('active', sectModalMode==='prelim');
+  document.getElementById('sectModeMainst').classList.toggle('active', sectModalMode==='mains');
+  renderSectSubjPicker(preselect);
   document.getElementById('sectModal').classList.add('open');
 }
 
@@ -1343,22 +1798,19 @@ function closeSectModal() {
 function selectSectSubj(el) {
   document.querySelectorAll('.sect-subj-btn').forEach(b => {
     b.classList.remove('selected');
-    b.style.background = 'var(--s2)';
-    b.style.borderColor = 'var(--border)';
-    b.style.color = 'var(--muted)';
+    b.style.background='var(--s2)'; b.style.borderColor='var(--border)'; b.style.color='var(--muted)';
   });
   el.classList.add('selected');
-  const c = {GA:'#e8b84b',Quant:'#4b8be8',Reasoning:'#9b4be8',English:'#4be87a'}[el.dataset.subj];
-  el.style.background = c + '22';
-  el.style.borderColor = c;
-  el.style.color = c;
-  // set sensible max defaults
-  const maxMap = {GA:80, Quant:30, Reasoning:60, English:30};
-  document.getElementById('sectMax').value = maxMap[el.dataset.subj] || 30;
+  const c = SECT_COLORS[el.dataset.subj] || '#4b8be8';
+  el.style.background=c+'22'; el.style.borderColor=c; el.style.color=c;
+  const defs = sectModalMode==='mains' ? MAINS_SUBJS_DEF : PRELIM_SUBJS_DEF;
+  const def = defs.find(d=>d.s===el.dataset.subj);
+  if (def) document.getElementById('sectMax').value = def.max;
 }
 
 function saveSectModalEntry() {
-  if (!state.sectional) state.sectional = {};
+  const store = sectModalMode === 'mains' ? 'mainsSectional' : 'sectional';
+  if (!state[store]) state[store] = {};
   const subjEl = document.querySelector('.sect-subj-btn.selected');
   if (!subjEl) return showToast('Please select a subject');
   const subj = subjEl.dataset.subj;
@@ -1367,41 +1819,27 @@ function saveSectModalEntry() {
   const time  = document.getElementById('sectTime').value;
   const notes = document.getElementById('sectNotes').value;
   const linked = document.getElementById('sectLinkedMock').value;
-  // compute accuracy
   let acc = document.getElementById('sectAcc').value;
   if (!acc && score && max) acc = Math.round((parseFloat(score)/parseFloat(max))*100);
-
-  const count = Object.values(state.sectional).filter(v=>v.subject===subj).length + 1;
+  const count = Object.values(state[store]).filter(v=>v.subject===subj).length + 1;
   const id = `${subj}-${Date.now()}`;
-  state.sectional[id] = {
-    subject: subj, score, max, time, notes,
-    acc: acc || '', linkedMock: linked || '',
-    date: new Date().toISOString().split('T')[0],
-    num: count
-  };
-  save(); closeSectModal(); buildPrelimTable(); showToast(`${subj} Sectional Mock ${count} saved! ✓`);
+  state[store][id] = { subject:subj, score, max, time, notes, acc:acc||'', linkedMock:linked||'', date:new Date().toISOString().split('T')[0], num:count };
+  save(); closeSectModal();
+  if (sectModalMode === 'mains') buildMainsSectionalGrid();
+  else buildPrelimTable();
+  showToast(`${subj} ${sectModalMode} Mock ${count} saved! ✓`);
 }
 
 function buildSectionalGrid() {
   if (!state.sectional) state.sectional = {};
   const grid = document.getElementById('sectionalGrid');
   if (!grid) return;
-
-  grid.innerHTML = SECT_SUBJECTS.map(subj => {
-    const c = SECT_COLORS[subj];
-    const mocks = Object.entries(state.sectional)
-      .filter(([,v]) => v.subject === subj)
-      .sort((a,b) => (a[1].num||0) - (b[1].num||0));
-    const scores = mocks.map(([,v]) => parseFloat(v.score)).filter(s=>!isNaN(s));
-    const avg = scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1) : '—';
-    const best = scores.length ? Math.max(...scores) : '—';
-    const maxMap = {GA:80,Quant:30,Reasoning:60,English:30};
-
-    // mini progress bar for avg
-    const maxScore = maxMap[subj];
-    const avgNum = parseFloat(avg);
-    const avgPct = (!isNaN(avgNum) && maxScore) ? Math.round((avgNum/maxScore)*100) : 0;
-
+  grid.innerHTML = PRELIM_SUBJS_DEF.map(({s:subj,max:maxScore,c}) => {
+    const mocks = Object.entries(state.sectional).filter(([,v])=>v.subject===subj).sort((a,b)=>(a[1].num||0)-(b[1].num||0));
+    const scores = mocks.map(([,v])=>parseFloat(v.score)).filter(s=>!isNaN(s));
+    const avg = scores.length?(scores.reduce((a,b)=>a+b)/scores.length).toFixed(1):'—';
+    const best = scores.length?Math.max(...scores):'—';
+    const avgNum=parseFloat(avg); const avgPct=!isNaN(avgNum)?Math.round(avgNum/maxScore*100):0;
     return `<div class="sectional-card">
       <div class="sect-card-header" style="border-top:3px solid ${c}">
         <div>
@@ -1411,48 +1849,47 @@ function buildSectionalGrid() {
             <span style="color:var(--muted)">Avg: <strong style="color:${c}">${avg}${!isNaN(avgNum)?'/'+maxScore:''}</strong></span>
             <span style="color:var(--muted)">Best: <strong style="color:${c}">${best}</strong></span>
           </div>
-          ${avgPct>0?`<div style="margin-top:6px;height:4px;background:var(--s3);border-radius:999px;width:140px;overflow:hidden"><div style="width:${avgPct}%;height:100%;background:${c};border-radius:999px;transition:width 0.4s"></div></div>`:''}
+          ${avgPct>0?`<div style="margin-top:6px;height:4px;background:var(--s3);border-radius:999px;width:140px;overflow:hidden"><div style="width:${avgPct}%;height:100%;background:${c};border-radius:999px"></div></div>`:''}
         </div>
-        <button class="sect-add-btn" style="width:auto;border:1px solid ${c}33;border-radius:8px;padding:5px 10px;color:${c};background:${c}11" onclick="openSectModal(null)" title="Add ${subj} mock">＋</button>
+        <button class="sect-add-btn" style="width:auto;border:1px solid ${c}33;border-radius:8px;padding:5px 10px;color:${c};background:${c}11" onclick="openSectModal(null,'prelim','${subj}')">＋</button>
       </div>
       <div class="sect-card-body">
-        ${mocks.length === 0 ? `<div style="padding:14px 16px;font-size:0.78rem;color:var(--muted);text-align:center">No mocks yet — click ＋ to add</div>` :
-          mocks.map(([id,v]) => {
-            const pct = v.max ? Math.round((parseFloat(v.score)||0)/parseFloat(v.max)*100) : null;
-            const pctColor = pct===null?'var(--muted)':pct>=70?'#4be87a':pct>=50?'#e8b84b':'#e84b4b';
+        ${mocks.length===0?`<div style="padding:14px;font-size:0.78rem;color:var(--muted);text-align:center">No mocks yet</div>`:
+          mocks.map(([id,v])=>{
+            const pct=v.max?Math.round((parseFloat(v.score)||0)/parseFloat(v.max)*100):null;
+            const pc=pct===null?'var(--muted)':pct>=70?'#4be87a':pct>=50?'#e8b84b':'#e84b4b';
             return `<div class="sect-entry">
-              <span class="sect-entry-num">M${v.linkedMock||v.num||'—'} <span style="font-size:0.65rem;color:var(--muted);font-weight:400">${v.date||''}</span></span>
-              <span class="sect-score-badge" style="color:${c}">${v.score||'—'}${v.max?'<span style="font-size:0.65rem;color:var(--muted);">/'+v.max+'</span>':''}</span>
-              <div>
-                ${pct!==null?`<span style="font-size:0.72rem;font-weight:700;color:${pctColor}">${pct}%</span> `:''}
-                ${v.time?`<span style="font-size:0.7rem;color:var(--muted)">⏱${v.time}m</span> `:''}
-                ${v.notes?`<span class="sect-notes">${v.notes}</span>`:''}
-              </div>
-              <span class="sect-date">${v.linkedMock?`<span style="font-size:0.65rem;background:rgba(232,184,75,0.1);color:var(--accent);border-radius:4px;padding:1px 5px">M${v.linkedMock}</span>`:''}</span>
-              <button class="sect-del-btn" onclick="deleteSectional('${id}')">✕</button>
+              <span class="sect-entry-num">M${v.linkedMock||v.num||'—'} <span style="font-size:0.6rem;color:var(--muted)">${v.date||''}</span></span>
+              <span class="sect-score-badge" style="color:${c}">${v.score||'—'}${v.max?`<span style="font-size:0.6rem;color:var(--muted)">/`+v.max+`</span>`:''}</span>
+              <div>${pct!==null?`<span style="font-size:0.72rem;font-weight:700;color:${pc}">${pct}% </span>`:''}${v.time?`<span style="font-size:0.7rem;color:var(--muted)">⏱${v.time}m </span>`:''}${v.notes?`<span class="sect-notes">${v.notes}</span>`:''}</div>
+              <span>${v.linkedMock?`<span style="font-size:0.62rem;background:rgba(232,184,75,0.1);color:var(--accent);border-radius:4px;padding:1px 4px">M${v.linkedMock}</span>`:''}</span>
+              <button class="sect-del-btn" onclick="deleteSectional('${id}','prelim')">✕</button>
             </div>`;
-          }).join('')
-        }
-        <button class="sect-add-btn" onclick="openSectModal(null)">＋ Add ${subj} Mock</button>
+          }).join('')}
+        <button class="sect-add-btn" onclick="openSectModal(null,'prelim','${subj}')">＋ Add ${subj} Mock</button>
       </div>
     </div>`;
   }).join('');
 }
 
-function addSectionalMock() { openSectModal(null); }
+function addSectionalMock() { openSectModal(null,'prelim'); }
 
 function saveSectional(id, key, val) {
+  if (!state.sectional) state.sectional = {};
   if (!state.sectional[id]) state.sectional[id] = {};
   state.sectional[id][key] = val;
   save(); buildPrelimTable(); showToast('Saved ✓');
 }
 
-function deleteSectional(id) {
-  delete state.sectional[id];
-  save(); buildPrelimTable(); showToast('Deleted');
+function deleteSectional(id, mode) {
+  const store = mode==='mains' ? 'mainsSectional' : 'sectional';
+  if (state[store]) delete state[store][id];
+  save();
+  if (mode==='mains') buildMainsSectionalGrid();
+  else buildPrelimTable();
+  showToast('Deleted');
 }
 
-// close sect modal on overlay click
 document.getElementById('sectModal').addEventListener('click', function(e) {
   if (e.target === this) closeSectModal();
 });
@@ -1562,8 +1999,285 @@ function updateMainsStats() {
   document.getElementById('mm-cleared').textContent = cleared;
 }
 
+// ══════════════════════════════════════════════════════
+// ─── SMART ENGINE — computes all intelligence ────────
+// ══════════════════════════════════════════════════════
+function computeSmartData() {
+  const prelim_scores  = Object.values(state.prelim).map(m=>parseFloat(m.score)).filter(s=>!isNaN(s));
+  const mains_scores   = Object.values(state.mains).map(m=>parseFloat(m.score)).filter(s=>!isNaN(s));
+  const daysLogged     = Object.values(state.daily).filter(d=>d.completed).length;
+  const streak         = calcStreak();
+
+  // ── Section averages (Prelim)
+  const sectAvgs = {};
+  [['ga',80],['quant',30],['reasoning',60],['english',30]].forEach(([s,mx]) => {
+    const vs = Object.values(state.prelim).map(m=>parseFloat(m[s])).filter(v=>!isNaN(v));
+    sectAvgs[s] = vs.length ? {avg: vs.reduce((a,b)=>a+b)/vs.length, max: mx, pct: Math.round((vs.reduce((a,b)=>a+b)/vs.length)/mx*100), n: vs.length} : null;
+  });
+
+  // ── Section averages (Mains)
+  const mainsSectAvgs = {};
+  [['esi',100],['fm',100],['english',100]].forEach(([s,mx]) => {
+    const vs = Object.values(state.mains).map(m=>parseFloat(m[s])).filter(v=>!isNaN(v));
+    mainsSectAvgs[s] = vs.length ? {avg: vs.reduce((a,b)=>a+b)/vs.length, max: mx, pct: Math.round((vs.reduce((a,b)=>a+b)/vs.length)/mx*100), n: vs.length} : null;
+  });
+
+  // ── Auto-detect weak subjects (prelim)
+  const weakSubjects = [];
+  const cutoffs = {ga:50, quant:40, reasoning:40, english:30}; // as % of max
+  Object.entries(sectAvgs).forEach(([s,v]) => {
+    if (v && v.pct < cutoffs[s]) weakSubjects.push({subj:s, pct:v.pct, cutoff:cutoffs[s]});
+  });
+  weakSubjects.sort((a,b)=>a.pct-b.pct);
+
+  // ── Prelim readiness score (weighted)
+  let prelimReadiness = 0;
+  const weights = {ga:0.40, quant:0.15, reasoning:0.30, english:0.15};
+  let weightSum = 0;
+  Object.entries(sectAvgs).forEach(([s,v]) => {
+    if (v) { prelimReadiness += (v.pct/100) * weights[s]; weightSum += weights[s]; }
+  });
+  // Factor in: mocks attempted, study consistency, syllabus done
+  const mockFactor  = Math.min(1, (Object.values(state.prelim).filter(m=>m.score).length) / 15);
+  const studyFactor = Math.min(1, daysLogged / 40);
+  const sylDone     = Object.values(state.syl||{}).filter(s=>s.done).length;
+  const sylFactor   = Math.min(1, sylDone / 30);
+  const basePrelim  = weightSum > 0 ? (prelimReadiness / weightSum) * 100 : 0;
+  const finalPrelim = weightSum > 0
+    ? Math.round(basePrelim * 0.55 + mockFactor * 100 * 0.20 + studyFactor * 100 * 0.15 + sylFactor * 100 * 0.10)
+    : Math.round(mockFactor * 100 * 0.40 + studyFactor * 100 * 0.40 + sylFactor * 100 * 0.20);
+
+  // ── Mains readiness
+  let mainsReadiness = 0; let mwSum = 0;
+  const mWeights = {esi:0.40, fm:0.35, english:0.25};
+  Object.entries(mainsSectAvgs).forEach(([s,v]) => {
+    if (v) { mainsReadiness += (v.pct/100) * mWeights[s]; mwSum += mWeights[s]; }
+  });
+  const mainsMockFactor = Math.min(1, (Object.values(state.mains).filter(m=>m.score).length) / 10);
+  const finalMains = mwSum > 0
+    ? Math.round((mainsReadiness/mwSum)*100*0.60 + mainsMockFactor*100*0.25 + studyFactor*100*0.15)
+    : Math.round(mainsMockFactor*100*0.50 + studyFactor*100*0.50);
+
+  // ── Trend direction
+  const prelimTrend = prelim_scores.length >= 3
+    ? prelim_scores.slice(-3).reduce((a,b)=>a+b)/3 - prelim_scores.slice(0,Math.floor(prelim_scores.length/2)).reduce((a,b)=>a+b)/Math.max(1,Math.floor(prelim_scores.length/2))
+    : 0;
+
+  // ── Missed days
+  const today = new Date(); today.setHours(0,0,0,0);
+  let missedDays = 0;
+  for (let i=83;i>=0;i--) {
+    const d=new Date(getDayISO(i)); d.setHours(0,0,0,0);
+    if (d>today) continue;
+    if (!state.daily[i]?.completed) missedDays++;
+    if (missedDays >= 2 || (new Date()-d > 3*86400000)) break;
+  }
+
+  // ── Sectional accuracy per subject
+  const sectAcc = {};
+  PRELIM_SUBJS_DEF.forEach(({s}) => {
+    const mocks = Object.values(state.sectional||{}).filter(v=>v.subject===s&&v.score&&v.max);
+    if (!mocks.length) return;
+    const total = mocks.reduce((a,v)=>a+(parseFloat(v.score)/parseFloat(v.max)*100),0);
+    sectAcc[s] = Math.round(total/mocks.length);
+  });
+
+  return {prelim_scores, mains_scores, daysLogged, streak, sectAvgs, mainsSectAvgs, weakSubjects,
+    finalPrelim, finalMains, prelimTrend, missedDays, sectAcc, mockFactor, studyFactor, sylFactor, sylDone};
+}
+
+// ─── TODAY'S TASKS ───
+const TODAY_TASKS = [
+  {id:'tt_quant',    label:'Quant Practice',    sub:'150+ questions target',        color:'#e8b84b'},
+  {id:'tt_reason',   label:'Reasoning',          sub:'120+ questions target',        color:'#4b8be8'},
+  {id:'tt_esi',      label:'ESI / Finance',       sub:'2 topics deep study',          color:'#9b4be8'},
+  {id:'tt_english',  label:'English',             sub:'5 RC + 1 Essay',               color:'#4be87a'},
+  {id:'tt_ca',       label:'Current Affairs',     sub:'Banking & Economy news',       color:'#4be8e8'},
+  {id:'tt_revision', label:'Night Revision',      sub:'Revise Slots 1–4',             color:'#e84b4b'},
+];
+
+function getTodayKey() { return 'today_' + new Date().toISOString().split('T')[0]; }
+
+function buildTodayTasks() {
+  const key = getTodayKey();
+  if (!state.todayTasks) state.todayTasks = {};
+  const done = state.todayTasks[key] || {};
+
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const now = new Date();
+  document.getElementById('todayDateBadge').textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`;
+
+  const doneCount = TODAY_TASKS.filter(t=>done[t.id]).length;
+  document.getElementById('todayTaskCount').textContent = `${doneCount}/${TODAY_TASKS.length} done`;
+  document.getElementById('todayProgPct').textContent = Math.round(doneCount/TODAY_TASKS.length*100)+'%';
+  document.getElementById('todayProgBar').style.width = (doneCount/TODAY_TASKS.length*100)+'%';
+
+  document.getElementById('todayTaskList').innerHTML = TODAY_TASKS.map(t => `
+    <div class="task-check-item ${done[t.id]?'done':''}" onclick="toggleTodayTask('${t.id}')">
+      <div class="tci-box" style="${done[t.id]?'':`border-color:${t.color}40`}"></div>
+      <div class="tci-text">
+        <div class="tci-title" style="color:${done[t.id]?'var(--muted)':t.color}">${t.label}</div>
+        <div class="tci-sub">${t.sub}</div>
+      </div>
+    </div>`).join('');
+}
+
+function toggleTodayTask(id) {
+  const key = getTodayKey();
+  if (!state.todayTasks) state.todayTasks = {};
+  if (!state.todayTasks[key]) state.todayTasks[key] = {};
+  state.todayTasks[key][id] = !state.todayTasks[key][id];
+  save(); buildTodayTasks();
+  const doneCount = TODAY_TASKS.filter(t=>state.todayTasks[key][t.id]).length;
+  if (doneCount === TODAY_TASKS.length) showToast('All tasks done today! 🎉');
+}
+
+function resetTodayTasks() {
+  if (!confirm('Reset today\'s task checklist?')) return;
+  const key = getTodayKey();
+  if (state.todayTasks) state.todayTasks[key] = {};
+  save(); buildTodayTasks();
+}
+
+// ─── SMART ALERTS ───
+function buildSmartAlerts(sd) {
+  const alerts = [];
+
+  // Missed days alert
+  if (sd.missedDays >= 2)
+    alerts.push({type:'warning', icon:'📅', title:`Missed ${sd.missedDays} days recently`, desc:'Your streak may be at risk. Revise weak areas to catch up.', action:'→ Go to Daily Log', fn:"showPage('daily')"});
+
+  // Weak subject alerts
+  sd.weakSubjects.slice(0,2).forEach(w => {
+    const labels = {ga:'General Awareness',quant:'Quantitative Aptitude',reasoning:'Reasoning',english:'English'};
+    alerts.push({type:'danger', icon:'⚠️', title:`Low performance in ${labels[w.subj] || w.subj}`, desc:`Your avg is ${w.pct}% — cut-off needs ~${w.cutoff}%. Practice more.`, action:'→ Analytics', fn:"showPage('analytics')"});
+  });
+
+  // Streak praise
+  if (sd.streak >= 7)
+    alerts.push({type:'success', icon:'🔥', title:`${sd.streak}-day streak! Keep it up!`, desc:'Consistency is the single biggest predictor of RBI Grade B success.'});
+  else if (sd.streak === 0)
+    alerts.push({type:'info', icon:'💡', title:'Start your streak today', desc:'Log at least one subject today to begin your streak. Small steps compound.'});
+
+  // Prelim readiness
+  if (sd.finalPrelim < 40 && Object.values(state.prelim).filter(m=>m.score).length > 0)
+    alerts.push({type:'warning', icon:'📊', title:`Prelim Readiness: ${sd.finalPrelim}% — needs improvement`, desc:'Focus on weak areas and increase mock frequency.', action:'→ Analytics', fn:"showPage('analytics')"});
+  else if (sd.finalPrelim >= 70)
+    alerts.push({type:'success', icon:'🎯', title:`Strong Prelim Readiness: ${sd.finalPrelim}%`, desc:'You are on track. Maintain consistency and keep revising.'});
+
+  // Score trend
+  if (sd.prelimTrend < -5 && sd.prelim_scores.length >= 4)
+    alerts.push({type:'danger', icon:'📉', title:'Prelim scores declining', desc:`Down ${Math.abs(sd.prelimTrend).toFixed(1)} pts recently. Review what changed.`, action:'→ Prelim Analysis', fn:"showPage('analytics')"});
+  else if (sd.prelimTrend > 5 && sd.prelim_scores.length >= 4)
+    alerts.push({type:'success', icon:'📈', title:'Prelim scores improving!', desc:`Up +${sd.prelimTrend.toFixed(1)} pts recently. Whatever you're doing is working!`});
+
+  const wrap = document.getElementById('smartAlerts');
+  if (!alerts.length) { wrap.innerHTML=''; return; }
+  wrap.innerHTML = alerts.map(a => `
+    <div class="alert-item alert-${a.type}">
+      <span class="alert-icon">${a.icon}</span>
+      <div class="alert-body">
+        <div class="alert-title">${a.title}</div>
+        <div class="alert-desc">${a.desc}</div>
+      </div>
+      ${a.action ? `<button class="alert-action" onclick="${a.fn}">${a.action}</button>` : ''}
+    </div>`).join('');
+}
+
+// ─── READINESS METER ───
+function buildReadinessMeter(sd) {
+  const wrap = document.getElementById('readinessMeter');
+  const prelimColor = sd.finalPrelim>=70?'#4be87a':sd.finalPrelim>=50?'#e8b84b':'#e84b4b';
+  const mainsColor  = sd.finalMains>=70?'#4be87a':sd.finalMains>=50?'#e8b84b':'#e84b4b';
+
+  const prelimBreakdown = [
+    {l:'Mock Scores', v: Math.round(sd.mockFactor*100), c:'#e8b84b'},
+    {l:'Study Days', v: Math.round(sd.studyFactor*100), c:'#4b8be8'},
+    {l:'Syllabus', v: Math.round(Math.min(100,sd.sylDone/30*100)), c:'#9b4be8'},
+  ];
+  const mainsBreakdown = [
+    {l:'Mock Scores', v: Math.round(Math.min(1,(Object.values(state.mains).filter(m=>m.score).length)/10)*100), c:'#4be87a'},
+    {l:'Study Days', v: Math.round(sd.studyFactor*100), c:'#4b8be8'},
+    {l:'Mains Prep', v: Math.round(sd.finalMains*0.6), c:'#4be8e8'},
+  ];
+
+  wrap.innerHTML = [
+    {title:'🎯 Prelim Readiness', pct:sd.finalPrelim, color:prelimColor, breakdown:prelimBreakdown,
+     label: sd.finalPrelim>=80?'Exam Ready!':sd.finalPrelim>=65?'On Track':sd.finalPrelim>=45?'Needs Focus':'Just Starting'},
+    {title:'🏆 Mains Readiness', pct:sd.finalMains, color:mainsColor, breakdown:mainsBreakdown,
+     label: sd.finalMains>=80?'Exam Ready!':sd.finalMains>=65?'On Track':sd.finalMains>=45?'Needs Focus':'Just Starting'},
+  ].map(r => `<div class="readiness-card">
+    <div class="readiness-header">
+      <span class="readiness-label">${r.title}</span>
+      <span class="readiness-pct" style="color:${r.color}">${r.pct}%</span>
+    </div>
+    <div class="readiness-bar-track"><div class="readiness-bar-fill" style="width:${r.pct}%;background:linear-gradient(90deg,${r.color}88,${r.color})"></div></div>
+    <div style="font-size:0.72rem;font-weight:700;color:${r.color};margin-bottom:10px">${r.label}</div>
+    <div class="readiness-breakdown">${r.breakdown.map(b=>`
+      <div class="rb-row">
+        <span class="rb-label">${b.l}</span>
+        <div class="rb-track"><div class="rb-fill" style="width:${b.v}%;background:${b.c}"></div></div>
+        <span class="rb-val">${b.v}%</span>
+      </div>`).join('')}
+    </div>
+  </div>`).join('');
+}
+
+// ─── SMART SUGGESTIONS ───
+function buildSmartSuggestions(sd) {
+  const sugs = [];
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const tomorrow = days[(new Date().getDay()+1)%7];
+
+  // Weak subject suggestion
+  if (sd.weakSubjects.length > 0) {
+    const w = sd.weakSubjects[0];
+    const labels = {ga:'General Awareness',quant:'Quant',reasoning:'Reasoning',english:'English'};
+    sugs.push({icon:'📚', color:'#e84b4b', text:`<strong>Revise ${labels[w.subj]||w.subj} ${tomorrow}</strong> — your weakest section at ${w.pct}%. Focus on ${w.subj==='ga'?'banking CA':'practice questions'}.`, badge:'High Priority', bc:'rgba(232,75,75,0.15)', bcolor:'#e84b4b'});
+  }
+
+  // Sectional mock suggestion
+  const sect_counts = PRELIM_SUBJS_DEF.map(({s}) => ({s, n: Object.values(state.sectional||{}).filter(v=>v.subject===s).length}));
+  const leastPracticed = sect_counts.sort((a,b)=>a.n-b.n)[0];
+  if (leastPracticed && leastPracticed.n < 3)
+    sugs.push({icon:'🎯', color:'#4b8be8', text:`<strong>Add a ${leastPracticed.s} sectional mock</strong> — only ${leastPracticed.n} done so far. Sectional practice builds speed.`, badge:'Suggested', bc:'rgba(75,142,232,0.12)', bcolor:'#4b8be8'});
+
+  // Mock frequency
+  const totalMocks = sd.prelim_scores.length;
+  if (totalMocks < 5)
+    sugs.push({icon:'📝', color:'#e8b84b', text:`<strong>Take at least ${5-totalMocks} more full mocks</strong> this week. Target: 15+ before the exam to build exam temperament.`, badge:'Mock Plan', bc:'rgba(232,184,75,0.12)', bcolor:'#e8b84b'});
+
+  // Spaced revision suggestion
+  const unrevised = Object.entries(state.syl||{}).filter(([,v])=>v.done && (!v.revisions||v.revisions<2));
+  if (unrevised.length > 0)
+    sugs.push({icon:'🔁', color:'#9b4be8', text:`<strong>${unrevised.length} topics need re-revision</strong> (studied but not yet revised twice). Spaced revision = long-term retention.`, badge:'Spaced Rev', bc:'rgba(155,75,232,0.12)', bcolor:'#9b4be8'});
+
+  // Study gap
+  if (sd.streak === 0 && sd.daysLogged > 0)
+    sugs.push({icon:'⚡', color:'#4be87a', text:`<strong>Start fresh today</strong> — you've studied ${sd.daysLogged} days total. Get back on track with even 1 hour.`, badge:'Restart', bc:'rgba(75,232,122,0.1)', bcolor:'#4be87a'});
+
+  if (!sugs.length)
+    sugs.push({icon:'✦', color:'#e8b84b', text:'<strong>Keep going!</strong> Log your daily tasks and mock scores to get personalised suggestions here.', badge:'', bc:'rgba(232,184,75,0.06)', bcolor:'#e8b84b'});
+
+  document.getElementById('smartSuggestions').innerHTML = sugs.map(s => `
+    <div class="sug-item" style="border-color:${s.color}44;background:${s.bc}">
+      <span class="sug-icon">${s.icon}</span>
+      <span class="sug-text">${s.text}</span>
+      ${s.badge?`<span class="sug-badge" style="background:${s.bc};color:${s.bcolor};border:1px solid ${s.bcolor}44">${s.badge}</span>`:''}
+    </div>`).join('');
+}
+
 // ─── DASHBOARD ───
 function updateDashboard() {
+  const sd = computeSmartData();
+
+  // Smart UI blocks
+  buildTodayTasks();
+  buildSmartAlerts(sd);
+  buildReadinessMeter(sd);
+  buildSmartSuggestions(sd);
+
   // Weeks
   const weeksDone = Object.values(state.weekly).filter(w => WSUBJ.every(s => w[s])).length;
   const totalWeekChecks = Object.values(state.weekly).reduce((a,w) => a + WSUBJ.filter(s=>w[s]).length, 0);
@@ -1581,22 +2295,11 @@ function updateDashboard() {
   document.getElementById('d-dbar').style.width = (totalDayChecks/maxDayChecks*100) + '%';
 
   // Streak
-  let streak = 0;
-  const today = new Date(); today.setHours(0,0,0,0);
-  for (let i = 83; i >= 0; i--) {
-    const iso = getDayISO(i);
-    const d = new Date(iso); d.setHours(0,0,0,0);
-    if (d > today) continue;
-    if (state.daily[i]?.completed) streak++;
-    else if (d <= today) break;
-  }
-  document.getElementById('d-streak').textContent = streak + '🔥';
+  document.getElementById('d-streak').textContent = sd.streak + '🔥';
 
   // Mocks
-  const prelimDone = Object.values(state.prelim).filter(m=>m.score).length;
-  const mainsDone = Object.values(state.mains).filter(m=>m.score).length;
-  document.getElementById('d-prelim').textContent = prelimDone + '/35';
-  document.getElementById('d-mains').textContent = mainsDone + '/35';
+  document.getElementById('d-prelim').textContent = (Object.values(state.prelim).filter(m=>m.score).length) + '/35';
+  document.getElementById('d-mains').textContent = (Object.values(state.mains).filter(m=>m.score).length) + '/35';
 
   // Heatmap
   const hm = document.getElementById('heatmap');
@@ -1621,73 +2324,8 @@ function updateDashboard() {
   }).join('');
 }
 
-// ─── ANALYTICS ───
-function updateAnalytics() {
-  // Weekly subject completion %
-  const wb = document.getElementById('wk-subj-bars');
-  const colors = ['#e8b84b','#4b8be8','#9b4be8','#4be87a','#e84b4b','#4be8e8','#e84be8'];
-  wb.innerHTML = WSUBJ.map((s,i) => {
-    const done = Object.values(state.weekly).filter(w=>w[s]).length;
-    const pct = Math.round(done/20*100);
-    return `<div class="subj-row">
-      <span class="subj-name" style="font-size:0.75rem">${WLABELS[i]}</span>
-      <div class="subj-track"><div class="subj-fill" style="width:${pct}%;background:${colors[i%colors.length]}"></div></div>
-      <span class="subj-pct">${pct}%</span>
-    </div>`;
-  }).join('');
-
-  // Mock chart (simple canvas bars)
-  const canvas = document.getElementById('mockChart');
-  const ctx = canvas.getContext('2d');
-  const scores = Array.from({length:35}, (_,i) => parseFloat(state.prelim[i+1]?.score)||0).filter(s=>s>0);
-  canvas.width = canvas.offsetWidth || 280;
-  const W = canvas.width, H = 180;
-  ctx.clearRect(0,0,W,H);
-  if (scores.length > 0) {
-    const max = Math.max(...scores, 1);
-    const barW = Math.max(4, (W - 20) / scores.length - 3);
-    scores.forEach((s,i) => {
-      const h = (s/max) * (H-30);
-      const x = 10 + i * (barW+3);
-      ctx.fillStyle = '#e8b84b55';
-      ctx.fillRect(x, H-h-20, barW, h);
-      ctx.fillStyle = '#e8b84b';
-      ctx.fillRect(x, H-h-20, barW, 3);
-    });
-    // avg line
-    const avg = scores.reduce((a,b)=>a+b,0)/scores.length;
-    const avgY = H - (avg/max)*(H-30) - 20;
-    ctx.strokeStyle = '#4be87a88';
-    ctx.setLineDash([4,4]);
-    ctx.beginPath(); ctx.moveTo(10, avgY); ctx.lineTo(W-10, avgY); ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.fillStyle = '#4be87a'; ctx.font = '10px DM Sans';
-    ctx.fillText('avg ' + avg.toFixed(1), W-60, avgY-4);
-  } else {
-    ctx.fillStyle = '#6b738f'; ctx.font = '13px DM Sans';
-    ctx.fillText('No mock data yet', W/2-60, H/2);
-  }
-
-  // Score card
-  const weeksDone = Object.values(state.weekly).filter(w => WSUBJ.every(s => w[s])).length;
-  const daysLogged = Object.values(state.daily).filter(d => d.completed).length;
-  const prelimDone = Object.values(state.prelim).filter(m=>m.score).length;
-  const mainsDone = Object.values(state.mains).filter(m=>m.score).length;
-  const rows = [
-    ['Weekly Targets Fully Completed', weeksDone, 20, '#e8b84b'],
-    ['Days Fully Completed', daysLogged, 84, '#4b8be8'],
-    ['Prelim Mocks Done', prelimDone, 35, '#9b4be8'],
-    ['Mains Mocks Done', mainsDone, 35, '#4be87a'],
-  ];
-  document.getElementById('scoreCard').innerHTML = `<div class="subject-bars">${rows.map(([l,v,t,c]) => {
-    const pct = Math.round(v/t*100);
-    return `<div class="subj-row" style="margin-bottom:6px">
-      <span class="subj-name" style="width:220px;font-size:0.82rem">${l}</span>
-      <div class="subj-track"><div class="subj-fill" style="width:${pct}%;background:${c}"></div></div>
-      <span class="subj-pct" style="width:60px">${v}/${t}</span>
-    </div>`;
-  }).join('')}</div>`;
-}
+// ─── ANALYTICS (tab-based — see renderAnalyticsTab) ───
+function updateAnalytics() { renderAnalyticsTab(activeAnalyticsTab || 'overview'); }
 
 // ─── STUDY CALENDAR ───
 const CAL_MONTHS = [
@@ -2159,30 +2797,575 @@ function decrementRev(id) {
   save(); renderSyllabus(); showToast('Revision undone');
 }
 
-// ─── EXPORT ───
-function exportData() {
+// ─── EXPORT / IMPORT ───
+function openExportPanel() {
+  document.getElementById('exportPanel').classList.add('open');
+  document.getElementById('exportOverlay').classList.add('open');
+}
+function closeExportPanel() {
+  document.getElementById('exportPanel').classList.remove('open');
+  document.getElementById('exportOverlay').classList.remove('open');
+}
+function exportAll() {
   const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'rbi-grade-b-tracker.json';
-  a.click();
-  showToast('Exported! ✓');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = `rbi-tracker-backup-${new Date().toISOString().split('T')[0]}.json`; a.click();
+  showToast('Full backup exported! ✓');
+}
+function exportSection(sec) {
+  let data = {};
+  if (sec === 'mocks') data = {prelim:state.prelim, mains:state.mains, sectional:state.sectional, mainsSectional:state.mainsSectional};
+  if (sec === 'syllabus') data = {syl:state.syl};
+  if (sec === 'weekly') data = {weekly:state.weekly, daily:state.daily};
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = `rbi-${sec}-${new Date().toISOString().split('T')[0]}.json`; a.click();
+  showToast(`${sec} data exported! ✓`);
+}
+function importAll(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const imp = JSON.parse(ev.target.result);
+      // deep merge
+      Object.keys(imp).forEach(k => { state[k] = imp[k]; });
+      save(); location.reload();
+    } catch { showToast('Invalid file'); }
+  };
+  reader.readAsText(file); e.target.value = '';
+}
+function importSection(e, sec) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const imp = JSON.parse(ev.target.result);
+      Object.keys(imp).forEach(k => { state[k] = imp[k]; });
+      save(); buildPrelimTable(); buildMainsTable(); showToast('Imported ✓');
+    } catch { showToast('Invalid file'); }
+  };
+  reader.readAsText(file); e.target.value = '';
+}
+function resetAllData() {
+  if (!confirm('Are you sure? This will delete ALL your progress data. This cannot be undone.')) return;
+  const creds = localStorage.getItem('rbi_auth');
+  localStorage.removeItem('rbi_tracker_v2');
+  if (creds) localStorage.setItem('rbi_auth', creds);
+  showToast('All data cleared'); setTimeout(() => location.reload(), 800);
+}
+function resetAuth() {
+  if (!confirm('Reset login credentials? You will need to set up again.')) return;
+  localStorage.removeItem('rbi_auth');
+  showToast('Credentials reset'); setTimeout(() => location.reload(), 800);
+}
+
+// ─── AUTH ───
+function switchAuthTab(tab) {
+  document.getElementById('authTabLogin').classList.toggle('active', tab==='login');
+  document.getElementById('authTabSetup').classList.toggle('active', tab==='setup');
+  document.getElementById('authLoginForm').style.display = tab==='login' ? '' : 'none';
+  document.getElementById('authSetupForm').style.display = tab==='setup' ? '' : 'none';
+  document.getElementById('authError').style.display = 'none';
+}
+function showAuthError(msg) {
+  const el = document.getElementById('authError');
+  el.textContent = msg; el.style.display = 'block';
+}
+function doLogin() {
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  const stored = JSON.parse(localStorage.getItem('rbi_auth') || 'null');
+  if (!stored) return showAuthError('No account found. Use "First-Time Setup" tab.');
+  if (stored.user !== user || stored.pass !== btoa(pass)) return showAuthError('Incorrect username or password.');
+  sessionStorage.setItem('rbi_session', stored.user);
+  document.getElementById('authScreen').style.display = 'none';
+  document.getElementById('userBadgeName').textContent = stored.name || stored.user;
+  initApp();
+}
+function doSetup() {
+  const name = document.getElementById('setupName').value.trim();
+  const user = document.getElementById('setupUser').value.trim();
+  const pass = document.getElementById('setupPass').value;
+  const pass2 = document.getElementById('setupPass2').value;
+  if (!user) return showAuthError('Please enter a username.');
+  if (pass.length < 4) return showAuthError('Password must be at least 4 characters.');
+  if (pass !== pass2) return showAuthError('Passwords do not match.');
+  if (localStorage.getItem('rbi_auth')) {
+    if (!confirm('An account already exists. Overwrite it?')) return;
+  }
+  localStorage.setItem('rbi_auth', JSON.stringify({user, pass: btoa(pass), name}));
+  sessionStorage.setItem('rbi_session', user);
+  document.getElementById('authScreen').style.display = 'none';
+  document.getElementById('userBadgeName').textContent = name || user;
+  showToast('Account created! Welcome 🎉'); initApp();
+}
+function doLogout() {
+  if (!confirm('Sign out?')) return;
+  sessionStorage.removeItem('rbi_session');
+  location.reload();
+}
+function checkAuth() {
+  const session = sessionStorage.getItem('rbi_session');
+  const stored = JSON.parse(localStorage.getItem('rbi_auth') || 'null');
+  if (!stored) {
+    // No account yet — show setup tab
+    switchAuthTab('setup');
+    return false;
+  }
+  if (session && session === stored.user) {
+    document.getElementById('authScreen').style.display = 'none';
+    document.getElementById('userBadgeName').textContent = stored.name || stored.user;
+    return true;
+  }
+  return false;
+}
+
+// ─── ANALYTICS TABS ───
+let activeAnalyticsTab = 'overview';
+function setAnalyticsTab(tab, el) {
+  activeAnalyticsTab = tab;
+  document.querySelectorAll('.perf-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  ['overview','prelim','mains','sectional','study'].forEach(t => {
+    const el = document.getElementById('atab-'+t);
+    if (el) el.style.display = t === tab ? '' : 'none';
+  });
+  renderAnalyticsTab(tab);
+}
+
+function renderAnalyticsTab(tab) {
+  if (tab === 'overview') renderAnalyticsOverview();
+  else if (tab === 'prelim') renderAnalyticsPrelim();
+  else if (tab === 'mains') renderAnalyticsMains();
+  else if (tab === 'sectional') renderAnalyticsSectional();
+  else if (tab === 'study') renderAnalyticsStudy();
+}
+
+function renderAnalyticsOverview() {
+  const sd = computeSmartData();
+
+  // Weekly bars
+  const wb = document.getElementById('wk-subj-bars');
+  const colors = ['#e8b84b','#4b8be8','#9b4be8','#4be87a','#e84b4b','#4be8e8','#e84be8'];
+  wb.innerHTML = WSUBJ.map((s,i) => {
+    const done = Object.values(state.weekly).filter(w=>w[s]).length;
+    const pct = Math.round(done/20*100);
+    return `<div class="trend-row"><span class="trend-label" style="font-size:0.73rem">${WLABELS[i]}</span><div class="trend-bar-track"><div class="trend-bar-fill" style="width:${pct}%;background:${colors[i%colors.length]}"></div></div><span class="trend-val">${pct}%</span></div>`;
+  }).join('');
+
+  // Score card with readiness
+  const weeksDone = Object.values(state.weekly).filter(w => WSUBJ.every(s => w[s])).length;
+  const daysLogged = Object.values(state.daily).filter(d => d.completed).length;
+  const prelimDone = Object.values(state.prelim).filter(m=>m.score).length;
+  const mainsDone = Object.values(state.mains).filter(m=>m.score).length;
+  const rows = [
+    ['Weekly Targets Done', weeksDone, 20, '#e8b84b'],
+    ['Days Fully Completed', daysLogged, 84, '#4b8be8'],
+    ['Prelim Mocks Done', prelimDone, 35, '#9b4be8'],
+    ['Mains Mocks Done', mainsDone, 35, '#4be87a'],
+    ['Prelim Readiness', sd.finalPrelim, 100, sd.finalPrelim>=70?'#4be87a':sd.finalPrelim>=50?'#e8b84b':'#e84b4b'],
+    ['Mains Readiness', sd.finalMains, 100, sd.finalMains>=70?'#4be87a':sd.finalMains>=50?'#e8b84b':'#e84b4b'],
+  ];
+  document.getElementById('scoreCard').innerHTML = rows.map(([l,v,t,c]) => {
+    const pct = Math.round(v/t*100);
+    return `<div class="trend-row" style="margin-bottom:8px"><span class="trend-label" style="width:200px;font-size:0.78rem">${l}</span><div class="trend-bar-track"><div class="trend-bar-fill" style="width:${pct}%;background:${c}"></div></div><span class="trend-val" style="width:50px;color:${c}">${l.includes('Readiness')?v+'%':v+'/'+t}</span></div>`;
+  }).join('');
+
+  // Insights using smart engine
+  const insights = [];
+  if (sd.prelim_scores.length >= 3) {
+    const recent = sd.prelim_scores.slice(-3);
+    const older = sd.prelim_scores.slice(0,-3);
+    if (older.length) {
+      const diff = recent.reduce((a,b)=>a+b)/recent.length - older.reduce((a,b)=>a+b)/older.length;
+      insights.push({icon:diff>0?'📈':'📉', text:`Last 3 prelim mocks avg <strong>${(recent.reduce((a,b)=>a+b)/recent.length).toFixed(1)}</strong> — ${diff>0?'improving +'+diff.toFixed(1):'declining '+diff.toFixed(1)} pts vs before.`});
+    }
+  }
+  if (sd.streak > 0) insights.push({icon:'🔥', text:`Streak: <strong>${sd.streak} day${sd.streak!==1?'s':''}</strong>. ${sd.streak>=7?'Excellent!':sd.streak>=3?'Good momentum.':'Keep going.'}`});
+  sd.weakSubjects.forEach(w => {
+    const labels = {ga:'GA',quant:'Quant',reasoning:'Reasoning',english:'English'};
+    insights.push({icon:'⚠️', text:`<strong>${labels[w.subj]||w.subj} is weak</strong> — ${w.pct}% accuracy vs ${w.cutoff}% cut-off threshold. Prioritise practice.`});
+  });
+  if (!insights.length) insights.push({icon:'💡', text:'Add mock scores and daily logs to unlock intelligent insights.'});
+
+  document.getElementById('analyticsInsights').innerHTML = insights.map(i =>
+    `<div class="insight-row"><span class="insight-icon">${i.icon}</span><div class="insight-text">${i.text}</div></div>`
+  ).join('');
+
+  // Cut-off readiness
+  const cr = document.getElementById('cutoffReadiness');
+  const sects = [{label:'GA',key:'ga',scores:Object.values(state.prelim).map(m=>parseFloat(m.ga)).filter(s=>!isNaN(s)),cutoff:40,max:80,color:'#e8b84b'},
+    {label:'Quant',key:'quant',scores:Object.values(state.prelim).map(m=>parseFloat(m.quant)).filter(s=>!isNaN(s)),cutoff:12,max:30,color:'#4b8be8'},
+    {label:'Reasoning',key:'reasoning',scores:Object.values(state.prelim).map(m=>parseFloat(m.reasoning)).filter(s=>!isNaN(s)),cutoff:24,max:60,color:'#9b4be8'},
+    {label:'English',key:'english',scores:Object.values(state.prelim).map(m=>parseFloat(m.english)).filter(s=>!isNaN(s)),cutoff:9,max:30,color:'#4be87a'},
+  ];
+  cr.innerHTML = sects.map(s => {
+    const avg = s.scores.length ? s.scores.reduce((a,b)=>a+b)/s.scores.length : null;
+    const safe = avg !== null && avg >= s.cutoff;
+    const pct = avg !== null ? Math.min(100, Math.round(avg/s.max*100)) : 0;
+    const co_pct = Math.round(s.cutoff/s.max*100);
+    return `<div class="trend-row" style="margin-bottom:10px">
+      <span class="trend-label">${s.label}</span>
+      <div style="flex:1;position:relative">
+        <div class="trend-bar-track"><div class="trend-bar-fill" style="width:${pct}%;background:${safe?s.color:'#e84b4b'}"></div></div>
+        <div style="position:absolute;top:-4px;left:${co_pct}%;width:1.5px;height:15px;background:rgba(255,255,255,0.25)"></div>
+      </div>
+      <span class="trend-val" style="color:${avg===null?'var(--muted)':safe?s.color:'#e84b4b'}">${avg===null?'—':avg.toFixed(1)}</span>
+    </div>`;
+  }).join('') + `<div style="font-size:0.68rem;color:var(--muted);margin-top:6px">▏= cut-off line · Green = safe · Red = below</div>`;
+}
+
+
+// ─── SVG LINE CHART ───
+function buildSVGLineChart(containerId, data, color, maxY, label) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  if (!data.length) {
+    container.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);font-size:0.82rem">No data yet — add mock scores to see trend</div>`;
+    return;
+  }
+  const W = container.offsetWidth || 600, H = 110;
+  const pad = {t:12, r:16, b:24, l:36};
+  const cW = W - pad.l - pad.r, cH = H - pad.t - pad.b;
+  const max = Math.max(...data, maxY || 1);
+  const min = Math.max(0, Math.min(...data) - 10);
+  const range = max - min || 1;
+  const pts = data.map((v,i) => ({
+    x: pad.l + (data.length === 1 ? cW/2 : i/(data.length-1)*cW),
+    y: pad.t + cH - ((v-min)/range)*cH,
+    v
+  }));
+  const pathD = pts.map((p,i)=>i===0?`M${p.x},${p.y}`:`L${p.x},${p.y}`).join(' ');
+  const areaD = `${pathD} L${pts[pts.length-1].x},${pad.t+cH} L${pts[0].x},${pad.t+cH} Z`;
+  const avg = data.reduce((a,b)=>a+b)/data.length;
+  const avgY = pad.t + cH - ((avg-min)/range)*cH;
+
+  // Y axis labels
+  const yLabels = [min, Math.round(min+range/2), Math.round(max)].map(v =>
+    `<text x="${pad.l-5}" y="${pad.t + cH - ((v-min)/range)*cH + 4}" fill="#6b738f" font-size="10" text-anchor="end">${Math.round(v)}</text>`
+  ).join('');
+
+  // X axis labels (show first, middle, last)
+  const xIdxs = data.length <= 6 ? data.map((_,i)=>i) : [0, Math.floor(data.length/2), data.length-1];
+  const xLabels = xIdxs.map(i => `<text x="${pts[i].x}" y="${H-4}" fill="#6b738f" font-size="10" text-anchor="middle">M${i+1}</text>`).join('');
+
+  container.innerHTML = `
+    <svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:${H}px">
+      <defs>
+        <linearGradient id="areaGrad_${containerId}" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${color}" stop-opacity="0.25"/>
+          <stop offset="100%" stop-color="${color}" stop-opacity="0.02"/>
+        </linearGradient>
+      </defs>
+      <!-- Grid lines -->
+      ${[0,0.25,0.5,0.75,1].map(f=>`<line x1="${pad.l}" y1="${pad.t+cH*f}" x2="${pad.l+cW}" y2="${pad.t+cH*f}" stroke="#252b3b" stroke-width="1"/>`).join('')}
+      <!-- Area fill -->
+      <path d="${areaD}" fill="url(#areaGrad_${containerId})"/>
+      <!-- Avg line -->
+      <line x1="${pad.l}" y1="${avgY}" x2="${pad.l+cW}" y2="${avgY}" stroke="${color}" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+      <text x="${pad.l+cW-2}" y="${avgY-4}" fill="${color}" font-size="9" text-anchor="end" opacity="0.8">avg ${avg.toFixed(1)}</text>
+      <!-- Line -->
+      <path d="${pathD}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Dots + invisible hover areas -->
+      ${pts.map((p,i)=>`
+        <circle cx="${p.x}" cy="${p.y}" r="4" fill="${color}" stroke="var(--s1)" stroke-width="2"/>
+        <circle cx="${p.x}" cy="${p.y}" r="10" fill="transparent" class="chart-dot" data-tip="Mock ${i+1}: ${p.v}" onmouseenter="showChartTip(event,this)" onmouseleave="hideChartTip()"/>
+      `).join('')}
+      <!-- Axis labels -->
+      ${yLabels}
+      ${xLabels}
+    </svg>`;
+
+  // Trend badge
+  const badgeEl = document.getElementById(containerId.replace('Chart','').replace('Trend','') + '-trend-badge') ||
+                  document.getElementById(containerId.replace('TrendChart','') + '-trend-badge');
+  if (badgeEl && data.length >= 2) {
+    const trend = data[data.length-1] - data[0];
+    badgeEl.textContent = trend >= 0 ? `↑ +${trend.toFixed(1)} improving` : `↓ ${trend.toFixed(1)} declining`;
+    badgeEl.style.background = trend >= 0 ? 'rgba(75,232,122,0.15)' : 'rgba(232,75,75,0.15)';
+    badgeEl.style.color = trend >= 0 ? '#4be87a' : '#e84b4b';
+  }
+}
+
+function showChartTip(e, el) {
+  const tip = document.getElementById('chartTooltip');
+  if (!tip) return;
+  tip.textContent = el.dataset.tip;
+  tip.classList.add('visible');
+  const rect = el.closest('.trend-chart-wrap')?.getBoundingClientRect() || {left:0,top:0};
+  const ex = e.clientX - rect.left, ey = e.clientY - rect.top;
+  tip.style.left = (ex+10)+'px'; tip.style.top = (ey-28)+'px';
+}
+function hideChartTip() {
+  const tip = document.getElementById('chartTooltip');
+  if (tip) tip.classList.remove('visible');
+}
+
+function renderAnalyticsPrelim() {
+  const sd = computeSmartData();
+  const scores = Array.from({length:35+(state.extraPrelim||0)}, (_,i) => state.prelim[i+1]).filter(m=>m?.score);
+  const vals = scores.map(m=>parseFloat(m.score));
+
+  // SVG Trend Chart
+  setTimeout(() => buildSVGLineChart('prelimTrendChart', vals, '#e8b84b', 200, 'prelim'), 50);
+
+  // Section avgs
+  const sects = ['ga','quant','reasoning','english'];
+  const sectLabels = ['GA','Quant','Reasoning','English'];
+  const sectColors = ['#e8b84b','#4b8be8','#9b4be8','#4be87a'];
+  const sectMax = {ga:80,quant:30,reasoning:60,english:30};
+  const cutoffs = {ga:40,quant:12,reasoning:24,english:9};
+  const sa = document.getElementById('prelimSectionAvgs');
+  sa.innerHTML = sects.map((s,i) => {
+    const vs = Object.values(state.prelim).map(m=>parseFloat(m[s])).filter(v=>!isNaN(v));
+    const avg = vs.length ? vs.reduce((a,b)=>a+b)/vs.length : null;
+    const pct = avg!==null ? Math.round(avg/sectMax[s]*100) : 0;
+    const safe = avg!==null && avg>=cutoffs[s];
+    const co_pct = Math.round(cutoffs[s]/sectMax[s]*100);
+    return `<div class="trend-row" style="margin-bottom:10px;position:relative">
+      <span class="trend-label">${sectLabels[i]}</span>
+      <div style="flex:1;position:relative">
+        <div class="trend-bar-track"><div class="trend-bar-fill" style="width:${pct}%;background:${safe?sectColors[i]:'#e84b4b'}"></div></div>
+        <div style="position:absolute;top:-4px;left:${co_pct}%;width:1.5px;height:15px;background:rgba(255,255,255,0.25)" title="Cut-off ${cutoffs[s]}"></div>
+      </div>
+      <span class="trend-val" style="color:${avg===null?'var(--muted)':safe?sectColors[i]:'#e84b4b'}">${avg===null?'—':avg.toFixed(1)}</span>
+    </div>`;
+  }).join('') + `<div style="font-size:0.68rem;color:var(--muted);margin-top:4px">▏= estimated cut-off line</div>`;
+
+  // Accuracy tracking
+  const acc = document.getElementById('prelimAccuracy');
+  const totalScores = Object.values(state.prelim).filter(m=>m.score);
+  if (!totalScores.length) { acc.innerHTML = `<div style="color:var(--muted);font-size:0.8rem">No mock data yet</div>`; }
+  else {
+    const overallAvg = totalScores.map(m=>parseFloat(m.score)).reduce((a,b)=>a+b)/totalScores.length;
+    const overallPct = Math.round(overallAvg/200*100);
+    const sectAccData = sects.map((s,i) => {
+      const vs = Object.values(state.prelim).map(m=>parseFloat(m[s])).filter(v=>!isNaN(v));
+      const avg = vs.length ? vs.reduce((a,b)=>a+b)/vs.length : null;
+      return {label:sectLabels[i], pct:avg!==null?Math.round(avg/sectMax[s]*100):null, color:sectColors[i]};
+    });
+    acc.innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:10px 12px;background:var(--s2);border-radius:10px">
+        <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:${overallPct>=50?'#4be87a':'#e84b4b'}">${overallPct}%</div>
+        <div><div style="font-size:0.78rem;font-weight:600">Overall Accuracy</div><div style="font-size:0.7rem;color:var(--muted)">${overallAvg.toFixed(1)}/200 avg · ${totalScores.length} mocks</div></div>
+      </div>
+      ${sectAccData.map(s=>s.pct!==null?`<div class="trend-row"><span class="trend-label">${s.label}</span><div class="trend-bar-track"><div class="trend-bar-fill" style="width:${s.pct}%;background:${s.color}"></div></div><span class="trend-val">${s.pct}%</span></div>`:''
+      ).join('')}`;
+  }
+
+  // Time vs Score
+  const tvs = document.getElementById('prelimTimeScore');
+  const timedMocks = Object.values(state.sectional||{}).filter(v=>v.time&&v.score&&v.max);
+  if (!timedMocks.length) {
+    tvs.innerHTML = `<div style="color:var(--muted);font-size:0.8rem">Add sectional mocks with <strong style="color:var(--text)">Time Taken</strong> to see this analysis.</div>`;
+  } else {
+    const bySubj = {};
+    timedMocks.forEach(v => {
+      if (!bySubj[v.subject]) bySubj[v.subject] = [];
+      bySubj[v.subject].push({time:parseFloat(v.time), acc:Math.round((parseFloat(v.score)/parseFloat(v.max))*100)});
+    });
+    tvs.innerHTML = Object.entries(bySubj).map(([subj,pts]) => {
+      const c = SECT_COLORS[subj]||'#4b8be8';
+      const avgTime = (pts.reduce((a,p)=>a+p.time,0)/pts.length).toFixed(0);
+      const avgAcc  = (pts.reduce((a,p)=>a+p.acc,0)/pts.length).toFixed(0);
+      const corr = pts.length >= 2 ? (pts.map(p=>p.acc).reduce((a,b)=>a+b)/pts.length > pts.map(p=>p.acc)[0] ? 'improving' : 'varied') : '—';
+      return `<div style="background:var(--s2);border-radius:10px;padding:12px 14px;margin-bottom:8px;border-left:3px solid ${c}">
+        <div style="font-size:0.78rem;font-weight:700;color:${c};margin-bottom:6px">${subj}</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:0.75rem;text-align:center">
+          <div><div style="font-weight:700;font-size:1rem;color:${c}">${avgTime}m</div><div style="color:var(--muted)">Avg Time</div></div>
+          <div><div style="font-weight:700;font-size:1rem;color:${c}">${avgAcc}%</div><div style="color:var(--muted)">Avg Acc</div></div>
+          <div><div style="font-weight:700;font-size:1rem;color:${c}">${pts.length}</div><div style="color:var(--muted)">Mocks</div></div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // Weak areas
+  const weakAll = Object.values(state.prelim).map(m=>m.notes).filter(Boolean);
+  const waFreq = {};
+  weakAll.forEach(n => n.split(/[,;\/]/).forEach(w => { w=w.trim(); if(w) waFreq[w]=(waFreq[w]||0)+1; }));
+  const sorted = Object.entries(waFreq).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('prelimWeakAreas').innerHTML = sorted.length
+    ? `<div style="margin-bottom:8px;font-size:0.75rem;color:var(--muted)">Frequency across ${weakAll.length} mocks:</div>` +
+      sorted.map(([w,n])=>`<span class="weak-tag">${w} <span style="opacity:0.6">(×${n})</span></span>`).join('')
+    : `<div style="color:var(--muted);font-size:0.8rem">Fill "Key Weak Areas" in mocks to see analysis here.</div>`;
+}
+
+function renderAnalyticsMains() {
+  if (!state.mainsSectional) state.mainsSectional = {};
+  const scores = Array.from({length:35}, (_,i) => state.mains[i+1]).filter(m=>m?.score);
+  const vals = scores.map(m=>parseFloat(m.score));
+
+  setTimeout(() => buildSVGLineChart('mainsTrendChart', vals, '#4b8be8', 300, 'mains'), 50);
+
+  const msects = ['esi','fm','english'];
+  const msectLabels = ['ESI','FM','English'];
+  const msectColors = ['#9b4be8','#4be87a','#4be8e8'];
+  const msa = document.getElementById('mainsSectionAvgs');
+  msa.innerHTML = msects.map((s,i) => {
+    const vs = Object.values(state.mains).map(m=>parseFloat(m[s])).filter(v=>!isNaN(v));
+    const avg = vs.length ? vs.reduce((a,b)=>a+b)/vs.length : null;
+    const pct = avg!==null ? Math.round(avg) : 0;
+    return `<div class="trend-row"><span class="trend-label">${msectLabels[i]}</span><div class="trend-bar-track"><div class="trend-bar-fill" style="width:${pct}%;background:${msectColors[i]}"></div></div><span class="trend-val">${avg!==null?avg.toFixed(1):'-'}/100</span></div>`;
+  }).join('');
+
+  const weakAll = Object.values(state.mains).map(m=>m.notes).filter(Boolean);
+  const waFreq = {};
+  weakAll.forEach(n => n.split(/[,;\/]/).forEach(w => { w=w.trim(); if(w) waFreq[w]=(waFreq[w]||0)+1; }));
+  const sorted = Object.entries(waFreq).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('mainsWeakAreas').innerHTML = sorted.length
+    ? sorted.map(([w,n])=>`<span class="weak-tag">${w} <span style="opacity:0.6">(×${n})</span></span>`).join('')
+    : `<div style="color:var(--muted);font-size:0.8rem">Fill "Key Weak Areas" in Mains mocks to see this.</div>`;
+
+  buildMainsSectionalGrid();
+}
+
+function buildMainsSectionalGrid() {
+  if (!state.mainsSectional) state.mainsSectional = {};
+  const grid = document.getElementById('mainsSectionalGrid');
+  if (!grid) return;
+  const MAINS_SUBJS = ['ESI','FM','English'];
+  const MAINS_COLORS = {ESI:'#9b4be8',FM:'#4be87a',English:'#4be8e8'};
+  const MAINS_MAX = {ESI:100,FM:100,English:100};
+  grid.innerHTML = MAINS_SUBJS.map(subj => {
+    const c = MAINS_COLORS[subj];
+    const mocks = Object.entries(state.mainsSectional).filter(([,v])=>v.subject===subj).sort((a,b)=>(a[1].num||0)-(b[1].num||0));
+    const scores = mocks.map(([,v])=>parseFloat(v.score)).filter(s=>!isNaN(s));
+    const avg = scores.length ? (scores.reduce((a,b)=>a+b)/scores.length).toFixed(1) : '—';
+    const best = scores.length ? Math.max(...scores) : '—';
+    return `<div class="sectional-card">
+      <div class="sect-card-header" style="border-top:3px solid ${c}">
+        <div><div class="sect-card-subj" style="color:${c}">${subj}</div>
+        <div class="sect-card-stats" style="margin-top:4px">
+          <span style="color:var(--muted)">Mocks: <strong style="color:var(--text)">${mocks.length}</strong></span>
+          <span style="color:var(--muted)">Avg: <strong style="color:${c}">${avg}</strong></span>
+          <span style="color:var(--muted)">Best: <strong style="color:${c}">${best}</strong></span>
+        </div></div>
+        <button class="sect-add-btn" style="width:auto;border:1px solid ${c}33;border-radius:8px;padding:5px 10px;color:${c};background:${c}11" onclick="openSectModal(null,'mains','${subj}')">＋</button>
+      </div>
+      <div class="sect-card-body">
+        ${mocks.length === 0 ? `<div style="padding:14px;font-size:0.78rem;color:var(--muted);text-align:center">No mocks yet</div>` :
+          mocks.map(([id,v]) => {
+            const pct = v.max ? Math.round((parseFloat(v.score)||0)/parseFloat(v.max)*100) : null;
+            const pc = pct===null?'var(--muted)':pct>=60?'#4be87a':pct>=40?'#e8b84b':'#e84b4b';
+            return `<div class="sect-entry">
+              <span class="sect-entry-num">M${v.linkedMock||v.num||'—'}</span>
+              <span class="sect-score-badge" style="color:${c}">${v.score||'—'}</span>
+              <div>${pct!==null?`<span style="font-size:0.72rem;font-weight:700;color:${pc}">${pct}%</span> `:''}${v.notes?`<span class="sect-notes">${v.notes}</span>`:''}</div>
+              <span></span>
+              <button class="sect-del-btn" onclick="deleteSectional('${id}','mains')">✕</button>
+            </div>`;
+          }).join('')
+        }
+        <button class="sect-add-btn" onclick="openSectModal(null,'mains','${subj}')">＋ Add ${subj} Mock</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderAnalyticsSectional() {
+  if (!state.sectional) state.sectional = {};
+  const grid = document.getElementById('sectionalAnalyticsGrid');
+  const PRELIM_SUBJS = ['GA','Quant','Reasoning','English'];
+  const MAINS_SUBJS = ['ESI','FM','English'];
+  const allSubjs = [...new Set([...PRELIM_SUBJS.map(s=>({s,mode:'prelim'})), ...MAINS_SUBJS.map(s=>({s,mode:'mains'}))])];
+  const cards = [
+    ...PRELIM_SUBJS.map(s => renderSectAnalyticsCard(s, 'prelim')),
+    ...MAINS_SUBJS.map(s => renderSectAnalyticsCard(s, 'mains'))
+  ];
+  grid.innerHTML = cards.join('');
+}
+
+function renderSectAnalyticsCard(subj, mode) {
+  const src = mode === 'mains' ? (state.mainsSectional||{}) : (state.sectional||{});
+  const colors = {GA:'#e8b84b',Quant:'#4b8be8',Reasoning:'#9b4be8',English:'#4be87a',ESI:'#9b4be8',FM:'#4be87a'};
+  const c = colors[subj] || '#4b8be8';
+  const mocks = Object.values(src).filter(v=>v.subject===subj);
+  const scores = mocks.map(v=>parseFloat(v.score)).filter(s=>!isNaN(s));
+  if (scores.length === 0) return `<div class="perf-card"><div class="perf-card-title" style="color:${c}">${subj} <span style="font-weight:400;color:var(--muted)">(${mode})</span></div><div style="color:var(--muted);font-size:0.8rem">No data yet</div></div>`;
+  const avg = (scores.reduce((a,b)=>a+b)/scores.length).toFixed(1);
+  const best = Math.max(...scores); const worst = Math.min(...scores);
+  const trend = scores.length >= 2 ? scores[scores.length-1] - scores[0] : 0;
+  const max = Math.max(...scores, 1);
+  return `<div class="perf-card">
+    <div class="perf-card-title" style="color:${c}">${subj} <span style="font-weight:400;color:var(--muted)">(${mode})</span></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;text-align:center">
+      <div><div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:${c}">${avg}</div><div style="font-size:0.65rem;color:var(--muted)">Avg</div></div>
+      <div><div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:#4be87a">${best}</div><div style="font-size:0.65rem;color:var(--muted)">Best</div></div>
+      <div><div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:${trend>=0?'#4be87a':'#e84b4b'}">${trend>=0?'+':''}${trend.toFixed(1)}</div><div style="font-size:0.65rem;color:var(--muted)">Trend</div></div>
+    </div>
+    <div class="score-sparkline">${scores.map((v,i)=>`<div class="spark-bar" style="height:${Math.max(4,Math.round((v/max)*50))}px;background:${c}${i===scores.length-1?'':'88'}" data-tip="Mock ${i+1}: ${v}"></div>`).join('')}</div>
+  </div>`;
+}
+
+function renderAnalyticsStudy() {
+  const colors = ['#e8b84b','#4b8be8','#9b4be8','#4be87a','#e84b4b'];
+  const sb = document.getElementById('studySubjBars');
+  sb.innerHTML = DSUBJ.map((s,i) => {
+    const done = Object.values(state.daily).filter(d=>d[s]).length;
+    const pct = Math.round(done/84*100);
+    return `<div class="trend-row"><span class="trend-label">${DLABELS[i]}</span><div class="trend-bar-track"><div class="trend-bar-fill" style="width:${pct}%;background:${colors[i]}"></div></div><span class="trend-val">${done}/84</span></div>`;
+  }).join('');
+
+  const streak = calcStreak();
+  const totalDone = Object.values(state.daily).filter(d=>d.completed).length;
+  const sc = document.getElementById('studyConsistency');
+  sc.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px">
+      <div style="background:var(--s2);border-radius:10px;padding:14px;text-align:center"><div style="font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--accent)">${streak}</div><div style="font-size:0.72rem;color:var(--muted)">Current Streak 🔥</div></div>
+      <div style="background:var(--s2);border-radius:10px;padding:14px;text-align:center"><div style="font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--accent3)">${totalDone}</div><div style="font-size:0.72rem;color:var(--muted)">Days Completed</div></div>
+    </div>
+    <div class="insight-row"><span class="insight-icon">📊</span><div class="insight-text">Completion rate: <strong>${Math.round(totalDone/84*100)}%</strong> (${totalDone}/84 days)</div></div>
+    <div class="insight-row"><span class="insight-icon">🎯</span><div class="insight-text">Days remaining: <strong>${84-totalDone}</strong></div></div>
+  `;
+
+  // Heatmap
+  const hm = document.getElementById('analyticsHeatmap');
+  hm.innerHTML = Array.from({length:84}, (_,i) => {
+    const d = state.daily[i] || {};
+    const cnt = DSUBJ.filter(s=>d[s]).length;
+    const cls = cnt === 0 ? '' : cnt <= 1 ? 'h1' : cnt <= 2 ? 'h2' : cnt <= 4 ? 'h3' : 'h4';
+    return `<div class="hmap-cell ${cls}" title="Day ${i+1}: ${getDayDate(i)} · ${cnt}/${DSUBJ.length} tasks"></div>`;
+  }).join('');
+}
+
+function calcStreak() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  let streak = 0;
+  for (let i = 83; i >= 0; i--) {
+    const iso = getDayISO(i);
+    const d = new Date(iso); d.setHours(0,0,0,0);
+    if (d > today) continue;
+    if (state.daily[i]?.completed) streak++;
+    else if (d <= today) break;
+  }
+  return streak;
 }
 
 // ─── TOAST ───
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.className = 'toast show ok';
-  setTimeout(() => t.className = 'toast', 2000);
+  setTimeout(() => t.className = 'toast', 2500);
 }
 
 // ─── INIT ───
-buildWeekTable();
-buildDayLog();
-buildPrelimTable();
-buildMainsTable();
-updateDashboard();
-buildCalendar();
+function initApp() {
+  buildWeekTable();
+  buildDayLog();
+  buildPrelimTable();
+  buildMainsTable();
+  updateDashboard();
+  buildCalendar();
+}
+
+// Check auth on load
+if (!checkAuth()) {
+  // show auth screen (already visible by default)
+} else {
+  initApp();
+}
 </script>
 </body>
 </html>
