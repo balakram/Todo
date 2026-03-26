@@ -485,6 +485,217 @@ nav {
   .syl-item { grid-template-columns: 1fr auto; }
   .conf-select { display: none; }
 }
+
+/* ── DAILY SCHEDULE CARD (Dashboard) ── */
+.schedule-card {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: var(--r); margin-bottom: 18px; overflow: hidden;
+}
+.schedule-card-title {
+  padding: 14px 20px; font-family: 'Playfair Display', serif;
+  font-size: 1rem; font-weight: 700;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.schedule-slots {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
+  gap: 0;
+}
+.slot-block {
+  padding: 14px 16px; border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.slot-block:last-child { border-right: none; }
+.slot-time {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.6px;
+  text-transform: uppercase; margin-bottom: 4px;
+}
+.slot-name { font-size: 0.88rem; font-weight: 700; margin-bottom: 6px; }
+.slot-items { display: flex; flex-direction: column; gap: 3px; }
+.slot-item {
+  font-size: 0.75rem; color: var(--muted);
+  display: flex; align-items: center; gap: 5px;
+}
+.slot-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.gym-row {
+  background: rgba(75,232,122,0.07); border-top: 1px solid var(--border);
+  padding: 10px 16px; display: flex; align-items: center; gap: 10px;
+  font-size: 0.8rem; color: var(--accent3);
+}
+
+/* ── SECTIONAL MOCK MODAL ── */
+.sect-modal {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+  z-index: 300; display: flex; align-items: center; justify-content: center;
+  padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.2s;
+}
+.sect-modal.open { opacity: 1; pointer-events: all; }
+.sect-modal-box {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 18px; padding: 26px; width: 100%; max-width: 460px;
+  transform: scale(0.95); transition: transform 0.2s;
+}
+.sect-modal.open .sect-modal-box { transform: scale(1); }
+.sect-modal-title {
+  font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700;
+  margin-bottom: 18px; display: flex; align-items: center; gap: 8px;
+}
+.sect-subj-picker {
+  display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; margin-bottom: 16px;
+}
+.sect-subj-btn {
+  padding: 10px 14px; border-radius: 10px; border: 2px solid var(--border);
+  background: var(--s2); cursor: pointer; font-size: 0.85rem; font-weight: 700;
+  transition: all 0.15s; text-align: center; color: var(--muted);
+}
+.sect-subj-btn.selected { color: #080a0f; }
+.sect-form-field { margin-bottom: 12px; }
+.sect-form-field label {
+  display: block; font-size: 0.72rem; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 5px;
+}
+.sect-form-input {
+  width: 100%; background: var(--s2); border: 1px solid var(--border);
+  color: var(--text); border-radius: 9px; padding: 9px 13px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.88rem; outline: none;
+  transition: border-color 0.2s;
+}
+.sect-form-input:focus { border-color: var(--accent2); }
+.sect-scores-grid {
+  display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; margin-bottom: 12px;
+}
+.sect-modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+
+/* improved sectional card */
+.sectional-card {
+  background: var(--s1); border: 1px solid var(--border); border-radius: var(--r);
+  padding: 0; overflow: hidden;
+}
+.sect-card-header {
+  padding: 14px 16px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.sect-card-subj { font-size: 0.8rem; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; }
+.sect-card-stats { display: flex; gap: 12px; font-size: 0.78rem; }
+.sect-card-body { padding: 0; }
+.sect-entry {
+  display: grid; grid-template-columns: 56px 70px 1fr 34px 26px;
+  align-items: center; gap: 8px;
+  padding: 9px 14px; border-bottom: 1px solid rgba(37,43,59,0.4);
+  transition: background 0.12s;
+}
+.sect-entry:last-child { border-bottom: none; }
+.sect-entry:hover { background: rgba(255,255,255,0.02); }
+.sect-entry-num { font-size: 0.75rem; font-weight: 700; color: var(--muted); }
+.sect-score-badge {
+  font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; text-align: center;
+}
+.sect-notes { font-size: 0.75rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sect-date { font-size: 0.68rem; color: var(--muted); }
+.sect-del-btn {
+  background: none; border: none; color: var(--muted); cursor: pointer;
+  font-size: 13px; padding: 2px; transition: color 0.15s; line-height: 1;
+}
+.sect-del-btn:hover { color: var(--danger); }
+.sect-add-btn {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 9px; font-size: 0.78rem; font-weight: 600; color: var(--muted);
+  cursor: pointer; border-top: 1px dashed var(--border);
+  transition: all 0.15s; background: none; border-left: none; border-right: none; border-bottom: none;
+  width: 100%;
+}
+.sect-add-btn:hover { background: rgba(255,255,255,0.03); color: var(--text); }
+.add-mock-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 20px; border-radius: 999px;
+  background: rgba(232,184,75,0.12); border: 1px solid rgba(232,184,75,0.3);
+  color: var(--accent); font-size: 0.83rem; font-weight: 600;
+  cursor: pointer; transition: all 0.2s; margin-top: 12px;
+}
+.add-mock-btn:hover { background: rgba(232,184,75,0.22); }
+.sectional-wrap { margin-top: 28px; }
+.sectional-title {
+  font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700;
+  margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+}
+.sectional-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  gap: 12px; margin-bottom: 18px;
+}
+
+/* ── CAL EDIT MODAL ── */
+.cal-edit-modal {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+  z-index: 200; display: flex; align-items: center; justify-content: center;
+  padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.2s;
+}
+.cal-edit-modal.open { opacity: 1; pointer-events: all; }
+.cal-edit-box {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 18px; padding: 26px; width: 100%; max-width: 480px;
+  transform: scale(0.95); transition: transform 0.2s;
+}
+.cal-edit-modal.open .cal-edit-box { transform: scale(1); }
+.cal-edit-title {
+  font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700;
+  margin-bottom: 18px;
+}
+.cal-edit-field { margin-bottom: 14px; }
+.cal-edit-field label {
+  display: block; font-size: 0.75rem; color: var(--muted); font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;
+}
+.cal-edit-input {
+  width: 100%; background: var(--s2); border: 1px solid var(--border);
+  color: var(--text); border-radius: 9px; padding: 9px 13px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.88rem; outline: none;
+  transition: border-color 0.2s;
+}
+.cal-edit-input:focus { border-color: var(--accent); }
+.tag-editor { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.tag-toggle {
+  padding: 4px 12px; border-radius: 999px; font-size: 0.75rem; font-weight: 600;
+  cursor: pointer; border: 1px solid var(--border);
+  background: var(--s2); color: var(--muted); transition: all 0.15s;
+  user-select: none;
+}
+.tag-toggle.on { border-color: currentColor; opacity: 1; }
+.cal-edit-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
+
+/* ── REVISION COUNTER (Syllabus) ── */
+.rev-counter {
+  display: flex; align-items: center; gap: 4px;
+  background: var(--s2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 3px 8px; flex-shrink: 0;
+}
+.rev-label { font-size: 0.68rem; color: var(--muted); font-weight: 600; white-space: nowrap; }
+.rev-dots { display: flex; gap: 3px; align-items: center; }
+.rev-dot {
+  width: 10px; height: 10px; border-radius: 50%; cursor: pointer;
+  border: 1.5px solid var(--border); background: var(--s3);
+  transition: all 0.15s; flex-shrink: 0;
+}
+.rev-dot.d1 { background: #e84b4b; border-color: #e84b4b; }
+.rev-dot.d2 { background: #e8b84b; border-color: #e8b84b; }
+.rev-dot.d3 { background: #4b8be8; border-color: #4b8be8; }
+.rev-dot.d4 { background: #9b4be8; border-color: #9b4be8; }
+.rev-dot.done { background: #4be87a; border-color: #4be87a; }
+.rev-num {
+  font-family: 'Playfair Display', serif; font-size: 0.85rem;
+  font-weight: 700; color: var(--accent); min-width: 12px; text-align: center;
+}
+.rev-btn {
+  width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--border);
+  background: var(--s2); color: var(--muted); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; line-height: 1; transition: all 0.15s; flex-shrink: 0;
+}
+.rev-btn:hover { border-color: var(--accent3); color: var(--accent3); }
+.syl-item { grid-template-columns: 1fr auto auto auto; }
+.spaced-tip {
+  font-size: 0.68rem; color: rgba(232,184,75,0.7);
+  font-style: italic; margin-top: 2px;
+}
   .cal-week-row { grid-template-columns: 28px 1fr; grid-template-rows: auto auto; }
   .cal-wk-dates { display: none; }
   .cal-wk-focus { grid-column: 2; padding: 10px 12px; }
@@ -557,6 +768,97 @@ nav {
     <div class="card-title">⚡ Subject-wise Consistency (Daily Log)</div>
     <div class="subject-bars" id="subjBars"></div>
   </div>
+
+  <!-- DAILY SCHEDULE CARD -->
+  <div class="schedule-card">
+    <div class="schedule-card-title">
+      🕐 Daily Study Schedule
+      <span style="font-size:0.75rem;color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:400">4:45 AM → 11:00 PM</span>
+    </div>
+    <div class="schedule-slots">
+      <div class="slot-block">
+        <div class="slot-time" style="color:#e8b84b">⭐ Slot 1 · 5:00–8:00 AM</div>
+        <div class="slot-name">Peak Brain Energy</div>
+        <div class="slot-items">
+          <div class="slot-item"><div class="slot-dot" style="background:#e8b84b"></div>Hardest Subjects</div>
+          <div class="slot-item"><div class="slot-dot" style="background:#9b4be8"></div>ESI / Finance</div>
+          <div class="slot-item"><div class="slot-dot" style="background:#4b8be8"></div>Quant</div>
+          <div class="slot-item"><div class="slot-dot" style="background:#4be87a"></div>Networking</div>
+        </div>
+      </div>
+      <div class="slot-block">
+        <div class="slot-time" style="color:#4b8be8">🔵 Slot 2 · 9:00–12:00 PM</div>
+        <div class="slot-name">Deep Study</div>
+        <div class="slot-items">
+          <div class="slot-item"><div class="slot-dot" style="background:#4b8be8"></div>RBI Grade B subjects</div>
+          <div class="slot-item"><div class="slot-dot" style="background:#4be87a"></div>Pomodoro technique</div>
+          <div class="slot-item"><div class="slot-dot" style="background:#e8b84b"></div>Deep reading</div>
+          <div class="slot-item"><div class="slot-dot" style="background:#9b4be8"></div>Concept notes</div>
+        </div>
+      </div>
+      <div class="slot-block">
+        <div class="slot-time" style="color:#9b4be8">🟣 Slot 3 · 1:30–4:00 PM</div>
+        <div class="slot-name">Practice Mode</div>
+        <div class="slot-items">
+          <div class="slot-item"><div class="slot-dot" style="background:#9b4be8"></div>1:30–2:30 Timer practice</div>
+          <div class="slot-item"><div class="slot-dot" style="background:#4b8be8"></div>Simulated exam mode</div>
+          <div class="slot-item"><div class="slot-dot" style="background:#e8b84b"></div>2:30–4:00 MCQ tests</div>
+        </div>
+      </div>
+      <div class="slot-block">
+        <div class="slot-time" style="color:#4be87a">🌙 Slot 4 · 4:30–5:30 PM</div>
+        <div class="slot-name">Passive Learning</div>
+        <div class="slot-items">
+          <div class="slot-item"><div class="slot-dot" style="background:#4be87a"></div>Video lectures</div>
+          <div class="slot-item"><div class="slot-dot" style="background:#4b8be8"></div>Active note-taking</div>
+          <div class="slot-item"><div class="slot-dot" style="background:#e8b84b"></div>Concept reinforcement</div>
+        </div>
+      </div>
+      <div class="slot-block">
+        <div class="slot-time" style="color:#e84b4b">🌃 Slot 5 · 9:00–11:00 PM</div>
+        <div class="slot-name">Daily Revision</div>
+        <div class="slot-items">
+          <div class="slot-item"><div class="slot-dot" style="background:#e84b4b"></div>Revise Slots 1–4</div>
+          <div class="slot-item"><div class="slot-dot" style="background:#e8b84b"></div>Especially Slot 4 notes</div>
+          <div class="slot-item"><div class="slot-dot" style="background:#4be87a"></div>10-min reflection</div>
+        </div>
+      </div>
+    </div>
+    <div class="gym-row">
+      🏊 3 days Swimming &nbsp;·&nbsp; 🏋️ 4 days GYM &nbsp;·&nbsp;
+      <span style="color:var(--muted)">5:30 – 6:10 AM (Slot between wake-up & Slot 1)</span>
+    </div>
+  </div>
+
+  <!-- SPACED REVISION CARD -->
+  <div class="card">
+    <div class="card-title">🧠 Spaced Revision Schedule <span style="font-size:0.75rem;color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:400;margin-left:8px">Revise each topic 4 times for long-term retention</span></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px">
+      <div style="background:var(--s2);border-radius:10px;padding:14px 16px;border-left:3px solid #e84b4b">
+        <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:#e84b4b;margin-bottom:4px">Revision 1</div>
+        <div style="font-size:1.1rem;font-weight:700;margin-bottom:2px">Immediately</div>
+        <div style="font-size:0.75rem;color:var(--muted)">Right after studying the topic</div>
+      </div>
+      <div style="background:var(--s2);border-radius:10px;padding:14px 16px;border-left:3px solid #e8b84b">
+        <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:#e8b84b;margin-bottom:4px">Revision 2</div>
+        <div style="font-size:1.1rem;font-weight:700;margin-bottom:2px">1 Day After</div>
+        <div style="font-size:0.75rem;color:var(--muted)">Next day quick recall</div>
+      </div>
+      <div style="background:var(--s2);border-radius:10px;padding:14px 16px;border-left:3px solid #4b8be8">
+        <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:#4b8be8;margin-bottom:4px">Revision 3</div>
+        <div style="font-size:1.1rem;font-weight:700;margin-bottom:2px">7 Days After</div>
+        <div style="font-size:0.75rem;color:var(--muted)">One week spaced review</div>
+      </div>
+      <div style="background:var(--s2);border-radius:10px;padding:14px 16px;border-left:3px solid #9b4be8">
+        <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:#9b4be8;margin-bottom:4px">Revision 4</div>
+        <div style="font-size:1.1rem;font-weight:700;margin-bottom:2px">31 Days After</div>
+        <div style="font-size:0.75rem;color:var(--muted)">Monthly long-term consolidation</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;font-size:0.78rem;color:var(--muted);font-style:italic;border-top:1px solid var(--border);padding-top:10px">
+      💡 Track each revision in the <strong style="color:var(--accent)">Syllabus Checklist</strong> tab using the revision counter (🔴→🟡→🔵→🟣→🟢 = all 4 done)
+    </div>
+  </div>
 </div>
 
 <!-- ═══════════════════════════ WEEKLY TRACKER ═══════════════════════════ -->
@@ -603,7 +905,7 @@ nav {
 <!-- ═══════════════════════════ PRELIM MOCKS ═══════════════════════════ -->
 <div class="page" id="page-prelim">
   <div class="page-title">Prelim <span>Mock Performance</span></div>
-  <div class="page-sub">35 Mocks · Track scores, section-wise performance & weak areas</div>
+  <div class="page-sub">Full Mocks + Sectional Mocks · Track scores, section-wise performance & weak areas</div>
 
   <div class="stat-grid" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr))">
     <div class="stat-card sc-gold"><div class="stat-label">Attempted</div><div class="stat-val" id="pm-attempted">0</div></div>
@@ -628,6 +930,14 @@ nav {
       </thead>
       <tbody id="prelimTbody"></tbody>
     </table>
+  </div>
+  <button class="add-mock-btn" onclick="addExtraPrelimMock()">＋ Add More Mock</button>
+
+  <!-- SECTIONAL MOCK SUB-SECTION -->
+  <div class="sectional-wrap">
+    <div class="sectional-title">📐 Sectional Mock Tracker <span style="font-size:0.78rem;color:var(--muted);font-weight:400;font-family:'DM Sans',sans-serif;margin-left:8px">Practice individual sections separately</span></div>
+    <div class="sectional-grid" id="sectionalGrid"></div>
+    <button class="add-mock-btn" onclick="addSectionalMock()">＋ Add Sectional Mock</button>
   </div>
 </div>
 
@@ -732,6 +1042,71 @@ nav {
   <div id="syllabusList"></div>
 </div>
 
+<!-- SECTIONAL MOCK MODAL -->
+<div class="sect-modal" id="sectModal">
+  <div class="sect-modal-box">
+    <div class="sect-modal-title">📐 Add Sectional Mock</div>
+    <div class="sect-form-field">
+      <label>Subject</label>
+      <div class="sect-subj-picker" id="sectSubjPicker">
+        <div class="sect-subj-btn" style="--c:#e8b84b" data-subj="GA" onclick="selectSectSubj(this)">GA</div>
+        <div class="sect-subj-btn" style="--c:#4b8be8" data-subj="Quant" onclick="selectSectSubj(this)">Quant</div>
+        <div class="sect-subj-btn" style="--c:#9b4be8" data-subj="Reasoning" onclick="selectSectSubj(this)">Reasoning</div>
+        <div class="sect-subj-btn" style="--c:#4be87a" data-subj="English" onclick="selectSectSubj(this)">English</div>
+      </div>
+    </div>
+    <div class="sect-scores-grid">
+      <div class="sect-form-field">
+        <label>Score</label>
+        <input class="sect-form-input" type="number" id="sectScore" placeholder="e.g. 22" min="0" max="100">
+      </div>
+      <div class="sect-form-field">
+        <label>Max Score</label>
+        <input class="sect-form-input" type="number" id="sectMax" placeholder="e.g. 30" min="0" max="100" value="30">
+      </div>
+      <div class="sect-form-field">
+        <label>Time Taken (min)</label>
+        <input class="sect-form-input" type="number" id="sectTime" placeholder="e.g. 25" min="0">
+      </div>
+      <div class="sect-form-field">
+        <label>Accuracy %</label>
+        <input class="sect-form-input" type="number" id="sectAcc" placeholder="auto or enter" min="0" max="100">
+      </div>
+    </div>
+    <div class="sect-form-field">
+      <label>Weak Areas / Notes</label>
+      <input class="sect-form-input" type="text" id="sectNotes" placeholder="e.g. Puzzles, Reading speed...">
+    </div>
+    <div class="sect-form-field">
+      <label>Link to Full Mock # (optional)</label>
+      <input class="sect-form-input" type="number" id="sectLinkedMock" placeholder="Mock number (1–35+)" min="1">
+    </div>
+    <div class="sect-modal-actions">
+      <button class="btn btn-ghost" onclick="closeSectModal()">Cancel</button>
+      <button class="btn btn-gold" onclick="saveSectModalEntry()">Save Mock</button>
+    </div>
+  </div>
+</div>
+
+<!-- CAL EDIT MODAL -->
+<div class="cal-edit-modal" id="calEditModal">
+  <div class="cal-edit-box">
+    <div class="cal-edit-title">✏️ Edit Week</div>
+    <div class="cal-edit-field">
+      <label>Focus / Topic</label>
+      <input class="cal-edit-input" type="text" id="calEditFocus" placeholder="What's the focus this week?">
+    </div>
+    <div class="cal-edit-field">
+      <label>Tags (toggle to add/remove)</label>
+      <div class="tag-editor" id="calTagEditor"></div>
+    </div>
+    <div class="cal-edit-actions">
+      <button class="btn btn-ghost" onclick="closeCalEdit()">Cancel</button>
+      <button class="btn btn-gold" onclick="saveCalEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -771,7 +1146,9 @@ const DLABELS = ['Quant','Reasoning','ESI/Fin/Mgmt','English','CA'];
 let state = JSON.parse(localStorage.getItem('rbi_tracker_v2') || 'null') || {
   weekly: {}, daily: {}, prelim: {}, mains: {},
   calWeeks: {},
-  syl: {} // {topicId: {done:bool, conf:'strong'|'medium'|'weak'|''}}
+  syl: {},       // {topicId: {done,conf,revisions}}
+  extraPrelim: 0, // count of extra mocks beyond 35
+  sectional: {}   // {mockId: {subject,score,date,notes}}
 };
 
 function save() { localStorage.setItem('rbi_tracker_v2', JSON.stringify(state)); }
@@ -870,11 +1247,44 @@ function toggleDay(idx, subj, el) {
 
 // ─── PRELIM MOCKS ───
 function buildPrelimTable() {
+  if (!state.extraPrelim) state.extraPrelim = 0;
+  if (!state.sectional) state.sectional = {};
+  const total = 35 + state.extraPrelim;
   const tbody = document.getElementById('prelimTbody');
-  tbody.innerHTML = Array.from({length:35}, (_,i) => {
+
+  tbody.innerHTML = Array.from({length:total}, (_,i) => {
     const n = i+1, m = state.prelim[n] || {};
+    // find sectional mocks linked to this full mock
+    const linked = Object.entries(state.sectional)
+      .filter(([,v]) => String(v.linkedMock) === String(n));
+    const linkedHtml = linked.length ? `
+      <tr class="sect-linked-row" data-mock="${n}">
+        <td colspan="8" style="padding:0 10px 8px 28px">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;padding-top:4px">
+            ${linked.map(([id,v]) => {
+              const colors = {GA:'#e8b84b',Quant:'#4b8be8',Reasoning:'#9b4be8',English:'#4be87a'};
+              const c = colors[v.subject] || '#4b8be8';
+              const pct = v.max ? Math.round((v.score/v.max)*100) : null;
+              return `<span style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,0.04);border:1px solid ${c}33;border-radius:8px;padding:3px 9px;font-size:0.72rem">
+                <span style="color:${c};font-weight:700">${v.subject}</span>
+                <span style="color:var(--text);font-weight:600">${v.score||'—'}${v.max?'/'+v.max:''}</span>
+                ${pct!==null?`<span style="color:var(--muted)">${pct}%</span>`:''}
+                ${v.time?`<span style="color:var(--muted)">${v.time}m</span>`:''}
+                <button onclick="deleteSectional('${id}')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px;padding:0 2px;line-height:1" title="Remove">✕</button>
+              </span>`;
+            }).join('')}
+            <span style="display:inline-flex;align-items:center;gap:4px;background:rgba(232,184,75,0.06);border:1px dashed rgba(232,184,75,0.25);border-radius:8px;padding:3px 9px;font-size:0.72rem;color:var(--accent);cursor:pointer" onclick="openSectModal(${n})">＋ Add Sectional</span>
+          </div>
+        </td>
+      </tr>` : '';
+
     return `<tr>
-      <td>Mock ${n}</td>
+      <td style="vertical-align:top">
+        <div style="display:flex;align-items:center;gap:6px">
+          Mock ${n}
+          <button onclick="openSectModal(${n})" style="background:rgba(232,184,75,0.1);border:1px solid rgba(232,184,75,0.25);color:var(--accent);border-radius:6px;padding:1px 6px;font-size:0.68rem;cursor:pointer;font-weight:700;line-height:1.4" title="Add sectional mock for Mock ${n}">+sect</button>
+        </div>
+      </td>
       <td><input class="score-input" type="number" placeholder="—" value="${m.score||''}" onchange="savePrelim(${n},'score',this.value)" min="0" max="200"></td>
       <td><input class="score-input" type="number" placeholder="—" value="${m.ga||''}" onchange="savePrelim(${n},'ga',this.value)"></td>
       <td><input class="score-input" type="number" placeholder="—" value="${m.quant||''}" onchange="savePrelim(${n},'quant',this.value)"></td>
@@ -888,10 +1298,213 @@ function buildPrelimTable() {
         </select>
       </td>
       <td><input class="notes-input" type="text" placeholder="Weak areas..." value="${m.notes||''}" onchange="savePrelim(${n},'notes',this.value)"></td>
-    </tr>`;
+    </tr>${linkedHtml}`;
   }).join('');
   updatePrelimStats();
+  buildSectionalGrid();
 }
+
+function addExtraPrelimMock() {
+  if (!state.extraPrelim) state.extraPrelim = 0;
+  state.extraPrelim += 1;
+  save(); buildPrelimTable(); showToast(`Mock ${35 + state.extraPrelim} added! ✓`);
+}
+
+// ─── SECTIONAL MOCKS ───
+const SECT_SUBJECTS = ['GA','Quant','Reasoning','English'];
+const SECT_COLORS = {GA:'#e8b84b',Quant:'#4b8be8',Reasoning:'#9b4be8',English:'#4be87a'};
+
+let sectModalLinkedMock = null;
+
+function openSectModal(linkedMock) {
+  sectModalLinkedMock = linkedMock || null;
+  document.getElementById('sectScore').value = '';
+  document.getElementById('sectMax').value = linkedMock ? '' : '30';
+  document.getElementById('sectTime').value = '';
+  document.getElementById('sectAcc').value = '';
+  document.getElementById('sectNotes').value = '';
+  document.getElementById('sectLinkedMock').value = linkedMock || '';
+  // reset subject selection
+  document.querySelectorAll('.sect-subj-btn').forEach(b => {
+    b.classList.remove('selected');
+    b.style.background = 'var(--s2)';
+    b.style.borderColor = 'var(--border)';
+    b.style.color = 'var(--muted)';
+  });
+  // set default max based on subject
+  document.getElementById('sectModal').classList.add('open');
+}
+
+function closeSectModal() {
+  document.getElementById('sectModal').classList.remove('open');
+  sectModalLinkedMock = null;
+}
+
+function selectSectSubj(el) {
+  document.querySelectorAll('.sect-subj-btn').forEach(b => {
+    b.classList.remove('selected');
+    b.style.background = 'var(--s2)';
+    b.style.borderColor = 'var(--border)';
+    b.style.color = 'var(--muted)';
+  });
+  el.classList.add('selected');
+  const c = {GA:'#e8b84b',Quant:'#4b8be8',Reasoning:'#9b4be8',English:'#4be87a'}[el.dataset.subj];
+  el.style.background = c + '22';
+  el.style.borderColor = c;
+  el.style.color = c;
+  // set sensible max defaults
+  const maxMap = {GA:80, Quant:30, Reasoning:60, English:30};
+  document.getElementById('sectMax').value = maxMap[el.dataset.subj] || 30;
+}
+
+function saveSectModalEntry() {
+  if (!state.sectional) state.sectional = {};
+  const subjEl = document.querySelector('.sect-subj-btn.selected');
+  if (!subjEl) return showToast('Please select a subject');
+  const subj = subjEl.dataset.subj;
+  const score = document.getElementById('sectScore').value;
+  const max   = document.getElementById('sectMax').value || '30';
+  const time  = document.getElementById('sectTime').value;
+  const notes = document.getElementById('sectNotes').value;
+  const linked = document.getElementById('sectLinkedMock').value;
+  // compute accuracy
+  let acc = document.getElementById('sectAcc').value;
+  if (!acc && score && max) acc = Math.round((parseFloat(score)/parseFloat(max))*100);
+
+  const count = Object.values(state.sectional).filter(v=>v.subject===subj).length + 1;
+  const id = `${subj}-${Date.now()}`;
+  state.sectional[id] = {
+    subject: subj, score, max, time, notes,
+    acc: acc || '', linkedMock: linked || '',
+    date: new Date().toISOString().split('T')[0],
+    num: count
+  };
+  save(); closeSectModal(); buildPrelimTable(); showToast(`${subj} Sectional Mock ${count} saved! ✓`);
+}
+
+function buildSectionalGrid() {
+  if (!state.sectional) state.sectional = {};
+  const grid = document.getElementById('sectionalGrid');
+  if (!grid) return;
+
+  grid.innerHTML = SECT_SUBJECTS.map(subj => {
+    const c = SECT_COLORS[subj];
+    const mocks = Object.entries(state.sectional)
+      .filter(([,v]) => v.subject === subj)
+      .sort((a,b) => (a[1].num||0) - (b[1].num||0));
+    const scores = mocks.map(([,v]) => parseFloat(v.score)).filter(s=>!isNaN(s));
+    const avg = scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1) : '—';
+    const best = scores.length ? Math.max(...scores) : '—';
+    const maxMap = {GA:80,Quant:30,Reasoning:60,English:30};
+
+    // mini progress bar for avg
+    const maxScore = maxMap[subj];
+    const avgNum = parseFloat(avg);
+    const avgPct = (!isNaN(avgNum) && maxScore) ? Math.round((avgNum/maxScore)*100) : 0;
+
+    return `<div class="sectional-card">
+      <div class="sect-card-header" style="border-top:3px solid ${c}">
+        <div>
+          <div class="sect-card-subj" style="color:${c}">${subj}</div>
+          <div class="sect-card-stats" style="margin-top:4px">
+            <span style="color:var(--muted)">Mocks: <strong style="color:var(--text)">${mocks.length}</strong></span>
+            <span style="color:var(--muted)">Avg: <strong style="color:${c}">${avg}${!isNaN(avgNum)?'/'+maxScore:''}</strong></span>
+            <span style="color:var(--muted)">Best: <strong style="color:${c}">${best}</strong></span>
+          </div>
+          ${avgPct>0?`<div style="margin-top:6px;height:4px;background:var(--s3);border-radius:999px;width:140px;overflow:hidden"><div style="width:${avgPct}%;height:100%;background:${c};border-radius:999px;transition:width 0.4s"></div></div>`:''}
+        </div>
+        <button class="sect-add-btn" style="width:auto;border:1px solid ${c}33;border-radius:8px;padding:5px 10px;color:${c};background:${c}11" onclick="openSectModal(null)" title="Add ${subj} mock">＋</button>
+      </div>
+      <div class="sect-card-body">
+        ${mocks.length === 0 ? `<div style="padding:14px 16px;font-size:0.78rem;color:var(--muted);text-align:center">No mocks yet — click ＋ to add</div>` :
+          mocks.map(([id,v]) => {
+            const pct = v.max ? Math.round((parseFloat(v.score)||0)/parseFloat(v.max)*100) : null;
+            const pctColor = pct===null?'var(--muted)':pct>=70?'#4be87a':pct>=50?'#e8b84b':'#e84b4b';
+            return `<div class="sect-entry">
+              <span class="sect-entry-num">M${v.linkedMock||v.num||'—'} <span style="font-size:0.65rem;color:var(--muted);font-weight:400">${v.date||''}</span></span>
+              <span class="sect-score-badge" style="color:${c}">${v.score||'—'}${v.max?'<span style="font-size:0.65rem;color:var(--muted);">/'+v.max+'</span>':''}</span>
+              <div>
+                ${pct!==null?`<span style="font-size:0.72rem;font-weight:700;color:${pctColor}">${pct}%</span> `:''}
+                ${v.time?`<span style="font-size:0.7rem;color:var(--muted)">⏱${v.time}m</span> `:''}
+                ${v.notes?`<span class="sect-notes">${v.notes}</span>`:''}
+              </div>
+              <span class="sect-date">${v.linkedMock?`<span style="font-size:0.65rem;background:rgba(232,184,75,0.1);color:var(--accent);border-radius:4px;padding:1px 5px">M${v.linkedMock}</span>`:''}</span>
+              <button class="sect-del-btn" onclick="deleteSectional('${id}')">✕</button>
+            </div>`;
+          }).join('')
+        }
+        <button class="sect-add-btn" onclick="openSectModal(null)">＋ Add ${subj} Mock</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function addSectionalMock() { openSectModal(null); }
+
+function saveSectional(id, key, val) {
+  if (!state.sectional[id]) state.sectional[id] = {};
+  state.sectional[id][key] = val;
+  save(); buildPrelimTable(); showToast('Saved ✓');
+}
+
+function deleteSectional(id) {
+  delete state.sectional[id];
+  save(); buildPrelimTable(); showToast('Deleted');
+}
+
+// close sect modal on overlay click
+document.getElementById('sectModal').addEventListener('click', function(e) {
+  if (e.target === this) closeSectModal();
+});
+
+// ─── CAL EDIT MODAL ───
+let calEditId = null;
+
+function openCalEdit(weekId, currentFocus, currentTags) {
+  calEditId = weekId;
+  document.getElementById('calEditFocus').value = currentFocus;
+  const allTags = Object.keys(TAG_COLORS);
+  document.getElementById('calTagEditor').innerHTML = allTags.map(tag => {
+    const tc = TAG_COLORS[tag];
+    const isOn = currentTags.includes(tag);
+    return `<span class="tag-toggle ${isOn?'on':''}" style="color:${tc.color};background:${isOn?tc.bg:'var(--s2)'};border-color:${isOn?tc.color:'var(--border)'}"
+      onclick="toggleTagEdit(this,'${tag}','${tc.bg}','${tc.color}')">${tag}</span>`;
+  }).join('');
+  document.getElementById('calEditModal').classList.add('open');
+}
+
+function toggleTagEdit(el, tag, bg, color) {
+  el.classList.toggle('on');
+  const isOn = el.classList.contains('on');
+  el.style.background = isOn ? bg : 'var(--s2)';
+  el.style.borderColor = isOn ? color : 'var(--border)';
+}
+
+function saveCalEdit() {
+  const focus = document.getElementById('calEditFocus').value.trim();
+  const tags = [...document.querySelectorAll('#calTagEditor .tag-toggle.on')].map(el => el.textContent.trim());
+  if (!focus) return showToast('Please enter a focus topic');
+
+  // Find the week in CAL_MONTHS and update
+  CAL_MONTHS.forEach(month => {
+    month.weeks.forEach(w => {
+      if (w.id === calEditId) { w.focus = focus; w.tags = tags; }
+    });
+  });
+  if (!state.calWeeks[calEditId]) state.calWeeks[calEditId] = {};
+  state.calWeeks[calEditId].customFocus = focus;
+  state.calWeeks[calEditId].customTags = tags;
+  save(); closeCalEdit(); buildCalendar(); showToast('Week updated ✓');
+}
+
+function closeCalEdit() {
+  document.getElementById('calEditModal').classList.remove('open');
+  calEditId = null;
+}
+
+document.getElementById('calEditModal').addEventListener('click', function(e) {
+  if (e.target === this) closeCalEdit();
+});
 
 function savePrelim(n, key, val) {
   if (!state.prelim[n]) state.prelim[n] = {};
@@ -1212,6 +1825,8 @@ function buildCalendar() {
           <div class="cal-wk-action">
             <input class="cal-notes-input" type="text" placeholder="Notes…" value="${cw.notes||''}"
               onchange="saveCalWeek('${w.id}','notes',this.value)" title="Add notes for this week">
+            <button class="cal-check-btn" style="background:rgba(232,184,75,0.08);border-color:rgba(232,184,75,0.25);color:var(--accent)"
+              onclick="openCalEdit('${w.id}','${w.focus.replace(/'/g,"\\'")}',${JSON.stringify(w.tags)})" title="Edit week">✏️</button>
             <button class="cal-check-btn ${cw.studied?'studied':''}"
               onclick="toggleCalWeek('${w.id}',this)">
               ${cw.studied ? '✓ Studied' : '○ Mark Done'}
@@ -1449,6 +2064,14 @@ function renderSyllabus() {
           const pyqCls = {high:'pyq-high', med:'pyq-med', low:'pyq-low'}[tp.pyq] || 'pyq-low';
           const pyqLabel = {high:'🔴 High PYQ', med:'🟡 Medium PYQ', low:'🔵 Low PYQ'}[tp.pyq] || '';
           const confCls = s.conf === 'strong' ? 'conf-strong' : s.conf === 'weak' ? 'conf-weak' : s.conf === 'medium' ? 'conf-medium' : '';
+          const revCount = s.revisions || 0;
+          const revColors = ['','#e84b4b','#e8b84b','#4b8be8','#9b4be8'];
+          const revDots = [1,2,3,4].map(n => {
+            const cls = revCount >= n ? `d${Math.min(n,4)}` : '';
+            const done = revCount >= 4 ? 'done' : '';
+            return `<div class="rev-dot ${revCount>=n?(revCount>=4?'done':`d${n}`):''}" title="Revision ${n}: ${['Immediately','1 Day After','7 Days After','31 Days After'][n-1]}"></div>`;
+          }).join('');
+          const spacedLabel = ['Not started','Immediately ✓','1-day rev ✓','7-day rev ✓','31-day rev ✓ — DONE!'][Math.min(revCount,4)];
           return `<div class="syl-item ${s.done ? 'syl-done' : ''}">
             <div class="syl-item-left">
               <div class="syl-topic">${tp.t}</div>
@@ -1456,6 +2079,14 @@ function renderSyllabus() {
                 <span class="syl-pyq ${pyqCls}">${pyqLabel}</span>
                 <span class="syl-tip">${tp.tip}</span>
               </div>
+              ${revCount>0?`<div class="spaced-tip">🔁 ${spacedLabel}</div>`:''}
+            </div>
+            <div class="rev-counter" title="Spaced Revision: Immediately → 1 Day → 7 Days → 31 Days">
+              <span class="rev-label">Rev</span>
+              <div class="rev-dots">${revDots}</div>
+              <span class="rev-num">${revCount}/4</span>
+              <button class="rev-btn" onclick="incrementRev('${tp.id}')" title="Log next revision (+1)">+</button>
+              <button class="rev-btn" onclick="decrementRev('${tp.id}')" title="Undo revision (−1)" style="font-size:10px">−</button>
             </div>
             <select class="conf-select ${confCls}" onchange="saveSyl('${tp.id}','conf',this.value,this)">
               <option value="">— Confidence</option>
@@ -1507,6 +2138,25 @@ function saveSyl(id, key, val, el) {
   state.syl[id][key] = val;
   el.className = 'conf-select' + (val==='strong'?' conf-strong':val==='weak'?' conf-weak':val==='medium'?' conf-medium':'');
   save(); renderSyllabus(); showToast('Saved ✓');
+}
+
+function incrementRev(id) {
+  if (!state.syl) state.syl = {};
+  if (!state.syl[id]) state.syl[id] = {};
+  const current = state.syl[id].revisions || 0;
+  if (current >= 4) return showToast('All 4 revisions complete! 🎉');
+  state.syl[id].revisions = current + 1;
+  const labels = ['','Immediately ✓','1-day revision ✓','7-day revision ✓','31-day revision ✓ — MASTERED! 🎉'];
+  save(); renderSyllabus(); showToast(labels[state.syl[id].revisions]);
+}
+
+function decrementRev(id) {
+  if (!state.syl) state.syl = {};
+  if (!state.syl[id]) state.syl[id] = {};
+  const current = state.syl[id].revisions || 0;
+  if (current <= 0) return;
+  state.syl[id].revisions = current - 1;
+  save(); renderSyllabus(); showToast('Revision undone');
 }
 
 // ─── EXPORT ───
