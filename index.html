@@ -913,6 +913,124 @@ nav {
 .sug-text { font-size: 0.82rem; flex: 1; }
 .sug-text strong { color: var(--text); }
 .sug-badge { font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; flex-shrink: 0; }
+
+/* ── ACTIVE SCHEDULE TIMELINE ── */
+.schedule-timeline {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: var(--r); overflow: hidden; margin-bottom: 18px;
+}
+.schedule-tl-header {
+  padding: 14px 20px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 8px;
+}
+.schedule-tl-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; }
+.active-slot-badge {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.75rem; font-weight: 700; padding: 4px 12px;
+  border-radius: 999px; animation: pulse-badge 2s infinite;
+}
+@keyframes pulse-badge { 0%,100%{opacity:1} 50%{opacity:0.7} }
+.tl-track {
+  position: relative; padding: 0 20px;
+  height: 4px; background: var(--s3); margin: 0 20px 0;
+  border-radius: 999px; overflow: visible;
+}
+.tl-progress { height: 100%; border-radius: 999px; background: linear-gradient(90deg,#e8b84b,#4be87a); transition: width 0.3s; }
+.tl-dot {
+  position: absolute; top: 50%; transform: translate(-50%,-50%);
+  width: 12px; height: 12px; border-radius: 50%;
+  border: 2px solid var(--bg); cursor: pointer;
+  transition: transform 0.2s; z-index: 2;
+}
+.tl-dot:hover { transform: translate(-50%,-50%) scale(1.4); }
+.tl-dot.active { width: 16px; height: 16px; box-shadow: 0 0 0 3px currentColor; animation: dot-pulse 2s infinite; }
+@keyframes dot-pulse { 0%,100%{box-shadow:0 0 0 3px rgba(255,255,255,0.1)} 50%{box-shadow:0 0 0 6px rgba(255,255,255,0.05)} }
+.tl-labels { display: flex; justify-content: space-between; padding: 4px 20px 8px; font-size: 0.62rem; color: var(--muted); }
+.slot-cards-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr));
+  gap: 0; border-top: 1px solid var(--border);
+}
+.slot-card {
+  padding: 12px 14px; border-right: 1px solid var(--border);
+  transition: background 0.15s; cursor: default;
+  position: relative;
+}
+.slot-card:last-child { border-right: none; }
+.slot-card.slot-active { background: rgba(255,255,255,0.03); }
+.slot-card.slot-active::before {
+  content: '▶ NOW';
+  position: absolute; top: 6px; right: 8px;
+  font-size: 0.58rem; font-weight: 800; letter-spacing: 0.5px;
+  padding: 1px 6px; border-radius: 999px; opacity: 0.9;
+}
+.slot-card.slot-done { opacity: 0.45; }
+.sc-time { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+.sc-name { font-size: 0.82rem; font-weight: 700; margin-bottom: 6px; }
+.sc-items { display: flex; flex-direction: column; gap: 2px; }
+.sc-item { font-size: 0.7rem; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+.sc-dot { width: 4px; height: 4px; border-radius: 50%; flex-shrink: 0; }
+.gym-pill {
+  margin: 10px 20px; padding: 8px 14px; border-radius: 10px;
+  background: rgba(75,232,122,0.07); border: 1px solid rgba(75,232,122,0.2);
+  font-size: 0.78rem; color: var(--accent3);
+  display: flex; align-items: center; gap: 10px;
+}
+.break-pill {
+  position: absolute; top: -18px; transform: translateX(-50%);
+  font-size: 0.6rem; font-weight: 700; padding: 1px 5px;
+  border-radius: 4px; white-space: nowrap; color: var(--muted);
+  background: var(--s1); border: 1px solid var(--border);
+}
+
+/* ── CA TRACKER ── */
+.ca-month-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 12px; }
+.ca-month-card { background: var(--s1); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
+.ca-month-header { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.ca-month-label { font-size: 0.8rem; font-weight: 700; }
+.ca-topics-list { padding: 8px 0; }
+.ca-topic-item { display: flex; align-items: center; gap: 10px; padding: 7px 16px; border-bottom: 1px solid rgba(37,43,59,0.35); }
+.ca-topic-item:last-child { border-bottom: none; }
+.ca-topic-name { flex: 1; font-size: 0.8rem; }
+.ca-chk { width: 18px; height: 18px; border-radius: 5px; border: 2px solid var(--border); background: var(--s2); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 900; flex-shrink: 0; transition: all 0.15s; }
+.ca-chk:hover { border-color: var(--accent3); }
+.ca-chk.on { background: var(--accent3); border-color: var(--accent3); color: #080a0f; }
+.ca-chk.on::after { content: '✓'; }
+.ca-priority { font-size: 0.65rem; font-weight: 700; padding: 1px 6px; border-radius: 999px; }
+.ca-add-row { padding: 8px 16px; display: flex; gap: 6px; }
+.ca-add-input { flex: 1; background: var(--s2); border: 1px solid var(--border); color: var(--text); border-radius: 7px; padding: 5px 9px; font-family: 'DM Sans',sans-serif; font-size: 0.78rem; outline: none; }
+.ca-add-input:focus { border-color: var(--accent); }
+.ga-progress-card { background: var(--s1); border: 1px solid var(--border); border-radius: var(--r); padding: 18px 20px; margin-bottom: 18px; border-top: 3px solid #e8b84b; }
+
+/* ── ANSWER WRITING TRACKER ── */
+.aw-entry { background: var(--s1); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; margin-bottom: 10px; }
+.aw-entry-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; flex-wrap: wrap; gap: 6px; }
+.aw-type-badge { font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+.aw-score { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; }
+.aw-meta { font-size: 0.72rem; color: var(--muted); }
+.aw-feedback { font-size: 0.78rem; color: var(--muted); font-style: italic; margin-top: 4px; padding-top: 6px; border-top: 1px solid var(--border); }
+.aw-add-form { background: var(--s1); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; margin-bottom: 16px; }
+.aw-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.aw-input, .aw-select { background: var(--s2); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px 11px; font-family: 'DM Sans',sans-serif; font-size: 0.82rem; outline: none; width: 100%; transition: border-color 0.2s; }
+.aw-input:focus, .aw-select:focus { border-color: var(--accent2); }
+.aw-stats-bar { display: grid; grid-template-columns: repeat(auto-fit,minmax(100px,1fr)); gap: 10px; margin-bottom: 16px; }
+
+/* ── MOCK ANALYSIS DEEP ── */
+.mock-analysis-card { background: var(--s1); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; margin-bottom: 10px; }
+.mock-analysis-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.mock-num-badge { font-size: 0.72rem; font-weight: 700; padding: 2px 9px; border-radius: 999px; background: var(--s3); color: var(--muted); }
+.mock-score-big { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; }
+.mock-fields-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.mock-field-input { background: var(--s2); border: 1px solid var(--border); color: var(--text); border-radius: 7px; padding: 5px 8px; font-size: 0.78rem; font-family: 'DM Sans',sans-serif; outline: none; width: 100%; text-align: center; }
+.mock-field-input:focus { border-color: var(--accent2); }
+.mock-field-label { font-size: 0.62rem; color: var(--muted); text-align: center; margin-top: 2px; }
+.error-type-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.err-tag { font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; cursor: pointer; border: 1px solid var(--border); background: var(--s2); color: var(--muted); transition: all 0.15s; }
+.err-tag.on { background: rgba(232,75,75,0.15); border-color: #e84b4b; color: #e84b4b; }
+.err-tag.on-concept { background: rgba(232,75,75,0.15); border-color: #e84b4b; color: #e84b4b; }
+.err-tag.on-silly { background: rgba(232,184,75,0.15); border-color: #e8b84b; color: #e8b84b; }
+.err-tag.on-time { background: rgba(75,142,232,0.15); border-color: #4b8be8; color: #4b8be8; }
+.err-tag.on-skip { background: rgba(107,115,143,0.2); border-color: var(--muted); color: var(--muted); }
 </style>
 </head>
 <body>
@@ -1034,6 +1152,8 @@ nav {
     <div class="nav-tab" onclick="showPage('analytics')">📈 Analytics</div>
     <div class="nav-tab" onclick="showPage('calendar')">🗓 Study Calendar</div>
     <div class="nav-tab" onclick="showPage('syllabus')">✅ Syllabus Checklist</div>
+    <div class="nav-tab" onclick="showPage('catracker')">📰 CA Tracker</div>
+    <div class="nav-tab" onclick="showPage('writing')">✍️ Answer Writing</div>
     <button class="nav-export-btn" onclick="openExportPanel()">⬇ Data</button>
     <div class="user-badge" id="userBadge" onclick="doLogout()" title="Click to sign out" style="margin-left:8px">👤 <span id="userBadgeName">—</span></div>
   </div>
@@ -1110,64 +1230,37 @@ nav {
     <div class="subject-bars" id="subjBars"></div>
   </div>
 
-  <!-- DAILY SCHEDULE CARD -->
-  <div class="schedule-card">
-    <div class="schedule-card-title">
-      🕐 Daily Study Schedule
-      <span style="font-size:0.75rem;color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:400">4:45 AM → 11:00 PM</span>
+  <!-- GA PRIORITY PROGRESS -->
+  <div class="ga-progress-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:700">📰 General Awareness Readiness <span style="font-size:0.72rem;font-weight:400;color:var(--muted);margin-left:6px">60–70% of Phase 1 marks</span></div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:2px">GA = GAME CHANGER. Track your CA coverage here.</div>
+      </div>
+      <button onclick="showPage('catracker')" style="background:rgba(232,184,75,0.12);border:1px solid rgba(232,184,75,0.3);color:var(--accent);border-radius:8px;padding:6px 14px;font-size:0.78rem;font-weight:600;cursor:pointer">📰 Open CA Tracker →</button>
     </div>
-    <div class="schedule-slots">
-      <div class="slot-block">
-        <div class="slot-time" style="color:#e8b84b">⭐ Slot 1 · 5:00–8:00 AM</div>
-        <div class="slot-name">Peak Brain Energy</div>
-        <div class="slot-items">
-          <div class="slot-item"><div class="slot-dot" style="background:#e8b84b"></div>Hardest Subjects</div>
-          <div class="slot-item"><div class="slot-dot" style="background:#9b4be8"></div>ESI / Finance</div>
-          <div class="slot-item"><div class="slot-dot" style="background:#4b8be8"></div>Quant</div>
-          <div class="slot-item"><div class="slot-dot" style="background:#4be87a"></div>Networking</div>
+    <div id="gaProgressBars"></div>
+  </div>
+
+  <!-- ACTIVE DAILY SCHEDULE TIMELINE -->
+  <div class="schedule-timeline">
+    <div class="schedule-tl-header">
+      <div class="schedule-tl-title">🕐 Daily Study Schedule <span style="font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:400;color:var(--muted);margin-left:8px">4:45 AM → 11:00 PM</span></div>
+      <div class="active-slot-badge" id="currentSlotBadge" style="background:rgba(75,232,122,0.12);color:var(--accent3);border:1px solid rgba(75,232,122,0.25)">⚡ Loading...</div>
+    </div>
+    <div style="padding:12px 20px 4px">
+      <div style="position:relative;margin-bottom:0">
+        <div class="tl-track" id="tlTrack">
+          <div class="tl-progress" id="tlProgress" style="width:0%"></div>
+          <!-- dots injected by JS -->
         </div>
-      </div>
-      <div class="slot-block">
-        <div class="slot-time" style="color:#4b8be8">🔵 Slot 2 · 9:00–12:00 PM</div>
-        <div class="slot-name">Deep Study</div>
-        <div class="slot-items">
-          <div class="slot-item"><div class="slot-dot" style="background:#4b8be8"></div>RBI Grade B subjects</div>
-          <div class="slot-item"><div class="slot-dot" style="background:#4be87a"></div>Pomodoro technique</div>
-          <div class="slot-item"><div class="slot-dot" style="background:#e8b84b"></div>Deep reading</div>
-          <div class="slot-item"><div class="slot-dot" style="background:#9b4be8"></div>Concept notes</div>
-        </div>
-      </div>
-      <div class="slot-block">
-        <div class="slot-time" style="color:#9b4be8">🟣 Slot 3 · 1:30–4:00 PM</div>
-        <div class="slot-name">Practice Mode</div>
-        <div class="slot-items">
-          <div class="slot-item"><div class="slot-dot" style="background:#9b4be8"></div>1:30–2:30 Timer practice</div>
-          <div class="slot-item"><div class="slot-dot" style="background:#4b8be8"></div>Simulated exam mode</div>
-          <div class="slot-item"><div class="slot-dot" style="background:#e8b84b"></div>2:30–4:00 MCQ tests</div>
-        </div>
-      </div>
-      <div class="slot-block">
-        <div class="slot-time" style="color:#4be87a">🌙 Slot 4 · 4:30–5:30 PM</div>
-        <div class="slot-name">Passive Learning</div>
-        <div class="slot-items">
-          <div class="slot-item"><div class="slot-dot" style="background:#4be87a"></div>Video lectures</div>
-          <div class="slot-item"><div class="slot-dot" style="background:#4b8be8"></div>Active note-taking</div>
-          <div class="slot-item"><div class="slot-dot" style="background:#e8b84b"></div>Concept reinforcement</div>
-        </div>
-      </div>
-      <div class="slot-block">
-        <div class="slot-time" style="color:#e84b4b">🌃 Slot 5 · 9:00–11:00 PM</div>
-        <div class="slot-name">Daily Revision</div>
-        <div class="slot-items">
-          <div class="slot-item"><div class="slot-dot" style="background:#e84b4b"></div>Revise Slots 1–4</div>
-          <div class="slot-item"><div class="slot-dot" style="background:#e8b84b"></div>Especially Slot 4 notes</div>
-          <div class="slot-item"><div class="slot-dot" style="background:#4be87a"></div>10-min reflection</div>
-        </div>
+        <div class="tl-labels" id="tlLabels"></div>
       </div>
     </div>
-    <div class="gym-row">
-      🏊 3 days Swimming &nbsp;·&nbsp; 🏋️ 4 days GYM &nbsp;·&nbsp;
-      <span style="color:var(--muted)">5:30 – 6:10 AM (Slot between wake-up & Slot 1)</span>
+    <div class="slot-cards-grid" id="slotCardsGrid"></div>
+    <div class="gym-pill">
+      🏊 <strong>3 days Swimming</strong> &nbsp;·&nbsp; 🏋️ <strong>4 days GYM</strong>
+      <span style="color:var(--muted)">· 5:30 – 6:10 PM (after Slot 1, before Slot 2)</span>
     </div>
   </div>
 
@@ -1548,6 +1641,103 @@ nav {
   </div>
 </div>
 
+<!-- ═══════════════════════════ CA TRACKER ═══════════════════════════ -->
+<div class="page" id="page-catracker">
+  <div class="top-bar">
+    <div>
+      <div class="page-title">Current Affairs <span>Tracker</span></div>
+      <div class="page-sub">GA = 60–70% of Phase 1 · Monthly CA + RBI + Budget · Most neglected = most dangerous</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="add-mock-btn" onclick="addCAMonth()">＋ Add Month</button>
+    </div>
+  </div>
+
+  <!-- GA Stats -->
+  <div class="stat-grid" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr));margin-bottom:20px">
+    <div class="stat-card sc-gold"><div class="stat-label">Months Covered</div><div class="stat-val" id="ca-months">0</div></div>
+    <div class="stat-card sc-blue"><div class="stat-label">Topics Done</div><div class="stat-val" id="ca-topics-done">0</div></div>
+    <div class="stat-card sc-green"><div class="stat-label">RBI Updates</div><div class="stat-val" id="ca-rbi">0</div></div>
+    <div class="stat-card sc-purple"><div class="stat-label">Static Links</div><div class="stat-val" id="ca-static">0</div></div>
+  </div>
+
+  <!-- Core CA Categories always tracked -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-title">🏦 Core RBI & Economy Tracker <span style="font-size:0.72rem;color:var(--muted);font-weight:400;margin-left:6px">Essential for GA + ESI + FM</span></div>
+    <div id="caCoreGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px"></div>
+  </div>
+
+  <!-- Monthly CA -->
+  <div id="caMonthsWrap"></div>
+</div>
+
+<!-- ═══════════════════════════ ANSWER WRITING ═══════════════════════════ -->
+<div class="page" id="page-writing">
+  <div class="top-bar">
+    <div>
+      <div class="page-title">Answer Writing <span>Tracker</span></div>
+      <div class="page-sub">Phase 2 = 300 marks · Writing = Selection · Track every answer you write</div>
+    </div>
+    <button class="add-mock-btn" onclick="openAWForm()">＋ Log Answer</button>
+  </div>
+
+  <!-- Stats -->
+  <div class="aw-stats-bar">
+    <div class="stat-card sc-gold"><div class="stat-label">Total Written</div><div class="stat-val" id="aw-total">0</div></div>
+    <div class="stat-card sc-blue"><div class="stat-label">ESI Answers</div><div class="stat-val" id="aw-esi">0</div></div>
+    <div class="stat-card sc-purple"><div class="stat-label">FM Answers</div><div class="stat-val" id="aw-fm">0</div></div>
+    <div class="stat-card sc-green"><div class="stat-label">Essays</div><div class="stat-val" id="aw-essay">0</div></div>
+    <div class="stat-card sc-red"><div class="stat-label">Avg Score</div><div class="stat-val" id="aw-avg">—</div></div>
+  </div>
+
+  <!-- Add Form -->
+  <div class="aw-add-form" id="awAddForm" style="display:none">
+    <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:12px">Log New Answer</div>
+    <div class="aw-form-grid">
+      <div>
+        <div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Type</div>
+        <select class="aw-select" id="awType">
+          <option value="ESI Answer">ESI Answer (150–200 words)</option>
+          <option value="FM Answer">FM Answer (150–200 words)</option>
+          <option value="Essay">Essay (250 words)</option>
+          <option value="Precis">Precis Writing</option>
+          <option value="Mgmt Answer">Management Answer</option>
+          <option value="English RC">English RC Answer</option>
+        </select>
+      </div>
+      <div>
+        <div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Topic</div>
+        <input class="aw-input" type="text" id="awTopic" placeholder="e.g. Inflation targeting">
+      </div>
+      <div>
+        <div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Word Count</div>
+        <input class="aw-input" type="number" id="awWords" placeholder="e.g. 180" min="50" max="500">
+      </div>
+      <div>
+        <div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Self Score (1–10)</div>
+        <input class="aw-input" type="number" id="awScore" placeholder="e.g. 7" min="1" max="10">
+      </div>
+    </div>
+    <div style="margin-bottom:10px">
+      <div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Feedback / What to improve</div>
+      <input class="aw-input" type="text" id="awFeedback" placeholder="e.g. Good intro, needs better data, conclusion weak">
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
+      <div style="font-size:0.7rem;color:var(--muted);font-weight:700;margin-right:4px;align-self:center">CA Linked?</div>
+      <div id="awCALinked" class="err-tag" onclick="this.classList.toggle('on')" data-val="no">📰 CA Link</div>
+      <div id="awStructure" class="err-tag" onclick="this.classList.toggle('on')" data-val="no">✅ Structure OK</div>
+      <div id="awData" class="err-tag" onclick="this.classList.toggle('on')" data-val="no">📊 Data Used</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-gold" onclick="saveAWEntry()" style="flex:1">Save Answer Log</button>
+      <button class="btn btn-ghost" onclick="closeAWForm()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Entries -->
+  <div id="awEntriesList"></div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1586,12 +1776,11 @@ const DLABELS = ['Quant','Reasoning','ESI/Fin/Mgmt','English','CA'];
 
 let state = JSON.parse(localStorage.getItem('rbi_tracker_v2') || 'null') || {
   weekly: {}, daily: {}, prelim: {}, mains: {},
-  calWeeks: {},
-  syl: {},
-  extraPrelim: 0,
-  sectional: {},
-  mainsSectional: {},
-  todayTasks: {}
+  calWeeks: {}, syl: {}, extraPrelim: 0,
+  sectional: {}, mainsSectional: {}, todayTasks: {},
+  ca: {},       // {month_key: {topics: [{id,name,done,priority,staticLink}]}}
+  caCore: {},   // {topicId: {done, staticLinked}}
+  writing: []   // [{id,type,topic,words,score,feedback,caLinked,structure,data,date}]
 };
 
 function save() { localStorage.setItem('rbi_tracker_v2', JSON.stringify(state)); }
@@ -1602,12 +1791,14 @@ function showPage(id) {
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
   const tabs = document.querySelectorAll('.nav-tab');
-  const map = {dashboard:0,weekly:1,daily:2,prelim:3,mains:4,analytics:5,calendar:6,syllabus:7};
-  tabs[map[id]].classList.add('active');
+  const map = {dashboard:0,weekly:1,daily:2,prelim:3,mains:4,analytics:5,calendar:6,syllabus:7,catracker:8,writing:9};
+  tabs[map[id]]?.classList.add('active');
   if (id === 'dashboard') updateDashboard();
   if (id === 'analytics') updateAnalytics();
   if (id === 'calendar') buildCalendar();
   if (id === 'syllabus') renderSyllabus();
+  if (id === 'catracker') buildCATracker();
+  if (id === 'writing') buildWritingTracker();
 }
 
 // ─── WEEKLY ───
@@ -2279,6 +2470,8 @@ function updateDashboard() {
   buildSmartAlerts(sd);
   buildReadinessMeter(sd);
   buildSmartSuggestions(sd);
+  buildScheduleTimeline();
+  buildGAProgressBars();
 
   // Weeks
   const weeksDone = Object.values(state.weekly).filter(w => WSUBJ.every(s => w[s])).length;
@@ -2955,7 +3148,344 @@ function decrementRev(id) {
   save(); renderSyllabus(); showToast('Revision undone');
 }
 
-// ─── EXPORT / IMPORT ───
+// ─── ACTIVE SCHEDULE TIMELINE ───
+const SCHEDULE_SLOTS = [
+  {id:'wake', label:'Wake Up', time:'4:45 AM', h:4.75, color:'#6b738f', icon:'⏰', items:['Morning prep','Freshen up','Hydrate']},
+  {id:'s1',   label:'Slot 1 — Peak Brain', time:'5:00–8:00 AM', h:5, end:8, color:'#e8b84b', icon:'⭐', items:['Hardest subjects','ESI / Finance','Deep study'], active:true},
+  {id:'brk1', label:'Break', time:'8:00–9:00 AM', h:8, end:9, color:'#6b738f', icon:'☕', items:['Breakfast','Rest','Walk'], isBreak:true},
+  {id:'s2',   label:'Slot 2 — Deep Study', time:'9:00–12:00 PM', h:9, end:12, color:'#4b8be8', icon:'🔵', items:['Pomodoro focus','RBI Grade B','Concept notes']},
+  {id:'brk2', label:'Lunch Break', time:'12:00–1:00 PM', h:12, end:13, color:'#6b738f', icon:'🍽', items:['Lunch','Rest'], isBreak:true},
+  {id:'s3',   label:'Slot 3 — Practice', time:'1:30–4:00 PM', h:13.5, end:16, color:'#9b4be8', icon:'🎯', items:['Timer-based practice','MCQ tests','Simulated exam mode']},
+  {id:'brk3', label:'Walk / Break', time:'4:00–4:30 PM', h:16, end:16.5, color:'#6b738f', icon:'🚶', items:['Walk','Refresh'], isBreak:true},
+  {id:'s4',   label:'Slot 4 — Passive', time:'4:30–5:30 PM', h:16.5, end:17.5, color:'#4be87a', icon:'🌙', items:['Video lectures','Active note-taking','Concept reinforcement']},
+  {id:'gym',  label:'GYM / Swimming', time:'5:30–6:10 PM', h:17.5, end:18.17, color:'#4be87a', icon:'💪', items:['3 days Swimming','4 days GYM'], isGym:true},
+  {id:'din',  label:'Dinner', time:'8:00 PM', h:20, end:20.5, color:'#6b738f', icon:'🍛', items:['Dinner + rest'], isBreak:true},
+  {id:'s5',   label:'Slot 5 — Revision', time:'9:00–11:00 PM', h:21, end:23, color:'#e84b4b', icon:'🌃', items:['Revise Slots 1–4','Especially Slot 4 notes','10-min reflection']},
+];
+
+function buildScheduleTimeline() {
+  const now = new Date();
+  const currentH = now.getHours() + now.getMinutes()/60;
+  const dayStart = 4.75, dayEnd = 23;
+  const daySpan = dayEnd - dayStart;
+
+  // Build timeline track
+  const track = document.getElementById('tlTrack');
+  const labels = document.getElementById('tlLabels');
+  if (!track || !labels) return;
+
+  const progress = Math.max(0, Math.min(100, ((currentH - dayStart) / daySpan) * 100));
+  document.getElementById('tlProgress').style.width = progress + '%';
+
+  // Dots for each slot
+  const mainSlots = SCHEDULE_SLOTS.filter(s => !s.isBreak && !s.isGym && s.h);
+  track.innerHTML = `<div class="tl-progress" id="tlProgress" style="width:${progress}%"></div>` +
+    mainSlots.map(s => {
+      const pct = ((s.h - dayStart) / daySpan) * 100;
+      const isPast = s.end ? currentH > s.end : currentH > s.h + 0.5;
+      const isActive = s.end ? (currentH >= s.h && currentH < s.end) : Math.abs(currentH - s.h) < 0.5;
+      return `<div class="tl-dot ${isActive ? 'active' : ''}" style="left:${pct}%;background:${s.color};color:${s.color}" title="${s.label}: ${s.time}">
+        ${s.end&&s.h&&((s.h+s.end)/2 - dayStart)/daySpan*100 > 0 ? `<div class="break-pill">${s.icon}</div>` : ''}
+      </div>`;
+    }).join('');
+
+  labels.innerHTML = `<span>4:45 AM</span><span>9 AM</span><span>1 PM</span><span>5 PM</span><span>9 PM</span><span>11 PM</span>`;
+
+  // Cards
+  const grid = document.getElementById('slotCardsGrid');
+  if (!grid) return;
+  const displaySlots = SCHEDULE_SLOTS.filter(s => !s.isBreak);
+  grid.innerHTML = displaySlots.map(s => {
+    const isPast = s.end ? currentH > s.end : currentH > s.h + 0.5;
+    const isActive = s.end ? (currentH >= s.h && currentH < s.end) : Math.abs(currentH - s.h) < 0.5;
+    return `<div class="slot-card ${isActive?'slot-active':''}  ${isPast&&!isActive?'slot-done':''}" style="${isActive?`border-top:2px solid ${s.color}`:''}">
+      ${isActive ? `<style>.slot-card.slot-active::before{background:${s.color};color:#080a0f}</style>` : ''}
+      <div class="sc-time" style="color:${s.color}">${s.icon} ${s.time}</div>
+      <div class="sc-name">${s.label.replace(/Slot \d — /,'')}</div>
+      <div class="sc-items">${s.items.map(i=>`<div class="sc-item"><div class="sc-dot" style="background:${s.color}"></div>${i}</div>`).join('')}</div>
+    </div>`;
+  }).join('');
+
+  // Active slot badge
+  const activeSlt = SCHEDULE_SLOTS.find(s => s.end && currentH >= s.h && currentH < s.end);
+  const badge = document.getElementById('currentSlotBadge');
+  if (badge) {
+    if (activeSlt) {
+      badge.textContent = `▶ ${activeSlt.label} — ${activeSlt.time}`;
+      badge.style.background = activeSlt.color + '22';
+      badge.style.color = activeSlt.color;
+      badge.style.borderColor = activeSlt.color + '44';
+    } else if (currentH < 4.75) {
+      badge.textContent = '😴 Sleep time';
+      badge.style.background = 'rgba(107,115,143,0.15)';
+      badge.style.color = 'var(--muted)';
+    } else if (currentH >= 23) {
+      badge.textContent = '🌙 Day complete!';
+    } else {
+      badge.textContent = '☕ Break / Personal time';
+      badge.style.background = 'rgba(107,115,143,0.12)';
+      badge.style.color = 'var(--muted)';
+    }
+  }
+
+  // Refresh every minute
+  setTimeout(buildScheduleTimeline, 60000);
+}
+
+// ─── GA PROGRESS BARS (Dashboard) ───
+function buildGAProgressBars() {
+  const el = document.getElementById('gaProgressBars');
+  if (!el) return;
+  if (!state.caCore) state.caCore = {};
+  const coreTopics = [
+    {id:'ga_mpc', label:'MPC Decisions & RBI Updates', color:'#e8b84b'},
+    {id:'ga_ca',  label:'Banking & Economy CA (current month)', color:'#4b8be8'},
+    {id:'ga_budget', label:'Budget 2025-26 Coverage', color:'#9b4be8'},
+    {id:'ga_reports', label:'Reports & Indices (HDI, WEO etc)', color:'#4be87a'},
+    {id:'ga_schemes', label:'Govt Schemes (Economic)', color:'#4be8e8'},
+  ];
+  const done = coreTopics.filter(t => state.caCore[t.id]?.done).length;
+  el.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px">` +
+    coreTopics.map(t => {
+      const isDone = state.caCore[t.id]?.done;
+      return `<div style="display:flex;align-items:center;gap:8px;background:var(--s2);border-radius:8px;padding:8px 12px;border:1px solid ${isDone?t.color+'44':'var(--border)'};cursor:pointer;transition:all 0.15s" onclick="toggleCACore('${t.id}')">
+        <div style="width:14px;height:14px;border-radius:4px;border:2px solid ${isDone?t.color:'var(--border)'};background:${isDone?t.color:'var(--s1)'};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#080a0f;flex-shrink:0">${isDone?'✓':''}</div>
+        <span style="font-size:0.75rem;color:${isDone?'var(--text)':'var(--muted)'}">${t.label}</span>
+      </div>`;
+    }).join('') + `</div>
+    <div style="margin-top:10px;font-size:0.72rem;color:var(--muted)">${done}/${coreTopics.length} GA pillars covered this week · <button onclick="showPage('catracker')" style="background:none;border:none;color:var(--accent2);cursor:pointer;font-size:0.72rem;font-weight:600;padding:0">Full CA Tracker →</button></div>`;
+}
+
+function toggleCACore(id) {
+  if (!state.caCore) state.caCore = {};
+  if (!state.caCore[id]) state.caCore[id] = {};
+  state.caCore[id].done = !state.caCore[id].done;
+  save(); buildGAProgressBars();
+}
+
+// ─── CA TRACKER ───
+const CA_CORE_TOPICS = [
+  {id:'rbi_mpc',    name:'MPC Policy Decision + Rate Changes', priority:'high', staticLink:'Monetary Policy'},
+  {id:'rbi_circ',   name:'RBI Circulars & Notifications', priority:'high', staticLink:'RBI Functions'},
+  {id:'rbi_report', name:'RBI Annual Report / Trend & Progress', priority:'high', staticLink:'Banking System'},
+  {id:'econ_survey',name:'Economic Survey Key Findings', priority:'high', staticLink:'Fiscal Policy'},
+  {id:'budget',     name:'Union Budget Key Allocations', priority:'high', staticLink:'Public Finance'},
+  {id:'inflation',  name:'CPI / WPI Data + RBI Commentary', priority:'high', staticLink:'Inflation'},
+  {id:'gdp_data',   name:'GDP Growth Data + Projections', priority:'high', staticLink:'Growth & Dev'},
+  {id:'banking_news',name:'Banking Sector News (NPAs, mergers, licenses)', priority:'med', staticLink:'NPAs'},
+  {id:'fin_inclusion',name:'Financial Inclusion Data (Jan Dhan, PM MUDRA)', priority:'med', staticLink:'Fin. Inclusion'},
+  {id:'digital_pay', name:'Digital Payments Data (UPI, CBDC updates)', priority:'med', staticLink:'Digital Payments'},
+  {id:'trade_data',  name:'Trade Data, CAD, Forex Reserves', priority:'med', staticLink:'External Sector'},
+  {id:'global',      name:'Global Economy: US Fed, IMF, World Bank updates', priority:'low', staticLink:'Globalization'},
+];
+
+function buildCATracker() {
+  if (!state.caCore) state.caCore = {};
+  if (!state.ca) state.ca = {};
+
+  // Core grid
+  const coreGrid = document.getElementById('caCoreGrid');
+  if (coreGrid) {
+    coreGrid.innerHTML = CA_CORE_TOPICS.map(t => {
+      const s = state.caCore[t.id] || {};
+      const pc = {high:'#e84b4b', med:'#e8b84b', low:'#4b8be8'}[t.priority];
+      const pl = {high:'🔥 High', med:'⚡ Med', low:'• Low'}[t.priority];
+      return `<div style="background:var(--s2);border-radius:10px;padding:12px 14px;border:1px solid ${s.done?pc+'44':'var(--border)'}">
+        <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px">
+          <div class="ca-chk ${s.done?'on':''}" onclick="toggleCoreCA('${t.id}')" style="${s.done?`background:${pc};border-color:${pc}`:''}"></div>
+          <div style="flex:1">
+            <div style="font-size:0.8rem;font-weight:600;color:${s.done?'var(--text)':'var(--muted)'}">${t.name}</div>
+            <div style="font-size:0.68rem;margin-top:2px;display:flex;gap:6px">
+              <span style="color:${pc}">${pl}</span>
+              <span style="color:var(--muted)">→ ${t.staticLink}</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px">
+          <div class="ca-chk ${s.staticLinked?'on':''}" onclick="toggleCoreCASL('${t.id}')" style="width:16px;height:16px;border-radius:4px;${s.staticLinked?'background:rgba(75,142,232,0.8);border-color:#4b8be8':''}" title="Static concept linked?"></div>
+          <span style="font-size:0.68rem;color:${s.staticLinked?'#4b8be8':'var(--muted)'}">Static linked${s.staticLinked?' ✓':''}</span>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // Monthly CA
+  const wrap = document.getElementById('caMonthsWrap');
+  if (!wrap) return;
+  const months = Object.keys(state.ca).sort();
+  if (!months.length) {
+    wrap.innerHTML = `<div style="text-align:center;padding:40px;color:var(--muted)">
+      <div style="font-size:2rem;margin-bottom:10px">📅</div>
+      <div style="font-size:0.9rem">No months added yet.</div>
+      <div style="font-size:0.8rem;margin-top:4px">Click <strong>＋ Add Month</strong> to start tracking monthly CA.</div>
+    </div>`;
+    return;
+  }
+  wrap.innerHTML = months.map(mk => {
+    const month = state.ca[mk];
+    const topics = month.topics || [];
+    const done = topics.filter(t=>t.done).length;
+    return `<div class="ca-month-card" style="margin-bottom:12px">
+      <div class="ca-month-header">
+        <div>
+          <div class="ca-month-label">📅 ${month.label || mk}</div>
+          <div style="font-size:0.68rem;color:var(--muted);margin-top:1px">${done}/${topics.length} topics covered</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <div style="height:6px;width:80px;background:var(--s3);border-radius:999px;overflow:hidden"><div style="height:100%;background:#e8b84b;border-radius:999px;width:${topics.length?Math.round(done/topics.length*100):0}%"></div></div>
+          <button onclick="deleteCAMonth('${mk}')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;padding:2px 4px" title="Delete month">✕</button>
+        </div>
+      </div>
+      <div class="ca-topics-list">
+        ${topics.map((t,i) => `<div class="ca-topic-item">
+          <div class="ca-chk ${t.done?'on':''}" onclick="toggleCATopicDone('${mk}',${i})"></div>
+          <span class="ca-topic-name" style="color:${t.done?'var(--muted)':'var(--text)'};${t.done?'text-decoration:line-through':''}">${t.name}</span>
+          <span class="ca-priority" style="background:${t.priority==='high'?'rgba(232,75,75,0.12)':t.priority==='med'?'rgba(232,184,75,0.1)':'rgba(75,142,232,0.1)'};color:${t.priority==='high'?'#e84b4b':t.priority==='med'?'#e8b84b':'#4b8be8'}">${t.priority==='high'?'🔥':t.priority==='med'?'⚡':'•'}</span>
+          <button onclick="deleteCATopicItem('${mk}',${i})" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px;padding:0 2px">✕</button>
+        </div>`).join('')}
+        ${!topics.length?`<div style="padding:12px 16px;font-size:0.78rem;color:var(--muted)">No topics yet — add below.</div>`:''}
+      </div>
+      <div class="ca-add-row">
+        <input class="ca-add-input" type="text" id="caInput_${mk}" placeholder="Add CA topic..." onkeydown="if(event.key==='Enter')addCATopicToMonth('${mk}')">
+        <select style="background:var(--s2);border:1px solid var(--border);color:var(--text);border-radius:7px;padding:5px 8px;font-size:0.75rem;outline:none" id="caPri_${mk}">
+          <option value="high">🔥</option><option value="med" selected>⚡</option><option value="low">•</option>
+        </select>
+        <button class="btn btn-ghost" style="padding:5px 10px;font-size:0.78rem" onclick="addCATopicToMonth('${mk}')">Add</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Update stats
+  let totalDone=0, totalTopics=0, rbiCount=0, staticCount=0;
+  Object.values(state.ca).forEach(m => { (m.topics||[]).forEach(t => { totalTopics++; if(t.done) totalDone++; }); });
+  Object.values(state.caCore).forEach(v => { if(v.done) rbiCount++; if(v.staticLinked) staticCount++; });
+  const el = id => document.getElementById(id);
+  if(el('ca-months')) el('ca-months').textContent = Object.keys(state.ca).length;
+  if(el('ca-topics-done')) el('ca-topics-done').textContent = `${totalDone}/${totalTopics}`;
+  if(el('ca-rbi')) el('ca-rbi').textContent = rbiCount;
+  if(el('ca-static')) el('ca-static').textContent = staticCount;
+}
+
+function toggleCoreCA(id) {
+  if (!state.caCore) state.caCore = {};
+  if (!state.caCore[id]) state.caCore[id] = {};
+  state.caCore[id].done = !state.caCore[id].done;
+  save(); buildCATracker(); buildGAProgressBars(); showToast('Saved ✓');
+}
+function toggleCoreCASL(id) {
+  if (!state.caCore) state.caCore = {};
+  if (!state.caCore[id]) state.caCore[id] = {};
+  state.caCore[id].staticLinked = !state.caCore[id].staticLinked;
+  save(); buildCATracker(); showToast(state.caCore[id].staticLinked ? 'Static linked ✓' : 'Static link removed');
+}
+function addCAMonth() {
+  const label = prompt('Month name (e.g. "March 2026"):');
+  if (!label) return;
+  const key = label.replace(/\s+/g,'_').toLowerCase() + '_' + Date.now();
+  if (!state.ca) state.ca = {};
+  state.ca[key] = {label, topics: []};
+  save(); buildCATracker(); showToast(`${label} added!`);
+}
+function deleteCAMonth(key) {
+  if (!confirm('Delete this month?')) return;
+  delete state.ca[key]; save(); buildCATracker();
+}
+function addCATopicToMonth(mk) {
+  const input = document.getElementById('caInput_'+mk);
+  const priEl = document.getElementById('caPri_'+mk);
+  if (!input?.value.trim()) return;
+  if (!state.ca[mk].topics) state.ca[mk].topics = [];
+  state.ca[mk].topics.push({name:input.value.trim(), priority:priEl?.value||'med', done:false});
+  input.value = ''; save(); buildCATracker(); showToast('Topic added ✓');
+}
+function toggleCATopicDone(mk, idx) {
+  state.ca[mk].topics[idx].done = !state.ca[mk].topics[idx].done;
+  save(); buildCATracker();
+}
+function deleteCATopicItem(mk, idx) {
+  state.ca[mk].topics.splice(idx,1); save(); buildCATracker();
+}
+
+// ─── ANSWER WRITING TRACKER ───
+function buildWritingTracker() {
+  if (!state.writing) state.writing = [];
+  const total = state.writing.length;
+  const esi = state.writing.filter(w=>w.type==='ESI Answer').length;
+  const fm  = state.writing.filter(w=>w.type==='FM Answer'||w.type==='Mgmt Answer').length;
+  const essays = state.writing.filter(w=>w.type==='Essay').length;
+  const scores = state.writing.map(w=>parseFloat(w.score)).filter(s=>!isNaN(s));
+  const avg = scores.length ? (scores.reduce((a,b)=>a+b)/scores.length).toFixed(1) : '—';
+
+  ['aw-total','aw-esi','aw-fm','aw-essay','aw-avg'].forEach((id,i) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = [total, esi, fm, essays, avg][i];
+  });
+
+  const list = document.getElementById('awEntriesList');
+  if (!list) return;
+  if (!state.writing.length) {
+    list.innerHTML = `<div style="text-align:center;padding:50px;color:var(--muted)"><div style="font-size:2rem;margin-bottom:10px">✍️</div><div>No answers logged yet.</div><div style="font-size:0.78rem;margin-top:4px">Start writing answers daily — Phase 2 selection depends on writing quality.</div></div>`;
+    return;
+  }
+  const TYPE_COLORS = {'ESI Answer':'#9b4be8','FM Answer':'#4b8be8','Essay':'#4be87a','Precis':'#4be8e8','Mgmt Answer':'#e8b84b','English RC':'#e84be8'};
+  list.innerHTML = [...state.writing].reverse().map((w,ri) => {
+    const i = state.writing.length - 1 - ri;
+    const c = TYPE_COLORS[w.type] || '#6b738f';
+    const scoreNum = parseFloat(w.score);
+    const scoreColor = !isNaN(scoreNum) ? (scoreNum>=8?'#4be87a':scoreNum>=6?'#e8b84b':'#e84b4b') : 'var(--muted)';
+    return `<div class="aw-entry">
+      <div class="aw-entry-header">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="aw-type-badge" style="background:${c}22;color:${c};border:1px solid ${c}44">${w.type}</span>
+          <span style="font-size:0.85rem;font-weight:600">${w.topic}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="aw-meta">${w.words ? w.words+' words ·' : ''} ${w.date || ''}</span>
+          <span class="aw-score" style="color:${scoreColor}">${w.score ? w.score+'/10' : '—'}</span>
+          <button onclick="deleteAWEntry(${i})" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;padding:2px">✕</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px">
+        ${w.caLinked?`<span style="font-size:0.68rem;padding:1px 7px;border-radius:999px;background:rgba(232,75,232,0.12);color:#e84be8;border:1px solid rgba(232,75,232,0.25)">📰 CA Linked</span>`:''}
+        ${w.structure?`<span style="font-size:0.68rem;padding:1px 7px;border-radius:999px;background:rgba(75,232,122,0.1);color:#4be87a;border:1px solid rgba(75,232,122,0.25)">✅ Structure</span>`:''}
+        ${w.data?`<span style="font-size:0.68rem;padding:1px 7px;border-radius:999px;background:rgba(75,142,232,0.1);color:#4b8be8;border:1px solid rgba(75,142,232,0.25)">📊 Data</span>`:''}
+      </div>
+      ${w.feedback?`<div class="aw-feedback">💬 ${w.feedback}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+function openAWForm() {
+  document.getElementById('awAddForm').style.display = '';
+  document.getElementById('awTopic').focus();
+}
+function closeAWForm() { document.getElementById('awAddForm').style.display = 'none'; }
+function saveAWEntry() {
+  if (!state.writing) state.writing = [];
+  const topic = document.getElementById('awTopic').value.trim();
+  if (!topic) return showToast('Please enter a topic');
+  state.writing.push({
+    type: document.getElementById('awType').value,
+    topic,
+    words: document.getElementById('awWords').value || '',
+    score: document.getElementById('awScore').value || '',
+    feedback: document.getElementById('awFeedback').value || '',
+    caLinked: document.getElementById('awCALinked').classList.contains('on'),
+    structure: document.getElementById('awStructure').classList.contains('on'),
+    data: document.getElementById('awData').classList.contains('on'),
+    date: new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'2-digit'})
+  });
+  save(); closeAWForm(); buildWritingTracker();
+  ['awTopic','awWords','awScore','awFeedback'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  ['awCALinked','awStructure','awData'].forEach(id => { document.getElementById(id)?.classList.remove('on'); });
+  showToast('Answer logged! ✍️');
+}
+function deleteAWEntry(i) {
+  if (!confirm('Delete this entry?')) return;
+  state.writing.splice(i,1); save(); buildWritingTracker();
+}
+
+// ─── UPDATE INITAPP ───
 function openExportPanel() {
   document.getElementById('exportPanel').classList.add('open');
   document.getElementById('exportOverlay').classList.add('open');
@@ -3516,6 +4046,9 @@ function initApp() {
   buildMainsTable();
   updateDashboard();
   buildCalendar();
+  if (!state.writing) state.writing = [];
+  if (!state.ca) state.ca = {};
+  if (!state.caCore) state.caCore = {};
 }
 
 // Check auth on load
