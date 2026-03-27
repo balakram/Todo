@@ -1473,6 +1473,8 @@ nav {
       <div class="tab" onclick="setSylFilter('pending',this)">Pending</div>
       <div class="tab" onclick="setSylFilter('weak',this)">Weak</div>
       <div class="tab" onclick="setSylFilter('done',this)">Done</div>
+      <div class="tab" onclick="setSylFilter('nowrite',this)">✍️ Not Write-Ready</div>
+      <div class="tab" onclick="setSylFilter('noca',this)">📰 No CA-Link</div>
     </div>
   </div>
 
@@ -2328,55 +2330,138 @@ function updateDashboard() {
 function updateAnalytics() { renderAnalyticsTab(activeAnalyticsTab || 'overview'); }
 
 // ─── STUDY CALENDAR ───
+// TOPPER-LEVEL PLAN: Official Syllabus (2025 PDF) + PYQ Trend Analysis + Phase 2 Dominance Strategy
+// WHY CHANGED: Old plan mixed topics randomly. New plan clusters by theme, ensures static→linking→writing sequence,
+// and bakes spaced revision cycles into the structure. Phase 2 (ESI+FM) gets 60% of prep time.
 const CAL_MONTHS = [
   {
-    title: 'Foundation Month 1', dates: 'March 29 – April 25', color: '#e8b84b',
+    title: 'Phase 1 Foundation — Quant, Reasoning & Phase 2 Core Start', dates: 'March 29 – April 25', color: '#e8b84b',
     id: 'fm1',
     weeks: [
-      {id:'fm1w1', dates:'Mar 29 – Apr 4',  focus:'Percentages, Syllogism, Growth, GDP', tags:['Quant','Reasoning','ESI']},
-      {id:'fm1w2', dates:'Apr 5 – Apr 11',  focus:'SI/CI, Blood Relations, Inflation, RBI Intro', tags:['Quant','Reasoning','ESI','Finance']},
-      {id:'fm1w3', dates:'Apr 12 – Apr 18', focus:'T&W, TSD, Employment, Monetary Tools', tags:['Quant','ESI','Finance']},
-      {id:'fm1w4', dates:'Apr 19 – Apr 25', focus:'Full Revision + Writing Start', tags:['Revision','English']},
+      {id:'fm1w1', dates:'Mar 29 – Apr 4',
+       focus:'Quant: Percentages, Ratio, Averages | Reasoning: Syllogism, Inequality | ESI: Growth vs Development, GDP/GNP/HDI concepts',
+       tags:['Quant','Reasoning','ESI'],
+       pyqNote:'DI + Puzzles = 35+ marks in Phase 1. ESI Growth questions repeat every year.',
+       phase2:'Write 1 answer: "Difference between growth and development" (150 words)'},
+      {id:'fm1w2', dates:'Apr 5 – Apr 11',
+       focus:'Quant: SI/CI, T&W | Reasoning: Blood Relations, Direction | ESI: Inflation (types, CPI/WPI, targeting) | Finance: RBI — origin, functions, structure',
+       tags:['Quant','Reasoning','ESI','Finance'],
+       pyqNote:'Inflation is the #1 most repeated ESI topic. RBI functions asked every Phase 2 exam.',
+       phase2:'Write 1 answer: "Role of RBI in controlling inflation" (150 words)'},
+      {id:'fm1w3', dates:'Apr 12 – Apr 18',
+       focus:'Quant: TSD, Profit/Loss, Number System | Reasoning: Seating Arrangement (Linear) | ESI: Poverty — MPI, Gini, Tendulkar vs Rangarajan | Sustainable Development & Environmental Issues',
+       tags:['Quant','Reasoning','ESI'],
+       pyqNote:'Poverty questions appear in 8/10 years. Sustainable Dev is a 2024-26 rising trend.',
+       phase2:'Write 1 answer: "Multidimensional Poverty Index — India\'s progress" (150 words)'},
+      {id:'fm1w4', dates:'Apr 19 – Apr 25',
+       focus:'Quant: DI (Table, Bar) | Reasoning: Seating Arrangement (Circular) + Puzzles | REVISION: Growth, Inflation, Poverty | CA: Economy + Banking news (Jan-Apr)',
+       tags:['Quant','Reasoning','Revision','CA'],
+       pyqNote:'First revision cycle. DI alone = 10-12 Phase 1 marks. Must be daily practice from now.',
+       phase2:'Essay practice: "Inflation vs Growth trade-off in India" (250 words)'},
     ]
   },
   {
-    title: 'Foundation Month 2', dates: 'April 26 – May 23', color: '#4b8be8',
+    title: 'Phase 2 Deep Dive — ESI Completion + Finance Core', dates: 'April 26 – May 23', color: '#4b8be8',
     id: 'fm2',
     weeks: [
-      {id:'fm2w1', dates:'Apr 26 – May 2',  focus:'Inflation Depth + RBI Basics', tags:['ESI','Finance']},
-      {id:'fm2w2', dates:'May 3 – May 9',   focus:'Time & Work + Monetary Policy', tags:['Quant','Finance']},
-      {id:'fm2w3', dates:'May 10 – May 16', focus:'Fiscal Policy + Motivation Theories', tags:['Finance','Mgmt']},
-      {id:'fm2w4', dates:'May 17 – May 23', focus:'Full Revision + Essay Practice', tags:['Revision','English']},
+      {id:'fm2w1', dates:'Apr 26 – May 2',
+       focus:'ESI: Monetary Policy (Repo, CRR, SLR, LAF, OMO, MPC structure) | Finance: Banking System — PSBs, Private, RRBs, NBFCs, Cooperative | CA: MPC decisions + RBI circulars',
+       tags:['ESI','Finance','CA'],
+       pyqNote:'Monetary Policy = asked in BOTH ESI and FM every year. One prep, double benefit.',
+       phase2:'Write 2 answers: "MPC transmission mechanism" + "Difference: PSB vs NBFC" (150 words each)'},
+      {id:'fm2w2', dates:'May 3 – May 9',
+       focus:'ESI: Fiscal Policy — deficits, FRBM Act, Union Budget concepts | Finance: Financial Markets — Money Market, Capital Market, Forex, Bond market instruments | CA: Budget + Economic Survey',
+       tags:['ESI','Finance','CA'],
+       pyqNote:'Fiscal + Monetary policy comparison = guaranteed descriptive question. Financial Markets objective questions = 4-6 marks.',
+       phase2:'Write 1 answer: "Fiscal policy vs Monetary policy: complementary or conflicting?" (200 words)'},
+      {id:'fm2w3', dates:'May 10 – May 16',
+       focus:'ESI: Employment, Demographic Dividend, Urbanisation, Migration | Finance: NPAs — causes, IBC, ARC, Bad Bank, NARCL, PCA framework | Management: Fundamentals — functions, evolution of thought, Nudge theory',
+       tags:['ESI','Finance','Mgmt'],
+       pyqNote:'Employment + Demographics rising trend (2023-26). NPA lifecycle asked descriptively. Nudge theory is NEW addition to 2025 syllabus.',
+       phase2:'Write: "Is India ready to leverage its demographic dividend?" (200 words)'},
+      {id:'fm2w4', dates:'May 17 – May 23',
+       focus:'30-DAY REVISION CYCLE 1: Revise all ESI + Finance covered | English: Essay structure templates (intro-body-conclusion) | CA: Revise Jan-May | Sectional Mock: ESI + Finance',
+       tags:['Revision','English','CA','Mock'],
+       pyqNote:'First 30-day cycle. Critical: if revision skipped, 60% content forgotten. Non-negotiable.',
+       phase2:'Write full 250-word essay + attempt 1 ESI sectional mock'},
     ]
   },
   {
-    title: 'Foundation Month 3', dates: 'May 24 – June 20', color: '#9b4be8',
+    title: 'Finance Depth + Management + Social Issues', dates: 'May 24 – June 20', color: '#9b4be8',
     id: 'fm3',
     weeks: [
-      {id:'fm3w1', dates:'May 24 – May 30', focus:'Number System, DI, Fiscal Depth', tags:['Quant','Finance']},
-      {id:'fm3w2', dates:'May 31 – Jun 6',  focus:'Financial Markets, NPAs', tags:['Finance']},
-      {id:'fm3w3', dates:'Jun 7 – Jun 13',  focus:'Social Issues + Leadership', tags:['ESI','Mgmt']},
-      {id:'fm3w4', dates:'Jun 14 – Jun 20', focus:'Full Syllabus Revision + Static-CA Linking', tags:['Revision','CA']},
+      {id:'fm3w1', dates:'May 24 – May 30',
+       focus:'Finance: Basel Norms (I/II/III), CRAR, Tier 1/2 Capital | Finance: Financial Inclusion — Jan Dhan, PM MUDRA, SHGs, PSL targets | Finance: Digital Payments — UPI, CBDC, Payment Banks, FinTech risks',
+       tags:['Finance','CA'],
+       pyqNote:'Basel asked every year (objective). Digital Payments/CBDC = 2024-26 hot topic. CBDC = new PYQ trend.',
+       phase2:'Write 1 answer: "How does financial inclusion strengthen monetary transmission?" (150 words)'},
+      {id:'fm3w2', dates:'May 31 – Jun 6',
+       focus:'Finance: Financial Risk Management, Basics of Derivatives, Corporate Governance in Banking | Finance: Accounting basics — Balance Sheet, P&L, Cash Flow, Ratio Analysis (ROE, ROA, D/E) | Finance: SIDBI, EXIM, NABARD, NHB, NaBFID — functions',
+       tags:['Finance'],
+       pyqNote:'Ratio Analysis = 2-3 objective Qs every year. NaBFID is new institution added to 2025 syllabus.',
+       phase2:'Write: "Role of NaBFID in infrastructure financing" (150 words)'},
+      {id:'fm3w3', dates:'Jun 7 – Jun 13',
+       focus:'ESI Social Issues: Education (NEP, RTE, challenges) + Health (NHM, PMJAY, health expenditure, SDG 3) + Gender Issues + Social Justice | Management: Motivation — Maslow, Herzberg, Alderfer ERG, McClelland, Vroom, Adams Equity',
+       tags:['ESI','Mgmt'],
+       pyqNote:'Social Issues weight increasing (15-20% of ESI). Motivation theories = SAME questions yearly — easy 10-12 marks.',
+       phase2:'Write: "Role of education in reducing inequality" (200 words) + Motivation table comparison'},
+      {id:'fm3w4', dates:'Jun 14 – Jun 20',
+       focus:'Management: Leadership (Trait, Behavioural, Contingency, Charismatic, Transactional, Transformational, EI) + OB (Personality, Big Five, Perception errors, Johari Window, TA) + Conflict Management + Kurt Lewin Change Theory',
+       tags:['Mgmt'],
+       pyqNote:'Leadership theories + OB concepts = 15-20 marks in FM Phase 2. Static, predictable, easy marks with one good read.',
+       phase2:'Write: "Transformational vs Transactional Leadership in banking" (150 words)'},
     ]
   },
   {
-    title: 'Foundation Month 4', dates: 'June 21 – July 18', color: '#4be87a',
+    title: 'Integration + Static-CA Linking + Answer Writing', dates: 'June 21 – July 18', color: '#4be87a',
     id: 'fm4',
     weeks: [
-      {id:'fm4w1', dates:'Jun 21 – Jun 27', focus:'ESI Core Revision', tags:['ESI']},
-      {id:'fm4w2', dates:'Jun 28 – Jul 4',  focus:'Finance Core Revision', tags:['Finance']},
-      {id:'fm4w3', dates:'Jul 5 – Jul 11',  focus:'Management + Social Issues', tags:['Mgmt','ESI']},
-      {id:'fm4w4', dates:'Jul 12 – Jul 18', focus:'Phase-1 Readiness + Writing Practice', tags:['Revision','English']},
+      {id:'fm4w1', dates:'Jun 21 – Jun 27',
+       focus:'Ethics & Governance: Utilitarianism, Rights-Duties, Virtue Ethics, Egoism, Relativism + Corporate Governance mechanisms + Communication process, barriers, IT role | Globalization: BoP, Exchange rates, WTO, IMF-WB, Regional Cooperation',
+       tags:['Mgmt','ESI'],
+       pyqNote:'Ethics asked descriptively. BoP + WTO = ESI objective questions. Global economic issues trending post-2023.',
+       phase2:'Write: "Ethical dilemmas in Indian banking sector" (200 words)'},
+      {id:'fm4w2', dates:'Jun 28 – Jul 4',
+       focus:'STATIC-CA LINKING WEEK: Link each ESI/FM static topic to current events | ESI: India\'s growth story 2024-26, Budget 2025 priorities | Finance: RBI Annual Report key findings, Trend & Progress of Banking report | CA: Revise May-June',
+       tags:['ESI','Finance','CA','Revision'],
+       pyqNote:'RBI exam rewards those who LINK concepts to current affairs. This week is unique and transformational.',
+       phase2:'Write 2 short answers linking static knowledge to 2025 current events'},
+      {id:'fm4w3', dates:'Jul 5 – Jul 11',
+       focus:'ANSWER WRITING INTENSIVE: Write 4 descriptive answers (ESI x2, FM x2) | Revise: Management complete | Phase 1 Quant: DI sets (daily) + Reasoning: Puzzles (daily) | Phase 1 Mock 1: Full Phase 1 attempt',
+       tags:['Revision','Mock','English'],
+       pyqNote:'Answer writing is the Phase 2 differentiator. 4 answers per week from now is non-negotiable.',
+       phase2:'Complete 1 full Phase 1 mock + 4 descriptive answers (evaluate each)'},
+      {id:'fm4w4', dates:'Jul 12 – Jul 18',
+       focus:'30-DAY REVISION CYCLE 2: Full ESI revision | Full FM revision | Management revision | CA: Full Jan-July revision | Phase 1 Mock 2 + Sectional Mocks (weak areas)',
+       tags:['Revision','Mock','CA'],
+       pyqNote:'Second 30-day cycle. Score should jump by 15-20% after this week. Track weak areas.',
+       phase2:'2 full Phase 1 mocks + 2 Phase 2 papers (ESI + FM) this week'},
     ]
   },
   {
-    title: 'Practice + Mock Month', dates: 'July 19 – August 15', color: '#e84b4b',
+    title: 'Exam Mode — Mocks, Refinement & Peak Performance', dates: 'July 19 – August 15', color: '#e84b4b',
     id: 'pm',
     weeks: [
-      {id:'pmw1', dates:'Jul 19 – Jul 25', focus:'Full Revision + Mock 1', tags:['Revision','Mock']},
-      {id:'pmw2', dates:'Jul 26 – Aug 1',  focus:'Mock 2 + Writing Consistency', tags:['Mock','English']},
-      {id:'pmw3', dates:'Aug 2 – Aug 8',   focus:'Mock 3 + Weak Area Fixing', tags:['Mock','Revision']},
-      {id:'pmw4', dates:'Aug 9 – Aug 15',  focus:'Final Mock + Confidence Building', tags:['Mock']},
+      {id:'pmw1', dates:'Jul 19 – Jul 25',
+       focus:'Phase 1 Mocks 3 & 4 (timed, exam conditions) | Phase 2: ESI + FM descriptive practice (2 essays + 2 short answers) | CA: July current affairs | Weak area fixing from mocks',
+       tags:['Mock','Revision','CA'],
+       pyqNote:'Mock analysis > mock count. Spend equal time analyzing each mock as taking it.',
+       phase2:'Mock 3 + Mock 4 + full analysis report of each'},
+      {id:'pmw2', dates:'Jul 26 – Aug 1',
+       focus:'Mock 5 (Phase 1 full) + Phase 2 Full Mock 1 (ESI+FM+English) | CA: July-August news | Writing: English paper practice — Essay + Precis + RC (full 90 minutes simulation)',
+       tags:['Mock','English','CA'],
+       pyqNote:'English paper (100 marks) = most underestimated. Clarity + structure + flow wins. Start timing yourself.',
+       phase2:'Full Phase 2 simulation — 3 papers in one day'},
+      {id:'pmw3', dates:'Aug 2 – Aug 8',
+       focus:'Weak area surgery: identify 3 weakest Phase 1 areas + 2 weakest Phase 2 topics → intensive practice | CA: Revise all 2026 events | Mock 6 (Phase 1) + Phase 2 Mock 2 | GK: Key RBI notifications 2025-26',
+       tags:['Mock','Revision','CA'],
+       pyqNote:'Week before exam = fix weaknesses, not learn new things. Brutal self-assessment.',
+       phase2:'6 targeted short answers on weakest topics'},
+      {id:'pmw4', dates:'Aug 9 – Aug 15',
+       focus:'FINAL WEEK — Light revision only: One-page notes for each subject | Mock 7 (Phase 1 light) | CA: Last 30-day current affairs | Mindset: Confidence building, exam strategy, time management | Sleep, nutrition, exam-day plan',
+       tags:['Mock','Revision','CA'],
+       pyqNote:'Final week is about RETENTION and CONFIDENCE, not new learning. Trust the process.',
+       phase2:'Revise best answers. Read them aloud. Walk in confident.'},
     ]
   }
 ];
@@ -2459,12 +2544,14 @@ function buildCalendar() {
           <div class="cal-wk-focus">
             <span style="font-size:0.85rem;margin-right:6px">${w.focus}</span>
             ${tags}
+            ${w.pyqNote?`<div style="margin-top:5px;font-size:0.7rem;color:rgba(232,184,75,0.75);font-style:italic">📊 ${w.pyqNote}</div>`:''}
+            ${w.phase2?`<div style="margin-top:3px;font-size:0.7rem;color:rgba(75,232,232,0.8)">✍️ ${w.phase2}</div>`:''}
           </div>
           <div class="cal-wk-action">
             <input class="cal-notes-input" type="text" placeholder="Notes…" value="${cw.notes||''}"
               onchange="saveCalWeek('${w.id}','notes',this.value)" title="Add notes for this week">
             <button class="cal-check-btn" style="background:rgba(232,184,75,0.08);border-color:rgba(232,184,75,0.25);color:var(--accent)"
-              onclick="openCalEdit('${w.id}','${w.focus.replace(/'/g,"\\'")}',${JSON.stringify(w.tags)})" title="Edit week">✏️</button>
+              onclick="openCalEdit('${w.id}','${w.focus.replace(/'/g,"\\'").replace(/"/g,'&quot;')}',${JSON.stringify(w.tags)})" title="Edit week">✏️</button>
             <button class="cal-check-btn ${cw.studied?'studied':''}"
               onclick="toggleCalWeek('${w.id}',this)">
               ${cw.studied ? '✓ Studied' : '○ Mark Done'}
@@ -2495,149 +2582,204 @@ function saveCalWeek(id, key, val) {
 }
 
 // ─── SYLLABUS CHECKLIST ───
+// REFINED based on: Official 2025 Syllabus PDF + PYQ trend analysis (2018-2025) + 2024-26 emerging topics
+// KEY CHANGES: Added new 2025 topics (Nudge theory, NaBFID, ERG, Adams Equity, Johari Window, CBDC depth),
+// removed low-ROI static GK, added write-ready + CA-linkage indicators, recalibrated PYQ frequency.
+// STRATEGY: Phase 2 (ESI+FM) = selection exam. Phase 1 = qualifying. Checklist reflects this.
 const SYLLABUS = [
   {
-    phase: 'Phase 1 — Objective', color: '#e8b84b', id: 'p1',
+    phase: 'Phase 1 — Objective (200 marks · 120 min · Qualifying + Shortlisting)', color: '#e8b84b', id: 'p1',
     sections: [
       {
-        title: '📰 General Awareness (80 marks — GAME CHANGER · 60–70% of Phase 1)',
+        title: '📰 General Awareness — 80 marks (35–40 Qs) · GAME CHANGER · 60–70% of Phase 1 merit',
         topics: [
-          {id:'ga1', t:'Banking & Finance Current Affairs (last 6–8 months)', pyq:'high', tip:'35–40% of GA marks. Master this = clear GA cut-off.'},
-          {id:'ga2', t:'RBI Notifications, Circulars & MPC Decisions', pyq:'high', tip:'10–15 marks. RBI loves its own decisions.'},
-          {id:'ga3', t:'Monetary Policy Committee (MPC) — rates, stance, minutes', pyq:'high', tip:'Directly linked to your Finance paper too.'},
-          {id:'ga4', t:'Inflation data (CPI, WPI), GDP & Growth figures', pyq:'high', tip:'Appears in both GA and ESI. Double prep benefit.'},
-          {id:'ga5', t:'Union Budget & Economic Survey highlights', pyq:'high', tip:'Cover key numbers + flagship schemes.'},
-          {id:'ga6', t:'Government Schemes (economic & social)', pyq:'med', tip:'20–25% of GA. Focus on economic schemes only.'},
-          {id:'ga7', t:'Reports & Indices (HDI, GII, WEF, World Bank, IMF)', pyq:'med', tip:'10% of GA. Learn top 5–7 indices deeply.'},
-          {id:'ga8', t:'International Orgs (IMF, World Bank, WTO, BIS)', pyq:'med', tip:'5% · Focus on India-specific interactions.'},
-          {id:'ga9', t:'National & International Organizations', pyq:'low', tip:'Appointments + summits only when high-profile.'},
-          {id:'ga10', t:'Static GK — very limited', pyq:'low', tip:'< 5% · Ignore deep static. Only famous facts.'},
+          {id:'ga1', t:'Banking & Finance CA — RBI circulars, MPC decisions, policy rates (last 8 months)', pyq:'high', tip:'🔥 35–40% of GA. RBI loves testing its own notifications. Read RBI website weekly.', writeReady:true, caLink:true},
+          {id:'ga2', t:'MPC Minutes — rate decisions, stance (accommodative/neutral/withdrawal), inflation projections', pyq:'high', tip:'🔥 10–12 marks. Appears in GA + links to ESI Monetary Policy = double benefit.', writeReady:true, caLink:true},
+          {id:'ga3', t:'Inflation Data — CPI, WPI, core inflation, food inflation trends (monthly)', pyq:'high', tip:'🔥 Appears in GA + ESI + FM. One prep, three places. Track RBI & MoSPI data.', writeReady:true, caLink:true},
+          {id:'ga4', t:'Union Budget 2025-26 — key allocations, fiscal deficit, new schemes, revenue targets', pyq:'high', tip:'🔥 5–8 Qs every year. Cover numbers + policy thrust. Links to Fiscal Policy (ESI).', writeReady:true, caLink:true},
+          {id:'ga5', t:'Economic Survey — major findings, sector-wise outlook, growth projections', pyq:'high', tip:'⚡ 3–5 Qs. Read chapter summaries. Don\'t read full — identify headlines.', writeReady:false, caLink:true},
+          {id:'ga6', t:'Government Schemes — PM-KISAN, PMAY, PLI, Jan Dhan, PMGSY (economic only)', pyq:'med', tip:'⚡ 4–5 Qs. Focus on economic + banking schemes only. Ignore social welfare details.', writeReady:false, caLink:true},
+          {id:'ga7', t:'Reports & Indices — HDI, GII, WEF, Global Hunger Index, World Bank, IMF WEO', pyq:'med', tip:'⚡ 3–4 Qs. Know India\'s rank + what each index measures. Nothing more.', writeReady:false, caLink:false},
+          {id:'ga8', t:'International Financial Institutions — IMF, World Bank, WTO, BIS, ADB, NDB functions', pyq:'med', tip:'⚡ 2–3 Qs. Focus on India\'s role + recent decisions. WTO disputes = trending.', writeReady:false, caLink:true},
+          {id:'ga9', t:'Digital Economy & FinTech CA — UPI data, CBDC launch, digital payments, cyber fraud', pyq:'med', tip:'⚡ 2–3 Qs and growing. 2024-26 hot trend. CBDC pilot = guaranteed question.', writeReady:false, caLink:true},
+          {id:'ga10', t:'Banking sector news — mergers, PCA, NPA data, RBI penalties, new bank licenses', pyq:'med', tip:'⚡ 3–4 Qs. Current affairs + banking regulation = RBI\'s favourite combo.', writeReady:false, caLink:true},
+          {id:'ga11', t:'Climate Finance & Green Economy — climate bonds, green taxonomy, RBI sustainability framework', pyq:'low', tip:'• 1–2 Qs. Rising 2025-26 trend. RBI published draft green taxonomy — must know.', writeReady:false, caLink:true},
+          {id:'ga12', t:'Static GK — limited (famous firsts, major HQs, currency)', pyq:'low', tip:'• < 3 Qs. Very limited. Do not waste time. Cover only in last 2 weeks.', writeReady:false, caLink:false},
         ]
       },
       {
-        title: '🔢 Quantitative Aptitude (30 marks — Accuracy > Speed)',
+        title: '🔢 Quantitative Aptitude — 30 marks · Accuracy > Speed · DI = Non-negotiable',
         topics: [
-          {id:'q1', t:'Data Interpretation (Table, Bar, Pie, Caselet)', pyq:'high', tip:'10–12 questions. DI is compulsory. Practice daily.'},
-          {id:'q2', t:'Percentages', pyq:'high', tip:'3–4 Qs. Foundation of all other Quant topics.'},
-          {id:'q3', t:'Ratio & Proportion + Averages', pyq:'med', tip:'3–4 Qs. Fast if formula is clear.'},
-          {id:'q4', t:'Simple & Compound Interest', pyq:'med', tip:'2–3 Qs. Formula clarity is enough.'},
-          {id:'q5', t:'Time & Work + Time, Speed & Distance', pyq:'med', tip:'2–3 Qs. Standard bank-exam level.'},
-          {id:'q6', t:'Number System', pyq:'low', tip:'2–3 Qs. Cover divisibility, LCM/HCF basics.'},
-          {id:'q7', t:'Profit & Loss', pyq:'low', tip:'1–2 Qs. Basic formulas only.'},
+          {id:'q1', t:'Data Interpretation — Table, Bar, Pie, Caselet, Mixed DI', pyq:'high', tip:'🔥 10–12 Qs every exam. Non-negotiable. Practice 2 DI sets daily from Month 2.', writeReady:false, caLink:false},
+          {id:'q2', t:'Percentages, Ratio & Proportion, Averages', pyq:'high', tip:'🔥 4–5 Qs. Foundation of all DI and application problems.', writeReady:false, caLink:false},
+          {id:'q3', t:'Simple & Compound Interest', pyq:'med', tip:'⚡ 2–3 Qs. Formula-based. Master once = always correct.', writeReady:false, caLink:false},
+          {id:'q4', t:'Time & Work + Time, Speed & Distance', pyq:'med', tip:'⚡ 2–3 Qs. Standard bank exam level. Speed > accuracy here.', writeReady:false, caLink:false},
+          {id:'q5', t:'Number System — HCF, LCM, divisibility, simplification', pyq:'low', tip:'• 1–2 Qs. Basic level. Don\'t over-invest.', writeReady:false, caLink:false},
+          {id:'q6', t:'Profit & Loss, Partnership', pyq:'low', tip:'• 1–2 Qs. Formulaic. Quick revision.', writeReady:false, caLink:false},
         ]
       },
       {
-        title: '🧠 Reasoning Ability (60 marks — Puzzles = Make or Break)',
+        title: '🧠 Reasoning Ability — 60 marks · Puzzles = 25–30 marks alone · Make or break section',
         topics: [
-          {id:'r1', t:'Puzzles & Seating Arrangement (Linear + Circular)', pyq:'high', tip:'25–30 Qs! Weak here = Phase-1 is risky. Daily practice.'},
-          {id:'r2', t:'Syllogism', pyq:'high', tip:'6–8 Qs. Very scoring once pattern is clear.'},
-          {id:'r3', t:'Inequality', pyq:'high', tip:'5–6 Qs. Rule-based. Master once, score always.'},
-          {id:'r4', t:'Coding–Decoding', pyq:'med', tip:'4–5 Qs. Pattern recognition.'},
-          {id:'r5', t:'Input–Output / Logical Reasoning', pyq:'med', tip:'5–6 Qs. Needs regular practice.'},
-          {id:'r6', t:'Series', pyq:'med', tip:'3–4 Qs. Number + letter series.'},
-          {id:'r7', t:'Blood Relations', pyq:'low', tip:'2–3 Qs. Tree diagram approach.'},
-          {id:'r8', t:'Direction Sense', pyq:'low', tip:'2–3 Qs. Quick once practiced.'},
+          {id:'r1', t:'Puzzles — Floor, Box, Month-based, Blood Relation-linked complex puzzles', pyq:'high', tip:'🔥 15–18 Qs. Weakest here = Phase 1 failure. Daily 2 puzzle sets mandatory.', writeReady:false, caLink:false},
+          {id:'r2', t:'Seating Arrangement — Linear, Circular, Double row, Uncertain direction', pyq:'high', tip:'🔥 10–12 Qs. Combine with puzzles practice. Same skill set.', writeReady:false, caLink:false},
+          {id:'r3', t:'Syllogism — all/some/no, possibility cases', pyq:'high', tip:'🔥 6–8 Qs. Rule-based. Master Venn diagram approach = always correct.', writeReady:false, caLink:false},
+          {id:'r4', t:'Inequality — direct + coded', pyq:'high', tip:'🔥 5–6 Qs. 2 minutes investment per set once concept is clear.', writeReady:false, caLink:false},
+          {id:'r5', t:'Coding–Decoding — letter shift, word coding, number coding', pyq:'med', tip:'⚡ 3–4 Qs. Pattern recognition. Quick marks.', writeReady:false, caLink:false},
+          {id:'r6', t:'Input–Output / Logical Reasoning', pyq:'med', tip:'⚡ 4–5 Qs. Machine input. Identify the pattern in step 1.', writeReady:false, caLink:false},
+          {id:'r7', t:'Series — Number, Letter, Alpha-numeric', pyq:'med', tip:'⚡ 3–4 Qs. Difference patterns + multiplication series most common.', writeReady:false, caLink:false},
+          {id:'r8', t:'Blood Relations + Direction Sense', pyq:'low', tip:'• 2–3 Qs. Tree/compass approach. Quick once practiced.', writeReady:false, caLink:false},
         ]
       },
       {
-        title: '📝 English Language (30 marks — Cut-off is strict)',
+        title: '📝 English Language — 30 marks · Strict cut-off · RC = 10+ marks',
         topics: [
-          {id:'e1', t:'Reading Comprehension', pyq:'high', tip:'10–12 Qs. Daily RC habit = Phase-1 + Phase-2 both covered.'},
-          {id:'e2', t:'Cloze Test', pyq:'high', tip:'5 Qs. Contextual vocab.'},
-          {id:'e3', t:'Error Spotting', pyq:'med', tip:'4–5 Qs. Grammar rules.'},
-          {id:'e4', t:'Para-jumbles', pyq:'med', tip:'4–5 Qs. Logical sequencing.'},
-          {id:'e5', t:'Fill in the Blanks / Vocabulary (context)', pyq:'low', tip:'3–4 Qs. Reading habit helps most.'},
+          {id:'e1', t:'Reading Comprehension — factual, inferential, vocab in context (2 passages)', pyq:'high', tip:'🔥 10–12 Qs. Daily RC habit = Phase 1 English + Phase 2 English Paper both covered.', writeReady:true, caLink:false},
+          {id:'e2', t:'Cloze Test — fill blanks in a paragraph (economy/banking passage)', pyq:'high', tip:'🔥 5 Qs. Contextual vocab + grammar. Economy passages are common.', writeReady:false, caLink:false},
+          {id:'e3', t:'Error Spotting — subject-verb, tense, preposition errors', pyq:'med', tip:'⚡ 4–5 Qs. Grammar rules list: cover 10 key rules, 80% questions covered.', writeReady:false, caLink:false},
+          {id:'e4', t:'Para-jumbles — 5–6 sentences in correct order', pyq:'med', tip:'⚡ 4–5 Qs. Look for opening sentence clue + connector words.', writeReady:false, caLink:false},
+          {id:'e5', t:'Fill in the Blanks + Sentence Improvement', pyq:'low', tip:'• 3–4 Qs. Reading habit is the best prep.', writeReady:false, caLink:false},
         ]
       }
     ]
   },
   {
-    phase: 'Phase 2 — ESI: Economic & Social Issues (100 marks)', color: '#9b4be8', id: 'p2esi',
+    phase: 'Phase 2 — ESI: Economic & Social Issues (100 marks · 120 min · SELECTION PAPER)', color: '#9b4be8', id: 'p2esi',
     sections: [
       {
-        title: '📈 Part A: Economics (Static + Current) — Descriptive dominates',
+        title: '🌱 Theme 1: Growth, Development & Sustainability (20–25% of ESI) · EVERGREEN',
         topics: [
-          {id:'esi1', t:'Growth & Development — GDP, GNP, NNP, HDI, MPI', pyq:'high', tip:'20–25% of ESI. Essay + MCQ both. Always appears.'},
-          {id:'esi2', t:'Poverty & Inequality — Tendulkar, Rangarajan, Gini, MPI', pyq:'high', tip:'10–12%. India-specific data + govt schemes essential.'},
-          {id:'esi3', t:'Inflation — types, causes, CPI vs WPI, inflation targeting', pyq:'high', tip:'EVERGREEN. Cost-push vs demand-pull. Link to MPC.'},
-          {id:'esi4', t:'Monetary Policy — Repo, CRR, SLR, LAF, transmission mechanism', pyq:'high', tip:'TOP PRIORITY. Link to Phase 2 Finance paper too.'},
-          {id:'esi5', t:'Fiscal Policy — deficits, FRBM Act, fiscal stimulus, budget', pyq:'high', tip:'10–12%. Fiscal vs monetary policy comparison is a PYQ staple.'},
-          {id:'esi6', t:'Employment & Demographics — unemployment types, demographic dividend', pyq:'med', tip:'8–10%. Structural unemployment + skill mismatch trending.'},
-          {id:'esi7', t:'Indian Economy — LPG reforms, economic planning, structure', pyq:'med', tip:'Conceptual background. Links everything else.'},
-          {id:'esi8', t:'External Sector — BoP, exchange rates, IMF, World Bank, WTO', pyq:'med', tip:'Cover basics + India context. Not deep theory.'},
+          {id:'esi1', t:'Growth vs Development — GDP, GNP, NNP, per capita income, limitations of GDP', pyq:'high', tip:'🔥 Asked every year. Both objective AND descriptive. Can you write 150 words? Must.', writeReady:true, caLink:false},
+          {id:'esi2', t:'Human Development — HDI components, MPI, PQLI, Gender Development Index (GDI)', pyq:'high', tip:'🔥 India\'s rank + what each measures. Link to current SDG progress.', writeReady:true, caLink:true},
+          {id:'esi3', t:'Poverty — MPI, Tendulkar vs Rangarajan, SECC, causes, govt programmes', pyq:'high', tip:'🔥 10–12% of ESI. India-specific data essential. MGNREGA link = bonus marks.', writeReady:true, caLink:true},
+          {id:'esi4', t:'Sustainable Development & Environmental Issues — SDGs, climate change, green growth, Paris Agreement', pyq:'med', tip:'⚡ Rising trend 2024-26. Climate + growth tradeoff = new PYQ pattern.', writeReady:true, caLink:true},
+          {id:'esi5', t:'Inequality — Gini coefficient, Lorenz curve, inclusive growth, Kuznets hypothesis', pyq:'med', tip:'⚡ Often appears with poverty. "Inclusive growth" = linking word for marks.', writeReady:true, caLink:true},
         ]
       },
       {
-        title: '🏥 Part B: Social Issues (RISING weight — 15–20%)',
+        title: '🏦 Theme 2: Indian Economy — Policy Architecture (25–30% of ESI) · CORE',
         topics: [
-          {id:'esi9',  t:'Education — quality vs access, NEP, policies, challenges', pyq:'high', tip:'Essay almost every year. SDG 4 angle + India data.'},
-          {id:'esi10', t:'Health — public health, schemes, NHM, health expenditure', pyq:'high', tip:'Post-COVID focus. Health + growth linkage essays.'},
-          {id:'esi11', t:'Gender Issues — inequality, schemes, demographic impacts', pyq:'high', tip:'Gender + development angle in descriptive.'},
-          {id:'esi12', t:'Poverty Alleviation Programs (MGNREGA, PM-KISAN, etc.)', pyq:'med', tip:'Know 5–6 major schemes deeply with data.'},
-          {id:'esi13', t:'Social Justice & Inclusion — SC/ST, OBC, minorities', pyq:'low', tip:'Background reading. Appears in essay contexts.'},
-        ]
-      }
-    ]
-  },
-  {
-    phase: 'Phase 2 — FM: Finance & Management (100 marks)', color: '#4b8be8', id: 'p2fm',
-    sections: [
-      {
-        title: '🏦 Finance Part A — RBI & Banking (50–60 marks · Most Important)',
-        topics: [
-          {id:'fm1', t:'RBI — functions, role, history, structure, as regulator', pyq:'high', tip:'25–30% of FM. Can explain RBI role without notes? ✓'},
-          {id:'fm2', t:'Monetary Policy Instruments — Repo, Reverse Repo, CRR, SLR, LAF, OMO', pyq:'high', tip:'Links directly to ESI. Double scoring topic.'},
-          {id:'fm3', t:'Banking System — commercial banks, NBFCs, cooperative, RRBs', pyq:'high', tip:'20–25%. Structure + regulation logic.'},
-          {id:'fm4', t:'NPAs & Asset Quality — causes, AQR, bad bank, resolution', pyq:'high', tip:'10–12%. NPA lifecycle + IBC + NARCL.'},
-          {id:'fm5', t:'Basel Norms — Basel I, II, III, CAR, Tier 1/2 capital', pyq:'med', tip:'8–10%. Explain Basel in simple words. Standard PYQ.'},
-          {id:'fm6', t:'Financial Markets — money market vs capital market, instruments', pyq:'med', tip:'10–12%. T-bills, CPs, bonds, SEBI role.'},
-          {id:'fm7', t:'Digital Banking & FinTech — UPI, CBDC, payment systems, cyber risk', pyq:'med', tip:'NEW TREND. 8–10%. Expected to grow. CBDC focus.'},
-          {id:'fm8', t:'Financial Inclusion & Priority Sector Lending', pyq:'med', tip:'Links to Social Issues. Jan Dhan, MUDRA, SHGs.'},
-          {id:'fm9', t:'Banking Reforms — IBC, PCA framework, consolidation', pyq:'low', tip:'Background knowledge. Context for NPA answers.'},
+          {id:'esi6', t:'Inflation — demand-pull, cost-push, CPI vs WPI, inflation targeting, RBI\'s role', pyq:'high', tip:'🔥 #1 most repeated ESI topic. Must be able to write 200-word essay instantly.', writeReady:true, caLink:true},
+          {id:'esi7', t:'Monetary Policy — MPC structure, instruments (Repo, CRR, SLR, LAF, OMO, MSF), transmission', pyq:'high', tip:'🔥 Asked in BOTH ESI and FM. One preparation serves both papers perfectly.', writeReady:true, caLink:true},
+          {id:'esi8', t:'Fiscal Policy — revenue/fiscal/primary deficit, FRBM Act, fiscal consolidation, Union Budget', pyq:'high', tip:'🔥 Fiscal vs Monetary policy comparison = guaranteed descriptive question. Must prepare.', writeReady:true, caLink:true},
+          {id:'esi9', t:'Indian Economy History — LPG 1991, planning, industrial policy, services sector growth', pyq:'med', tip:'⚡ Background knowledge. Links all other topics. 1991 reforms angle = PYQ favourite.', writeReady:true, caLink:false},
+          {id:'esi10', t:'Indian Money & Financial Markets — RBI\'s role, credit flow, banking in development', pyq:'med', tip:'⚡ Overlap with FM Paper. Conceptual understanding sufficient for ESI.', writeReady:true, caLink:true},
+          {id:'esi11', t:'Public Finance — revenue vs capital expenditure, Centre-State relations, 15th Finance Commission', pyq:'med', tip:'⚡ 3–4 Qs objective. Finance Commission recommendations = high value.', writeReady:true, caLink:true},
+          {id:'esi12', t:'Indian Agriculture — issues, MSP, PM-KISAN, agri reforms, food inflation link', pyq:'low', tip:'• 1–2 Qs. Agriculture-inflation linkage = important framing for answers.', writeReady:true, caLink:true},
         ]
       },
       {
-        title: '🏢 Management Part B — STATIC + SCORING (40–50 marks · Predictable)',
+        title: '🌍 Theme 3: Globalization & External Sector (10–12% of ESI)',
         topics: [
-          {id:'mg1', t:'Motivation Theories — Maslow, Herzberg, McGregor X&Y, Vroom', pyq:'high', tip:'15–20%. SAME questions, year after year. Easy marks.'},
-          {id:'mg2', t:'Leadership Styles — autocratic, democratic, laissez-faire, situational', pyq:'high', tip:'10–12%. Apply to workplace context in answers.'},
-          {id:'mg3', t:'Communication — process, barriers, types, channels', pyq:'high', tip:'10%. Barriers + effective communication = standard PYQ.'},
-          {id:'mg4', t:'Ethics & Governance — corporate governance, ethical dilemmas', pyq:'med', tip:'10–12%. Examples-based answers score well.'},
-          {id:'mg5', t:'Organizational Behavior & HR Concepts', pyq:'med', tip:'10–12%. OB theories + group dynamics basics.'},
-          {id:'mg6', t:'Management Functions — planning, organizing, staffing, directing', pyq:'med', tip:'Foundation. Appears in multiple-choice + short answers.'},
-          {id:'mg7', t:'Corporate Social Responsibility (CSR)', pyq:'low', tip:'5–8%. India CSR law + examples. Quick to prepare.'},
+          {id:'esi13', t:'Balance of Payments — current account, capital account, BoP deficit/surplus, CAD', pyq:'high', tip:'🔥 BoP questions appear every 2 years. CAD concept = link to Rupee depreciation.', writeReady:true, caLink:true},
+          {id:'esi14', t:'Export-Import Policy, Exchange Rate — fixed vs flexible, depreciation vs devaluation', pyq:'med', tip:'⚡ 2–3 Qs. Exchange rate + inflation link = popular PYQ theme.', writeReady:true, caLink:true},
+          {id:'esi15', t:'International Economic Institutions — IMF, World Bank, WTO, Regional Cooperation (BRICS, SCO)', pyq:'med', tip:'⚡ Functions + India\'s role. WTO dispute resolution = trending 2024-26.', writeReady:false, caLink:true},
+          {id:'esi16', t:'International Economic Issues — global recession risk, commodity prices, China slowdown impact', pyq:'low', tip:'• CA-linked. Appears as context in descriptive answers rather than standalone.', writeReady:false, caLink:true},
+        ]
+      },
+      {
+        title: '👥 Theme 4: Social Structure & Issues (15–20% of ESI · RISING FAST)',
+        topics: [
+          {id:'esi17', t:'Education — NEP 2020, RTE, GER, school dropout, skill gap, education-employment linkage', pyq:'high', tip:'🔥 Essay almost every year. "Education as enabler of development" = safe essay frame.', writeReady:true, caLink:true},
+          {id:'esi18', t:'Health — NHM, PMJAY, public health expenditure (1% GDP), WHO SDG 3, mental health', pyq:'high', tip:'🔥 Post-2021 health questions surging. "Health = Human Capital" = key argument.', writeReady:true, caLink:true},
+          {id:'esi19', t:'Gender Issues — female LFPR, gender pay gap, POCSO, Beti Bachao, SHG movement', pyq:'high', tip:'🔥 Gender + development angle = 200-mark essay potential. Always link to data.', writeReady:true, caLink:true},
+          {id:'esi20', t:'Employment & Demographic Dividend — unemployment types, PLFS data, skilling, NSDC', pyq:'high', tip:'🔥 Demographic dividend = opportunity OR disaster? Great essay argument. PYQ 2023.', writeReady:true, caLink:true},
+          {id:'esi21', t:'Urbanisation & Migration — push-pull factors, smart cities, urban poverty, PMAY-Urban', pyq:'med', tip:'⚡ 2–3 Qs. Urban migration + informal economy = contemporary angle.', writeReady:true, caLink:true},
+          {id:'esi22', t:'Social Justice & Multiculturalism — affirmative action, SC/ST/OBC policies, reservation debate', pyq:'low', tip:'• Background context for essays. Don\'t prepare standalone — integrate in other answers.', writeReady:false, caLink:true},
         ]
       }
     ]
   },
   {
-    phase: 'Phase 2 — English: Writing Skills (100 marks · Descriptive)', color: '#4be87a', id: 'p2eng',
+    phase: 'Phase 2 — FM: Finance & Management (100 marks · 120 min · SELECTION PAPER)', color: '#4b8be8', id: 'p2fm',
     sections: [
       {
-        title: '✍️ Descriptive English — Clarity > Vocabulary',
+        title: '🏛 Finance A: Financial System & RBI (25–30 marks) · HIGHEST VALUE',
         topics: [
-          {id:'en1', t:'Essay Writing (200–250 words) — 40–45% weightage', pyq:'high', tip:'Good intro + body + conclusion. Simple English wins. 25 min target.'},
-          {id:'en2', t:'Precis Writing — reduce by 1/3 logically', pyq:'high', tip:'30% weightage. Appears EVERY year. Practice weekly.'},
-          {id:'en3', t:'Reading Comprehension (Descriptive) — answer in own words', pyq:'high', tip:'25–30% weightage. No copy-paste. Paraphrase + analyse.'},
-          {id:'en4', t:'Essay Themes: Inflation, Banking Reforms, Digital Economy', pyq:'high', tip:'Repeat topics from ESI/Finance = linked preparation.'},
-          {id:'en5', t:'Essay Themes: Education, Health, Gender, Employment', pyq:'high', tip:'Social Issues themes. Prepare 2–3 structure templates.'},
-          {id:'en6', t:'Grammar Foundation — SVA, tenses, articles, prepositions', pyq:'med', tip:'No direct test but errors hurt score. Review once.'},
+          {id:'fm1', t:'RBI — origin, preamble, functions (monetary authority, issuer, banker, regulator, forex manager)', pyq:'high', tip:'🔥 Asked EVERY exam. 2 descriptive Qs potentially from RBI alone. Must master 100%.', writeReady:true, caLink:true},
+          {id:'fm2', t:'Banking System — PSBs, private banks, foreign banks, RRBs, cooperative banks, SFBs, PBs', pyq:'high', tip:'🔥 Structure + recent developments. Merger of PSBs + Small Finance Bank upgrades = PYQ.', writeReady:true, caLink:true},
+          {id:'fm3', t:'Monetary Policy — instruments, MPC voting, transmission mechanism, liquidity management', pyq:'high', tip:'🔥 Overlaps with ESI. Write same answer for both papers with minor adjustments.', writeReady:true, caLink:true},
+          {id:'fm4', t:'Development Finance Institutions — SIDBI, EXIM Bank, NABARD, NHB, NaBFID (NEW 2025)', pyq:'high', tip:'🔥 NaBFID added to 2025 syllabus = guaranteed question. Know its mandate, funding, role.', writeReady:true, caLink:true},
+          {id:'fm5', t:'NPAs — GNPA/NNPA, causes, AQR, Insolvency & Bankruptcy Code, NARCL, bad bank concept', pyq:'high', tip:'🔥 NPA lifecycle + resolution = evergreen FM topic. Always link to current NPA data.', writeReady:true, caLink:true},
+          {id:'fm6', t:'Global Financial System impact on India — 2008 crisis lessons, SVB 2023, global contagion', pyq:'med', tip:'⚡ Context questions. Know India\'s resilience narrative + RBI\'s safeguards.', writeReady:true, caLink:true},
+          {id:'fm7', t:'Non-Banking System — NBFCs categories, regulation, IL&FS crisis, RBI tightening', pyq:'med', tip:'⚡ NBFC regulation post-IL&FS = important contemporary angle.', writeReady:true, caLink:true},
+        ]
+      },
+      {
+        title: '📊 Finance B: Financial Markets & Risk (15–20 marks)',
+        topics: [
+          {id:'fm8', t:'Money Market — T-bills, CPs, CDs, LAF, repo, reverse repo, call money', pyq:'high', tip:'🔥 5–6 objective Qs. Instrument characteristics + who issues = standard PYQ format.', writeReady:true, caLink:false},
+          {id:'fm9', t:'Capital Market — primary vs secondary, SEBI role, IPO, bonds, equity, mutual funds', pyq:'high', tip:'🔥 Capital market reforms + SEBI actions = CA-linked questions.', writeReady:true, caLink:true},
+          {id:'fm10', t:'Foreign Exchange Market — participants, spot vs forward, exchange rate management, RBI intervention', pyq:'med', tip:'⚡ Rupee depreciation episodes = popular descriptive context.', writeReady:true, caLink:true},
+          {id:'fm11', t:'Financial Risk Management — credit risk, market risk, operational risk, VaR', pyq:'med', tip:'⚡ Definitions + bank-specific application. Basel norms link = key.', writeReady:true, caLink:false},
+          {id:'fm12', t:'Basics of Derivatives — futures, options, swaps, hedging, speculation', pyq:'med', tip:'⚡ Basic concepts only. Don\'t go deep — this is NOT a finance exam.', writeReady:false, caLink:false},
+          {id:'fm13', t:'Alternate Finance & PPP — private equity, venture capital, impact investing, PPP models', pyq:'low', tip:'• 1–2 Qs. Definitions + examples. Infrastructure + PPP = government angle.', writeReady:false, caLink:true},
+        ]
+      },
+      {
+        title: '💡 Finance C: General Finance Topics (10–15 marks)',
+        topics: [
+          {id:'fm14', t:'Basel Norms — Basel I/II/III, CRAR, Tier 1/Tier 2 capital, leverage ratio, LCR', pyq:'high', tip:'🔥 Asked every year objective. Basel III implementation + India\'s CRAR data = must know.', writeReady:true, caLink:false},
+          {id:'fm15', t:'Digital Payments & FinTech — UPI ecosystem, CBDC (e-Rupee), payment aggregators, RBI sandbox', pyq:'high', tip:'🔥 CBDC is new major topic. RBI launched digital Rupee = guaranteed 2025-26 question.', writeReady:true, caLink:true},
+          {id:'fm16', t:'Financial Inclusion — Jan Dhan, BC model, MUDRA, priority sector lending, SHGs, India Stack', pyq:'high', tip:'🔥 Links to social issues + ESI. Comprehensive answer = marks in both papers.', writeReady:true, caLink:true},
+          {id:'fm17', t:'Corporate Governance in Banking — board independence, audit committee, RBI inspection, Pillar 2', pyq:'med', tip:'⚡ Governance failures in Indian banking = PYQ context. Link to Ethics (Mgmt).', writeReady:true, caLink:true},
+          {id:'fm18', t:'Union Budget — fiscal deficit targets, capital expenditure trend, revenue vs capital receipts', pyq:'med', tip:'⚡ Budget 2025-26 numbers = must memorize 5–6 key figures.', writeReady:true, caLink:true},
+          {id:'fm19', t:'Accounting & Financial Statements — Balance Sheet, P&L, Cash Flow, Ratio Analysis (ROE, ROA, D/E, NIM)', pyq:'med', tip:'⚡ 2–3 objective Qs. Bank-specific ratios (NIM, NPA ratio, CRAR) = most common.', writeReady:false, caLink:false},
+          {id:'fm20', t:'Inflation — WPI/CPI components, monetary vs fiscal tools, RBI inflation targeting framework', pyq:'high', tip:'🔥 Inflation = Triple-paper topic (GA + ESI + FM). Same prep works all three.', writeReady:true, caLink:true},
+          {id:'fm21', t:'Climate Finance & Sustainable Finance — green bonds, ESG, RBI\'s green taxonomy, climate risk in banking', pyq:'low', tip:'• Emerging PYQ 2025-26. RBI published draft framework = must know basics.', writeReady:true, caLink:true},
+        ]
+      },
+      {
+        title: '🧩 Management A: OB & Fundamentals (20–25 marks) · Static + Scoring · Prepare Once',
+        topics: [
+          {id:'mg1', t:'Motivation Theories — Maslow, Herzberg (2-factor), Alderfer ERG, McClelland, Vroom Expectancy, Adams Equity', pyq:'high', tip:'🔥 SAME questions year after year. All 6 theories in one comparison table = 15 marks secured.', writeReady:true, caLink:false},
+          {id:'mg2', t:'Leadership — Trait, Behavioural, Contingency, Charismatic, Transactional, Transformational, Servant Leadership', pyq:'high', tip:'🔥 Compare 2 theories in 150 words = classic FM descriptive. Transformational = current PYQ.', writeReady:true, caLink:false},
+          {id:'mg3', t:'Emotional Intelligence — Goleman\'s model, dimensions (self-awareness, empathy, social skills)', pyq:'med', tip:'⚡ New addition to prominence. EI in banking leadership = trending 2023-25.', writeReady:true, caLink:false},
+          {id:'mg4', t:'OB Concepts — Personality (Big Five), Perception, Perceptual errors, Reinforcement, Johari Window, TA', pyq:'med', tip:'⚡ Johari Window + Transactional Analysis = 2025 syllabus additions. Objective Qs likely.', writeReady:true, caLink:false},
+          {id:'mg5', t:'Management Fundamentals — functions (POSDCORB), Scientific/Administrative/Human Relations/Systems, Nudge theory', pyq:'med', tip:'⚡ Nudge theory NEWLY ADDED to 2025 syllabus. Define + bank application = exam-ready.', writeReady:true, caLink:false},
+          {id:'mg6', t:'Conflict Management — sources, types, resolution strategies, Kurt Lewin\'s Change Model, OD', pyq:'med', tip:'⚡ Lewin\'s 3-step change model = easy objective question. Action Research Model too.', writeReady:true, caLink:false},
+          {id:'mg7', t:'Communication — process, channels, oral vs written, upward/downward/lateral, barriers, IT role', pyq:'high', tip:'🔥 Barriers to communication = most repeated objective Q. 5 barriers with examples = ready.', writeReady:true, caLink:false},
+        ]
+      },
+      {
+        title: '⚖️ Management B: Ethics & Corporate Governance (10–12 marks) · Scoring',
+        topics: [
+          {id:'mg8', t:'Ethics Theories — Utilitarianism, Rights & Duties (Deontology), Virtue Ethics, Teleological, Egoism, Relativism', pyq:'high', tip:'🔥 Theory definitions + real banking example = full marks descriptive formula.', writeReady:true, caLink:false},
+          {id:'mg9', t:'Business Ethics Application — ethics in compliance, finance, HR, marketing; ethical dilemmas in banking', pyq:'high', tip:'🔥 "Ethical issues in Indian banking" = regular descriptive. Prepare 3 case examples.', writeReady:true, caLink:true},
+          {id:'mg10', t:'Corporate Governance — factors, mechanisms, board roles, Code of Ethics, Code of Conduct, best practices', pyq:'med', tip:'⚡ Corporate governance failures (IL&FS, PMC Bank) = real-world context for answers.', writeReady:true, caLink:true},
         ]
       }
     ]
   },
   {
-    phase: 'Interview (75 marks)', color: '#e84b4b', id: 'interview',
+    phase: 'Phase 2 — English Writing Skills (100 marks · 90 min · 3 questions)', color: '#4be87a', id: 'p2eng',
     sections: [
       {
-        title: '🎤 Personal Interview — No fixed syllabus, but patterns exist',
+        title: '✍️ Paper II: English — Clarity + Structure + Analytical Thinking · NOT vocabulary',
         topics: [
-          {id:'int1', t:'RBI Functions, Role & Recent Decisions', pyq:'high', tip:'Most asked area. Know last 3 MPC decisions.'},
-          {id:'int2', t:'Indian Economy — current issues, growth outlook', pyq:'high', tip:'Be ready to give opinions with data.'},
-          {id:'int3', t:'Banking sector — reforms, NPAs, digital banking', pyq:'high', tip:'Situational + opinion questions frequent here.'},
-          {id:'int4', t:'Your academic background & work experience', pyq:'med', tip:'Link your background to RBI/banking/economy.'},
-          {id:'int5', t:'Current economic issues (inflation, employment, fiscal)', pyq:'med', tip:'Last 3–6 months news. Your take matters.'},
-          {id:'int6', t:'Why RBI Grade B? Why public service?', pyq:'low', tip:'Prepare a 2-minute honest answer.'},
+          {id:'en1', t:'Essay Writing — 200–250 words, economy/banking/social themes, clear intro-body-conclusion', pyq:'high', tip:'🔥 40–45% of paper. Target: 250 words in 25 min. Simple language wins. Practice weekly.', writeReady:true, caLink:true},
+          {id:'en2', t:'Precis Writing — reduce passage to 1/3 length, retain key ideas, no opinion', pyq:'high', tip:'🔥 30% of paper. Appears every year. Practice: read 300-word passage, write 100-word summary.', writeReady:true, caLink:false},
+          {id:'en3', t:'Reading Comprehension (Descriptive) — analytical questions, inference, tone, vocabulary', pyq:'high', tip:'🔥 25–30% of paper. Answer in own words. No copy-paste. Critical thinking = marks.', writeReady:true, caLink:false},
+          {id:'en4', t:'Essay Themes: Economy — Inflation, Growth, Digital Economy, Financial Inclusion, Fiscal Deficit', pyq:'high', tip:'🔥 Linked directly to ESI + FM prep. Same knowledge, different expression.', writeReady:true, caLink:true},
+          {id:'en5', t:'Essay Themes: Social — Education, Health, Gender Equality, Employment, Climate Change', pyq:'high', tip:'🔥 Social themes are rising in English paper. Mirrors ESI Social Issues section.', writeReady:true, caLink:true},
+          {id:'en6', t:'Essay Themes: Banking & Tech — Digital payments, CBDC, Cybersecurity, AI in banking, FinTech', pyq:'med', tip:'⚡ 2024-26 emerging essay themes. RBI and AI = new angle being tested.', writeReady:true, caLink:true},
+          {id:'en7', t:'Grammar Foundation — SVA, tenses, prepositions, articles (for error-free writing)', pyq:'low', tip:'• Review once. Errors in Phase 2 writing deduct 10–15 marks invisibly. Must be clean.', writeReady:false, caLink:false},
+        ]
+      }
+    ]
+  },
+  {
+    phase: 'Interview — 75 marks · Personality + Analytical Ability · Final Filter', color: '#e84b4b', id: 'interview',
+    sections: [
+      {
+        title: '🎤 Interview Preparation — No fixed syllabus, high variance, test of overall personality',
+        topics: [
+          {id:'int1', t:'RBI\'s role, recent decisions (last 6 months MPC), vision + mandate + Governor\'s statements', pyq:'high', tip:'🔥 Most asked area. "Why RBI Grade B?" + "What do you know about RBI?" = opening Qs.', writeReady:true, caLink:true},
+          {id:'int2', t:'Current Economic Issues — India\'s growth outlook, inflation trajectory, fiscal consolidation', pyq:'high', tip:'🔥 Give opinions backed by data. "What would you do as an RBI officer?" = leadership test.', writeReady:true, caLink:true},
+          {id:'int3', t:'Banking Sector — NPA resolution, digital banking, financial inclusion progress, reforms', pyq:'high', tip:'🔥 Be ready for situational + opinion questions. Don\'t memorize — understand.', writeReady:true, caLink:true},
+          {id:'int4', t:'Academic Background & Work Experience — link your degree/job to RBI relevance', pyq:'med', tip:'⚡ Prepare 2-minute self-introduction. Link everything to banking/economy/public service.', writeReady:true, caLink:false},
+          {id:'int5', t:'Why Public Service? Why RBI specifically? Career motivation', pyq:'med', tip:'⚡ Authentic, specific answer. Mention RBI\'s unique mandate. Avoid generic "job security" answers.', writeReady:true, caLink:false},
+          {id:'int6', t:'Global Issues affecting India — geopolitical tensions, trade wars, US Fed impact on RBI', pyq:'low', tip:'• Know 2–3 global issues affecting Indian economy in depth. Analytical opinion expected.', writeReady:true, caLink:true},
         ]
       }
     ]
@@ -2688,6 +2830,8 @@ function renderSyllabus() {
         if (sylFilter === 'done' && !s.done) return false;
         if (sylFilter === 'pending' && s.done) return false;
         if (sylFilter === 'weak' && s.conf !== 'weak') return false;
+        if (sylFilter === 'nowrite' && (!tp.writeReady || s.writeReadyDone)) return false;
+        if (sylFilter === 'noca' && (!tp.caLink || s.caLinkDone)) return false;
         return true;
       });
       if (!filtered.length) return;
@@ -2710,12 +2854,18 @@ function renderSyllabus() {
             return `<div class="rev-dot ${revCount>=n?(revCount>=4?'done':`d${n}`):''}" title="Revision ${n}: ${['Immediately','1 Day After','7 Days After','31 Days After'][n-1]}"></div>`;
           }).join('');
           const spacedLabel = ['Not started','Immediately ✓','1-day rev ✓','7-day rev ✓','31-day rev ✓ — DONE!'][Math.min(revCount,4)];
+          const writeState = s.writeReady ? 'on' : (s.writeReadyDone ? 'on' : '');
+          const caState = s.caLinkDone ? 'on' : '';
           return `<div class="syl-item ${s.done ? 'syl-done' : ''}">
             <div class="syl-item-left">
               <div class="syl-topic">${tp.t}</div>
               <div class="syl-meta-row">
                 <span class="syl-pyq ${pyqCls}">${pyqLabel}</span>
                 <span class="syl-tip">${tp.tip}</span>
+              </div>
+              <div class="syl-meta-row" style="margin-top:4px">
+                ${tp.writeReady!==undefined?`<span onclick="toggleSylFlag('${tp.id}','writeReadyDone')" title="Can I write a 150-word answer on this?" style="cursor:pointer;font-size:0.68rem;font-weight:700;padding:1px 8px;border-radius:999px;border:1px solid ${s.writeReadyDone?'rgba(75,232,232,0.5)':'var(--border)'};background:${s.writeReadyDone?'rgba(75,232,232,0.12)':'var(--s2)'};color:${s.writeReadyDone?'#4be8e8':'var(--muted)'};transition:all 0.15s">✍️ Write-ready${s.writeReadyDone?' ✓':''}</span>`:''}
+                ${tp.caLink?`<span onclick="toggleSylFlag('${tp.id}','caLinkDone')" title="Current Affairs linkage prepared?" style="cursor:pointer;font-size:0.68rem;font-weight:700;padding:1px 8px;border-radius:999px;border:1px solid ${s.caLinkDone?'rgba(232,75,232,0.5)':'var(--border)'};background:${s.caLinkDone?'rgba(232,75,232,0.1)':'var(--s2)'};color:${s.caLinkDone?'#e84be8':'var(--muted)'};transition:all 0.15s">📰 CA-linked${s.caLinkDone?' ✓':''}</span>`:''}
               </div>
               ${revCount>0?`<div class="spaced-tip">🔁 ${spacedLabel}</div>`:''}
             </div>
@@ -2776,6 +2926,14 @@ function saveSyl(id, key, val, el) {
   state.syl[id][key] = val;
   el.className = 'conf-select' + (val==='strong'?' conf-strong':val==='weak'?' conf-weak':val==='medium'?' conf-medium':'');
   save(); renderSyllabus(); showToast('Saved ✓');
+}
+
+function toggleSylFlag(id, flag) {
+  if (!state.syl) state.syl = {};
+  if (!state.syl[id]) state.syl[id] = {};
+  state.syl[id][flag] = !state.syl[id][flag];
+  save(); renderSyllabus();
+  showToast(flag === 'writeReadyDone' ? (state.syl[id][flag] ? '✍️ Write-ready marked!' : 'Write-ready unmarked') : (state.syl[id][flag] ? '📰 CA-linkage marked!' : 'CA-linkage unmarked'));
 }
 
 function incrementRev(id) {
